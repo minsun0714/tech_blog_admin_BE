@@ -55,4 +55,26 @@ class SecurityJwtIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("pong"));
     }
+
+    @Test
+    void blockAfterRepeatedFailedAttempts() throws Exception {
+        String invalidBody = """
+                {
+                  "username": "unknown-user",
+                  "password": "wrong-password"
+                }
+                """;
+
+        for (int i = 0; i < 5; i++) {
+            mockMvc.perform(post("/api/auth/token")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(invalidBody))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        mockMvc.perform(post("/api/auth/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidBody))
+                .andExpect(status().isTooManyRequests());
+    }
 }
