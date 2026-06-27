@@ -15,8 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest(properties = {
+        "APP_SECURITY_PASSWORD=change-me-password",
+        "APP_SECURITY_JWT_SECRET=change-me-super-secret-key-change-me-123456",
+        "APP_SECURITY_JWT_ISSUER=tech-blog-admin-be"
+})
 class SecurityJwtIntegrationTest {
 
     @Autowired

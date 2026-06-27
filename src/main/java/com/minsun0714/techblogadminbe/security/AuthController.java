@@ -43,7 +43,7 @@ public class AuthController {
         Instant expiresAt = issuedAt.plusSeconds(properties.jwt().tokenTtlSeconds());
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(authentication.getName())
-                .issuer("tech-blog-admin-be")
+                .issuer(properties.jwt().issuer())
                 .issuedAt(issuedAt)
                 .expiresAt(expiresAt)
                 .build();
