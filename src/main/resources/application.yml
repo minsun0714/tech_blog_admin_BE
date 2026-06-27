@@ -1,13 +1,3 @@
 spring:
   application:
     name: tech-blog-admin-be
-
-app:
-  security:
-    user:
-      username: ${APP_SECURITY_USERNAME:admin}
-      password: ${APP_SECURITY_PASSWORD}
-    jwt:
-      secret: ${APP_SECURITY_JWT_SECRET}
-      issuer: ${APP_SECURITY_JWT_ISSUER:tech-blog-admin-be}
-      token-ttl-seconds: ${APP_SECURITY_JWT_TOKEN_TTL_SECONDS:3600}
