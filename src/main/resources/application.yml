@@ -1,3 +1,12 @@
 spring:
   application:
     name: tech-blog-admin-be
+
+app:
+  security:
+    user:
+      username: admin
+      password: change-me-password
+    jwt:
+      secret: change-me-super-secret-key-change-me-123456
+      token-ttl-seconds: 3600
