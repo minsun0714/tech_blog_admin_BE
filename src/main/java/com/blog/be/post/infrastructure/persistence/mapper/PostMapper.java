@@ -30,14 +30,9 @@ public final class PostMapper {
                 .map(image -> PostImageJpaEntity.builder()
                         .id(image.getId())
                         .postId(post.getPostId())
-                        .s3key(mapImageToS3Key(image.getId()))
                         .thumbnail(image.isThumbnail())
                         .build())
                 .toList();
-    }
-
-    private static String mapImageToS3Key(Long id) {
-        return String.valueOf(id);
     }
 
     public static Post toDomain(
