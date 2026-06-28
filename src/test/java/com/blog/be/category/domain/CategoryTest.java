@@ -1,5 +1,6 @@
 package com.blog.be.category.domain;
 
+import com.blog.be.category.infrastructure.persistence.CategoryJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ class CategoryTest {
         String name = "Backend";
 
         // when
-        Category category = Category.create(name, null);
+        CategoryJpaEntity category = CategoryJpaEntity.create(name, null);
 
         // then
         assertThat(category.isRoot()).isTrue();
@@ -25,10 +26,10 @@ class CategoryTest {
     @DisplayName("하위 카테고리를 생성한다.")
     void createChildCategory() {
         // given
-        CategoryId parentId = new CategoryId(1L);
+        Long parentId = 1L;
 
         // when
-        Category category = Category.create("Spring", parentId);
+        CategoryJpaEntity category = CategoryJpaEntity.create("Spring", parentId);
 
         // then
         assertThat(category.isRoot()).isFalse();
@@ -39,7 +40,7 @@ class CategoryTest {
     @DisplayName("카테고리 이름을 변경한다.")
     void changeName() {
         // given
-        Category category = Category.create("Backend", null);
+        CategoryJpaEntity category = CategoryJpaEntity.create("Backend", null);
 
         // when
         category.changeName("Java");
@@ -52,7 +53,7 @@ class CategoryTest {
     @DisplayName("빈 이름으로 변경하면 예외가 발생한다.")
     void changeNameWithBlank() {
         // given
-        Category category = Category.create("Backend", null);
+        CategoryJpaEntity category = CategoryJpaEntity.create("Backend", null);
 
         // when & then
         assertThatThrownBy(() -> category.changeName(""))
@@ -63,8 +64,8 @@ class CategoryTest {
     @DisplayName("부모 카테고리를 변경한다.")
     void changeParent() {
         // given
-        Category category = Category.create("Spring", null);
-        CategoryId parentId = new CategoryId(1L);
+        CategoryJpaEntity category = CategoryJpaEntity.create("Spring", null);
+        Long parentId = 1L;
 
         // when
         category.changeParent(parentId);
@@ -78,7 +79,7 @@ class CategoryTest {
     @DisplayName("부모를 제거하면 루트 카테고리가 된다.")
     void removeParent() {
         // given
-        Category category = Category.create("Spring", new CategoryId(1L));
+        CategoryJpaEntity category = CategoryJpaEntity.create("Spring", 1L);
 
         // when
         category.changeParent(null);

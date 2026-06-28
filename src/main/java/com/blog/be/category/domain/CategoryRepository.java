@@ -1,16 +1,18 @@
 package com.blog.be.category.domain;
 
+import com.blog.be.category.infrastructure.persistence.CategoryJpaEntity;
+
 import java.util.Optional;
 
 public interface CategoryRepository {
 
-    Category save(Category category);
+    CategoryJpaEntity save(CategoryJpaEntity category);
 
-    Optional<Category> findById(CategoryId categoryId);
+    Optional<CategoryJpaEntity> findById(Long categoryId);
 
-    void delete(Category category);
+    void delete(CategoryJpaEntity category);
 
-    boolean existsById(CategoryId categoryId);
+    boolean existsById(Long categoryId);
 
-    boolean existsByParentId(CategoryId parentId);
+    boolean existsByParentId(Long parentId);
 }

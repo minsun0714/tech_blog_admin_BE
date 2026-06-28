@@ -1,0 +1,40 @@
+package com.blog.be.post.infrastructure.persistence;
+
+import com.blog.be.common.infrastructure.persistence.BaseEntity;
+import com.blog.be.post.domain.OpenStatus;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Entity
+@Table(name = "post")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+public class PostJpaEntity extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 200)
+    private String title;
+
+    @Lob
+    @Column(nullable = false)
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OpenStatus openStatus;
+
+    @Column(nullable = false)
+    private Long categoryId;
+
+    @Column
+    private Long seriesId;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Long likeCount = 0L;
+}

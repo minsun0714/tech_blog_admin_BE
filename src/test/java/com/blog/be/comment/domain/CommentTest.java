@@ -1,6 +1,6 @@
 package com.blog.be.comment.domain;
 
-import com.blog.be.post.domain.PostId;
+import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +12,10 @@ class CommentTest {
     @DisplayName("루트 댓글을 생성한다.")
     void createRoot() {
         // given
-        PostId postId = new PostId(1L);
+        Long postId = 1L;
 
         // when
-        Comment comment = Comment.createRoot(postId, "첫 번째 댓글");
+        CommentJpaEntity comment = CommentJpaEntity.createRoot(postId, "첫 번째 댓글");
 
         // then
         assertThat(comment.isRoot()).isTrue();
@@ -29,11 +29,11 @@ class CommentTest {
     @DisplayName("대댓글을 생성한다.")
     void createReply() {
         // given
-        PostId postId = new PostId(1L);
-        CommentId parentCommentId = new CommentId(10L);
+        Long postId = 1L;
+        Long parentCommentId = 10L;
 
         // when
-        Comment comment = Comment.createReply(
+        CommentJpaEntity comment = CommentJpaEntity.createReply(
                 postId,
                 parentCommentId,
                 "대댓글입니다."
@@ -49,8 +49,8 @@ class CommentTest {
     @DisplayName("댓글 내용을 수정한다.")
     void changeContent() {
         // given
-        Comment comment = Comment.createRoot(
-                new PostId(1L),
+        CommentJpaEntity comment = CommentJpaEntity.createRoot(
+                1L,
                 "기존 댓글"
         );
 
@@ -65,8 +65,8 @@ class CommentTest {
     @DisplayName("댓글를 삭제한다.")
     void delete() {
         // given
-        Comment comment = Comment.createRoot(
-                new PostId(1L),
+        CommentJpaEntity comment = CommentJpaEntity.createRoot(
+                1L,
                 "삭제할 댓글"
         );
 
@@ -82,14 +82,14 @@ class CommentTest {
     @DisplayName("루트 댓글 여부를 확인한다.")
     void isRoot() {
         // given
-        Comment root = Comment.createRoot(
-                new PostId(1L),
+        CommentJpaEntity root = CommentJpaEntity.createRoot(
+                1L,
                 "루트"
         );
 
-        Comment reply = Comment.createReply(
-                new PostId(1L),
-                new CommentId(1L),
+        CommentJpaEntity reply = CommentJpaEntity.createReply(
+                1L,
+                1L,
                 "답글"
         );
 

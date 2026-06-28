@@ -1,5 +1,6 @@
 package com.blog.be.tag.domain;
 
+import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ class TagTest {
     @DisplayName("태그를 생성한다.")
     void create() {
         // when
-        Tag tag = Tag.create("Spring");
+        TagJpaEntity tag = TagJpaEntity.create("Spring");
 
         // then
         assertThat(tag.getName()).isEqualTo("Spring");
@@ -21,7 +22,7 @@ class TagTest {
     @DisplayName("태그 이름을 변경한다.")
     void changeName() {
         // given
-        Tag tag = Tag.create("Spring");
+        TagJpaEntity tag = TagJpaEntity.create("Spring");
 
         // when
         tag.changeName("JPA");
@@ -33,7 +34,7 @@ class TagTest {
     @Test
     @DisplayName("빈 이름으로 태그를 생성할 수 없다.")
     void createWithBlankName() {
-        assertThatThrownBy(() -> Tag.create(""))
+        assertThatThrownBy(() -> TagJpaEntity.create(""))
                 .isInstanceOf(TagException.class);
     }
 
@@ -41,7 +42,7 @@ class TagTest {
     @DisplayName("빈 이름으로 변경할 수 없다.")
     void changeNameWithBlank() {
         // given
-        Tag tag = Tag.create("Spring");
+        TagJpaEntity tag = TagJpaEntity.create("Spring");
 
         // when & then
         assertThatThrownBy(() -> tag.changeName(""))

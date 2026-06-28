@@ -1,13 +1,15 @@
 package com.blog.be.comment.domain;
 
+import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
+
 import java.util.Optional;
 
 public interface CommentRepository {
-    Comment save(Comment comment);
+    CommentJpaEntity save(CommentJpaEntity comment);
 
-    Optional<Comment> findById(CommentId id);
+    Optional<CommentJpaEntity> findById(Long id);
 
-    void delete(Comment comment);
+    void delete(CommentJpaEntity comment);
 
-    boolean existsById(CommentId id);
+    boolean existsById(Long id);
 }

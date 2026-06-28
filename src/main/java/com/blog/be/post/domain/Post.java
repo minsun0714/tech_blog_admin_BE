@@ -1,26 +1,19 @@
 package com.blog.be.post.domain;
 
-import com.blog.be.category.domain.CategoryId;
 import com.blog.be.post.domain.image.PostImage;
-import com.blog.be.post.domain.image.PostImageId;
-import com.blog.be.series.domain.SeriesId;
-import com.blog.be.tag.domain.TagId;
-import jakarta.annotation.Nonnull;
 import lombok.Getter;
 
 import java.util.*;
 
+@Getter
 public class Post {
 
-    private PostId postId;
+    private Long postId;
 
-    @Getter
     private String title;
 
-    @Getter
     private String content;
 
-    @Getter
     private OpenStatus openStatus;
 
     private List<PostImage> postImages;
@@ -29,21 +22,19 @@ public class Post {
         return Collections.unmodifiableList(postImages);
     }
 
-    private Set<TagId> tagIds;
+    private Set<Long> tagIds;
 
-    public Set<TagId> getTagIds() {
+    public Set<Long> getTagIds() {
         return Collections.unmodifiableSet(tagIds);
     }
 
-    @Getter
-    private CategoryId categoryId;
+    private Long categoryId;
 
-    @Getter
-    private SeriesId seriesId;
+    private Long seriesId;
 
     private Long likeCount;
 
-    private Post(String title, String content, OpenStatus openStatus, List<PostImage> postImages, Set<TagId> tagIds, CategoryId categoryId, SeriesId seriesId) {
+    private Post(String title, String content, OpenStatus openStatus, List<PostImage> postImages, Set<Long> tagIds, Long categoryId, Long seriesId) {
         Objects.requireNonNull(title);
         Objects.requireNonNull(content);
         Objects.requireNonNull(openStatus);
@@ -59,13 +50,68 @@ public class Post {
         this.seriesId = seriesId;
     }
 
+    private Post(
+            Long postId,
+            String title,
+            String content,
+            OpenStatus openStatus,
+            List<PostImage> postImages,
+            Set<Long> tagIds,
+            Long categoryId,
+            Long seriesId,
+            Long likeCount
+    ) {
+        Objects.requireNonNull(postId);
+        Objects.requireNonNull(title);
+        Objects.requireNonNull(content);
+        Objects.requireNonNull(openStatus);
+        Objects.requireNonNull(postImages);
+        Objects.requireNonNull(tagIds);
+        Objects.requireNonNull(categoryId);
+        Objects.requireNonNull(likeCount);
+
+        this.postId = postId;
+        this.title = title;
+        this.content = content;
+        this.openStatus = openStatus;
+        this.postImages = new ArrayList<>(postImages);
+        this.tagIds = new HashSet<>(tagIds);
+        this.categoryId = categoryId;
+        this.seriesId = seriesId;
+        this.likeCount = likeCount;
+    }
+
+    public static Post restore(
+            Long postId,
+            String title,
+            String content,
+            OpenStatus openStatus,
+            List<PostImage> postImages,
+            Set<Long> tagIds,
+            Long categoryId,
+            Long seriesId,
+            Long likeCount
+    ) {
+        return new Post(
+                postId,
+                title,
+                content,
+                openStatus,
+                postImages,
+                tagIds,
+                categoryId,
+                seriesId,
+                likeCount
+        );
+    }
+
     public static Post publish(
             String title,
             String content,
             List<PostImage> postImages,
-            Set<TagId> tagIds,
-            CategoryId categoryId,
-            SeriesId seriesId
+            Set<Long> tagIds,
+            Long categoryId,
+            Long seriesId
     ) {
         return new Post(
           title,
@@ -82,9 +128,9 @@ public class Post {
             String title,
             String content,
             List<PostImage> postImages,
-            Set<TagId> tagIds,
-            CategoryId categoryId,
-            SeriesId seriesId
+            Set<Long> tagIds,
+            Long categoryId,
+            Long seriesId
     ) {
         return new Post(
                 title,
@@ -109,7 +155,7 @@ public class Post {
         this.content = content;
     }
 
-    public void addImage(PostImageId postImageId, boolean isThumbnail) {
+    public void addImage(Long postImageId, boolean isThumbnail) {
         Objects.requireNonNull(postImageId);
 
         validateDuplicatedPostImage(postImageId);
@@ -123,7 +169,7 @@ public class Post {
         );
     }
 
-    private void validateDuplicatedPostImage(PostImageId postImageId) {
+    private void validateDuplicatedPostImage(Long postImageId) {
         boolean isAlreadyAdded = postImages.stream().map(PostImage::getId).anyMatch(postImageId::equals);
 
         if (isAlreadyAdded) {
@@ -131,7 +177,7 @@ public class Post {
         }
     }
 
-    public void removeImage(PostImageId postImageId) {
+    public void removeImage(Long postImageId) {
         Objects.requireNonNull(postImageId);
 
         PostImage targetPostImage = getTargetPostImage(postImageId);
@@ -139,7 +185,7 @@ public class Post {
         postImages.remove(targetPostImage);
     }
 
-    public void changeThumbnailImage(PostImageId postImageId) {
+    public void changeThumbnailImage(Long postImageId) {
         Objects.requireNonNull(postImageId);
 
         PostImage targetPostImage = getTargetPostImage(postImageId);
@@ -149,33 +195,35 @@ public class Post {
         targetPostImage.changeThumbnailImage();
     }
 
-    private PostImage getTargetPostImage(PostImageId postImageId) {
+    private PostImage getTargetPostImage(Long postImageId) {
         return postImages.stream()
                 .filter(postImage -> postImageId.equals(postImage.getId()))
                 .findFirst()
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_IMAGE_NOT_FOUND));
     }
 
-    public void addTag(TagId tagId) {
+    public void addTag(Long tagId) {
         Objects.requireNonNull(tagId);
 
         tagIds.add(tagId);
     }
 
-    public void removeTag(TagId tagId) {
+    public void removeTag(Long tagId) {
         Objects.requireNonNull(tagId);
 
         tagIds.remove(tagId);
     }
 
-    public void changeCategory (CategoryId categoryId){
+    public void changeCategory (Long categoryId){
         Objects.requireNonNull(categoryId);
 
         this.categoryId = categoryId;
     }
 
-    public void changeSeries(SeriesId seriesId) {
+    public void changeSeries(Long seriesId) {
         this.seriesId = seriesId;
     }
+
+
 
 }

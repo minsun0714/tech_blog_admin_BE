@@ -1,8 +1,7 @@
-package com.blog.be.category.infrastructure;
+package com.blog.be.category.infrastructure.repository;
 
-import com.blog.be.category.domain.Category;
-import com.blog.be.category.domain.CategoryId;
 import com.blog.be.category.domain.CategoryRepository;
+import com.blog.be.category.infrastructure.persistence.CategoryJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,27 +14,27 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     private final CategoryJpaRepository categoryJpaRepository;
 
     @Override
-    public Category save(Category category) {
+    public CategoryJpaEntity save(CategoryJpaEntity category) {
         return categoryJpaRepository.save(category);
     }
 
     @Override
-    public Optional<Category> findById(CategoryId categoryId) {
-        return categoryJpaRepository.findById(categoryId.id());
+    public Optional<CategoryJpaEntity> findById(Long categoryId) {
+        return categoryJpaRepository.findById(categoryId);
     }
 
     @Override
-    public void delete(Category category) {
+    public void delete(CategoryJpaEntity category) {
         categoryJpaRepository.delete(category);
     }
 
     @Override
-    public boolean existsById(CategoryId categoryId) {
-        return categoryJpaRepository.existsById(categoryId.id());
+    public boolean existsById(Long categoryId) {
+        return categoryJpaRepository.existsById(categoryId);
     }
 
     @Override
-    public boolean existsByParentId(CategoryId parentId) {
+    public boolean existsByParentId(Long parentId) {
         return existsById(parentId);
     }
 }

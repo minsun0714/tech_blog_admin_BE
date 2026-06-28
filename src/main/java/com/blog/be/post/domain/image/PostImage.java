@@ -7,16 +7,16 @@ import java.util.Objects;
 @Getter
 public class PostImage {
 
-    private PostImageId id;
+    private Long id;
 
     private boolean isThumbnail;
 
-    private PostImage(PostImageId postImageId, boolean isThumbnail) {
+    private PostImage(Long postImageId, boolean isThumbnail) {
         this.id = postImageId;
         this.isThumbnail = isThumbnail;
     }
 
-    public static PostImage create(PostImageId postImageId, boolean isThumbnail){
+    public static PostImage create(Long postImageId, boolean isThumbnail){
         return new PostImage(postImageId, isThumbnail);
     }
 
