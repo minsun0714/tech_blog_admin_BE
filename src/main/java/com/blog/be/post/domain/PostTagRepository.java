@@ -9,4 +9,6 @@ public interface PostTagRepository {
     void saveAll(Long postId, Set<Long> tagIds);
 
     Set<PostTagJpaEntity> findAllByPostId(Long postId);
+
+    Set<Long> deleteAllByPostId(Long postId);
 }
