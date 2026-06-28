@@ -1,4 +1,4 @@
-package com.minsun0714.techblogadminbe;
+package com.blog.be;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
