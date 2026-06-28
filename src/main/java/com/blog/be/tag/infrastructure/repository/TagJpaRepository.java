@@ -1,6 +1,5 @@
-package com.blog.be.tag.infrastructure;
+package com.blog.be.tag.infrastructure.repository;
 
-import com.blog.be.post.domain.Post;
 import com.blog.be.tag.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 

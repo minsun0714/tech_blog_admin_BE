@@ -1,14 +1,9 @@
-package com.blog.be.series.infrastructure;
+package com.blog.be.series.infrastructure.repository;
 
-import com.blog.be.category.domain.Category;
-import com.blog.be.category.domain.CategoryId;
-import com.blog.be.category.domain.CategoryRepository;
-import com.blog.be.category.infrastructure.CategoryJpaRepository;
 import com.blog.be.series.domain.Series;
 import com.blog.be.series.domain.SeriesId;
 import com.blog.be.series.domain.SeriesRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
