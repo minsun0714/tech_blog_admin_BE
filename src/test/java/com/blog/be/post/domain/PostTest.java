@@ -238,6 +238,115 @@ class PostTest {
         assertThat(post.getSeriesId()).isEqualTo(seriesId);
     }
 
+    @Test
+    @DisplayName("게시글 정보를 한번에 변경한다.")
+    void change() {
+        // given
+        Post post = createPost();
+
+        List<PostImage> images = List.of(
+                PostImage.create(1L, true),
+                PostImage.create(2L, false)
+        );
+
+        Set<Long> tagIds = Set.of(1L, 2L);
+
+        // when
+        post.change(
+                "새 제목",
+                "새 내용",
+                images,
+                tagIds,
+                10L,
+                20L
+        );
+
+        // then
+        assertThat(post.getTitle()).isEqualTo("새 제목");
+        assertThat(post.getContent()).isEqualTo("새 내용");
+        assertThat(post.getPostImages()).containsExactlyElementsOf(images);
+        assertThat(post.getTagIds()).containsExactlyInAnyOrder(1L, 2L);
+        assertThat(post.getCategoryId()).isEqualTo(10L);
+        assertThat(post.getSeriesId()).isEqualTo(20L);
+    }
+
+    @Test
+    @DisplayName("게시글 이미지를 변경한다.")
+    void changePostImages() {
+        // given
+        Post post = createPost();
+
+        List<PostImage> images = List.of(
+                PostImage.create(1L, true),
+                PostImage.create(2L, false)
+        );
+
+        // when
+        post.changePostImages(images);
+
+        // then
+        assertThat(post.getPostImages()).containsExactlyElementsOf(images);
+    }
+
+    @Test
+    @DisplayName("게시글 이미지는 null일 수 없다.")
+    void changePostImagesNull() {
+        // given
+        Post post = createPost();
+
+        // when & then
+        assertThatThrownBy(() -> post.changePostImages(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("태그를 변경한다.")
+    void changeTags() {
+        // given
+        Post post = createPost();
+
+        // when
+        post.changeTags(Set.of(1L, 2L));
+
+        // then
+        assertThat(post.getTagIds())
+                .containsExactlyInAnyOrder(1L, 2L);
+    }
+
+    @Test
+    @DisplayName("태그는 null일 수 없다.")
+    void changeTagsNull() {
+        // given
+        Post post = createPost();
+
+        // when & then
+        assertThatThrownBy(() -> post.changeTags(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("변경 시 전달받은 컬렉션을 복사한다.")
+    void defensiveCopy() {
+        // given
+        Post post = createPost();
+
+        List<PostImage> images = new java.util.ArrayList<>();
+        images.add(PostImage.create(1L, true));
+
+        Set<Long> tags = new java.util.HashSet<>(Set.of(1L));
+
+        // when
+        post.changePostImages(images);
+        post.changeTags(tags);
+
+        images.clear();
+        tags.clear();
+
+        // then
+        assertThat(post.getPostImages()).hasSize(1);
+        assertThat(post.getTagIds()).containsExactly(1L);
+    }
+
     private Post createPost() {
         return Post.publish(
                 "제목",

@@ -143,6 +143,22 @@ public class Post {
         );
     }
 
+    public void change(
+            String title,
+            String content,
+            List<PostImage> postImages,
+            Set<Long> tagIds,
+            Long categoryId,
+            Long seriesId
+    ){
+        changeTitle(title);
+        changeContent(content);
+        changePostImages(postImages);
+        changeCategory(categoryId);
+        changeSeries(seriesId);
+        changeTags(tagIds);
+    }
+
     public void changeTitle(String title) {
         Objects.requireNonNull(title);
 
@@ -212,6 +228,16 @@ public class Post {
         Objects.requireNonNull(tagId);
 
         tagIds.remove(tagId);
+    }
+
+    public void changePostImages(List<PostImage> postImages) {
+        Objects.requireNonNull(postImages);
+        this.postImages = new ArrayList<>(postImages);
+    }
+
+    public void changeTags(Set<Long> tagIds) {
+        Objects.requireNonNull(tagIds);
+        this.tagIds = new HashSet<>(tagIds);
     }
 
     public void changeCategory (Long categoryId){
