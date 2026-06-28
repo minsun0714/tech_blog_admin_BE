@@ -46,7 +46,7 @@ public class TagCommandService {
         tag.changeName(newName);
     }
 
-    public void deleteSeries(Long id){
+    public void deleteTag(Long id){
         TagJpaEntity tag = getTag(id);
 
         tagRepository.delete(tag);
