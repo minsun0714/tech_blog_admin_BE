@@ -8,3 +8,4 @@ build/
 .mvn/wrapper/maven-wrapper.jar
 
 .env
+*.pem
