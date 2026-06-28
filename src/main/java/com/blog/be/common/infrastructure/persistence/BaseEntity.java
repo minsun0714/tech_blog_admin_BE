@@ -1,4 +1,4 @@
-package com.blog.be.common.exception;
+package com.blog.be.common.infrastructure.persistence;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
