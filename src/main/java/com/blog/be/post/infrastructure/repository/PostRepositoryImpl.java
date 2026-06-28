@@ -2,34 +2,64 @@ package com.blog.be.post.infrastructure.repository;
 
 import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PostRepository;
+import com.blog.be.post.domain.PostTagRepository;
+import com.blog.be.post.infrastructure.persistence.PostImageJpaEntity;
 import com.blog.be.post.infrastructure.persistence.PostJpaEntity;
+import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
 import com.blog.be.post.infrastructure.persistence.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-
-import static com.blog.be.post.infrastructure.persistence.mapper.PostMapper.toJpaEntity;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepository {
 
+    private final PostImageJpaRepository postImageJpaRepository;
     private final PostJpaRepository postJpaRepository;
+    private final PostTagRepository postTagRepository;
 
     @Override
-    public PostJpaEntity save(Post post) {
-        return postJpaRepository.save(toJpaEntity(post));
+    public Post save(Post post) {
+
+        PostJpaEntity entity = PostMapper.toJpaEntity(post);
+
+        PostJpaEntity savedPostEntity = postJpaRepository.save(entity);
+
+        // 수정일 경우 기존 이미지 삭제
+        if (!Objects.isNull(post.getPostId())) {
+            postImageJpaRepository.deleteAllByPostId(savedPostEntity.getId());
+        }
+
+        List<PostImageJpaEntity> postImageJpaEntities =
+                PostMapper.toPostImageJpaEntities(savedPostEntity.getId(), post.getPostImages());
+
+        List<PostImageJpaEntity> savedPostImages = postImageJpaRepository.saveAll(postImageJpaEntities);
+
+        return PostMapper.toDomain(savedPostEntity, savedPostImages, post.getTagIds());
     }
 
     @Override
-    public Optional<PostJpaEntity> findById(Long postId) {
-        return postJpaRepository.findById(postId);
+    public Optional<Post> findById(Long postId) {
+        List<PostImageJpaEntity> postImageJpaEntities = postImageJpaRepository.findAllByPostId(postId);
+        Set<Long> tagIds = postTagRepository.findAllByPostId(postId)
+                .stream()
+                .map(PostTagJpaEntity::getTagId)
+                .collect(Collectors.toSet());
+
+        return postJpaRepository.findById(postId)
+                .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, postImageJpaEntities, tagIds));
     }
 
     @Override
     public void delete(Post post) {
-        postJpaRepository.delete(toJpaEntity(post));
+        postImageJpaRepository.deleteAllByPostId(post.getPostId());
+        postJpaRepository.delete(PostMapper.toJpaEntity(post));
     }
 
     @Override

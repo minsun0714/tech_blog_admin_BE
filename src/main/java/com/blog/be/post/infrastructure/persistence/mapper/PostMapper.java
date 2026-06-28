@@ -25,11 +25,14 @@ public final class PostMapper {
                 .build();
     }
 
-    public static List<PostImageJpaEntity> toPostImageJpaEntities(Post post) {
-        return post.getPostImages().stream()
+    public static List<PostImageJpaEntity> toPostImageJpaEntities(
+            Long postId,
+            List<PostImage> postImages
+    ) {
+        return postImages.stream()
                 .map(image -> PostImageJpaEntity.builder()
                         .id(image.getId())
-                        .postId(post.getPostId())
+                        .postId(postId)
                         .thumbnail(image.isThumbnail())
                         .build())
                 .toList();
