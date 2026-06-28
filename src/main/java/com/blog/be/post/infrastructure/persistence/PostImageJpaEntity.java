@@ -20,8 +20,5 @@ public class PostImageJpaEntity extends BaseEntity {
     private Long postId;
 
     @Column(nullable = false)
-    private String s3key;
-
-    @Column(nullable = false)
     private boolean thumbnail;
 }
