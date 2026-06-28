@@ -15,6 +15,11 @@ public enum CommentErrorCode implements ErrorCode {
             "댓글을 찾을 수 없습니다."
     ),
 
+    PARENT_COMMENT_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "부모 댓글을 찾을 수 없습니다."
+    ),
+
     COMMENT_ALREADY_DELETED(
             HttpStatus.BAD_REQUEST,
             "이미 삭제된 댓글입니다."
