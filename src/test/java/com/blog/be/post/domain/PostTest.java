@@ -1,10 +1,6 @@
 package com.blog.be.post.domain;
 
-import com.blog.be.category.domain.CategoryId;
 import com.blog.be.post.domain.image.PostImage;
-import com.blog.be.post.domain.image.PostImageId;
-import com.blog.be.series.domain.SeriesId;
-import com.blog.be.tag.domain.TagId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +21,8 @@ class PostTest {
                 "내용",
                 List.of(),
                 Set.of(),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
 
         // then
@@ -42,8 +38,8 @@ class PostTest {
                 "내용",
                 List.of(),
                 Set.of(),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
 
         // then
@@ -83,7 +79,7 @@ class PostTest {
         Post post = createPost();
 
         // when
-        post.addImage(new PostImageId(1L), false);
+        post.addImage(1L, false);
 
         // then
         assertThat(post.getPostImages()).hasSize(1);
@@ -95,7 +91,7 @@ class PostTest {
         // given
         Post post = createPost();
 
-        PostImageId imageId = new PostImageId(1L);
+        Long imageId = 1L;
 
         post.addImage(imageId, false);
 
@@ -108,15 +104,15 @@ class PostTest {
     @DisplayName("이미지를 삭제한다.")
     void removeImage() {
         // given
-        PostImageId imageId = new PostImageId(1L);
+        Long imageId = 1L;
 
         Post post = Post.publish(
                 "제목",
                 "내용",
                 List.of(PostImage.create(imageId, false)),
                 Set.of(),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
 
         // when
@@ -134,7 +130,7 @@ class PostTest {
 
         // when & then
         assertThatThrownBy(() ->
-                post.removeImage(new PostImageId(100L)))
+                post.removeImage(100L))
                 .isInstanceOf(PostException.class);
     }
 
@@ -142,8 +138,8 @@ class PostTest {
     @DisplayName("썸네일을 변경한다.")
     void changeThumbnailImage() {
         // given
-        PostImageId image1 = new PostImageId(1L);
-        PostImageId image2 = new PostImageId(2L);
+        Long image1 = 1L;
+        Long image2 = 2L;
 
         Post post = Post.publish(
                 "제목",
@@ -153,8 +149,8 @@ class PostTest {
                         PostImage.create(image2, false)
                 ),
                 Set.of(),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
 
         // when
@@ -184,25 +180,25 @@ class PostTest {
         Post post = createPost();
 
         // when
-        post.addTag(new TagId(1L));
+        post.addTag(1L);
 
         // then
-        assertThat(post.getTagIds()).contains(new TagId(1L));
+        assertThat(post.getTagIds()).contains(1L);
     }
 
     @Test
     @DisplayName("태그를 삭제한다.")
     void removeTag() {
         // given
-        TagId tagId = new TagId(1L);
+        Long tagId = 1L;
 
         Post post = Post.publish(
                 "제목",
                 "내용",
                 List.of(),
                 Set.of(tagId),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
 
         // when
@@ -218,7 +214,7 @@ class PostTest {
         // given
         Post post = createPost();
 
-        CategoryId categoryId = new CategoryId(10L);
+        Long categoryId = 10L;
 
         // when
         post.changeCategory(categoryId);
@@ -233,7 +229,7 @@ class PostTest {
         // given
         Post post = createPost();
 
-        SeriesId seriesId = new SeriesId(10L);
+        Long seriesId = 10L;
 
         // when
         post.changeSeries(seriesId);
@@ -248,8 +244,8 @@ class PostTest {
                 "내용",
                 List.of(),
                 Set.of(),
-                new CategoryId(1L),
-                new SeriesId(1L)
+                1L,
+                1L
         );
     }
 }

@@ -1,13 +1,13 @@
 package com.blog.be.tag.infrastructure.repository;
 
-import com.blog.be.tag.domain.Tag;
+import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TagJpaRepository extends JpaRepository<Tag, Long> {
+public interface TagJpaRepository extends JpaRepository<TagJpaEntity, Long> {
 
-    Optional<Tag> findByName(String name);
+    Optional<TagJpaEntity> findByName(String name);
 
     boolean existsByName(String name);
 }

@@ -1,14 +1,16 @@
 package com.blog.be.series.domain;
 
+import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
+
 import java.util.Optional;
 
 public interface SeriesRepository {
 
-    Series save(Series series);
+    SeriesJpaEntity save(SeriesJpaEntity series);
 
-    Optional<Series> findById(SeriesId id);
+    Optional<SeriesJpaEntity> findById(Long id);
 
-    void delete(Series series);
+    void delete(SeriesJpaEntity series);
 
-    boolean existsById(SeriesId id);
+    boolean existsById(Long id);
 }

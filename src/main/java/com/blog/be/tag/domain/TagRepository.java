@@ -1,16 +1,18 @@
 package com.blog.be.tag.domain;
 
+import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
+
 import java.util.Optional;
 
 public interface TagRepository {
 
-    Tag save(Tag tag);
+    TagJpaEntity save(TagJpaEntity tag);
 
-    Optional<Tag> findById(TagId tagId);
+    Optional<TagJpaEntity> findById(Long tagId);
 
-    Optional<Tag> findByName(String name);
+    Optional<TagJpaEntity> findByName(String name);
 
     boolean existsByName(String name);
 
-    void delete(Tag tag);
+    void delete(TagJpaEntity tag);
 }

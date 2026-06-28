@@ -1,14 +1,16 @@
 package com.blog.be.post.domain;
 
+import com.blog.be.post.infrastructure.persistence.PostJpaEntity;
+
 import java.util.Optional;
 
 public interface PostRepository {
 
-    Post save(Post post);
+    PostJpaEntity save(Post post);
 
-    Optional<Post> findById(PostId postId);
+    Optional<PostJpaEntity> findById(Long postId);
 
     void delete(Post post);
 
-    boolean existsById(PostId postId);
+    boolean existsById(Long postId);
 }

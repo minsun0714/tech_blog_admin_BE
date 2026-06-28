@@ -1,8 +1,7 @@
 package com.blog.be.tag.infrastructure.repository;
 
-import com.blog.be.tag.domain.Tag;
-import com.blog.be.tag.domain.TagId;
 import com.blog.be.tag.domain.TagRepository;
+import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,17 +14,17 @@ public class TagRepositoryImpl implements TagRepository {
     private final TagJpaRepository tagJpaRepository;
 
     @Override
-    public Tag save(Tag tag) {
+    public TagJpaEntity save(TagJpaEntity tag) {
         return tagJpaRepository.save(tag);
     }
 
     @Override
-    public Optional<Tag> findById(TagId tagId) {
-        return tagJpaRepository.findById(tagId.id());
+    public Optional<TagJpaEntity> findById(Long tagId) {
+        return tagJpaRepository.findById(tagId);
     }
 
     @Override
-    public Optional<Tag> findByName(String name) {
+    public Optional<TagJpaEntity> findByName(String name) {
         return tagJpaRepository.findByName(name);
     }
 
@@ -35,7 +34,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void delete(Tag tag) {
+    public void delete(TagJpaEntity tag) {
         tagJpaRepository.delete(tag);
     }
 }

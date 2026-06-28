@@ -1,8 +1,7 @@
 package com.blog.be.comment.infrastructure.repository;
 
-import com.blog.be.comment.domain.Comment;
-import com.blog.be.comment.domain.CommentId;
 import com.blog.be.comment.domain.CommentRepository;
+import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,22 +15,22 @@ public class CommentRepositoryImpl implements CommentRepository {
 
 
     @Override
-    public Comment save(Comment comment) {
+    public CommentJpaEntity save(CommentJpaEntity comment) {
         return commentJpaRepository.save(comment);
     }
 
     @Override
-    public Optional<Comment> findById(CommentId commentId) {
-        return commentJpaRepository.findById(commentId.id());
+    public Optional<CommentJpaEntity> findById(Long commentId) {
+        return commentJpaRepository.findById(commentId);
     }
 
     @Override
-    public void delete(Comment comment) {
+    public void delete(CommentJpaEntity comment) {
         commentJpaRepository.delete(comment);
     }
 
     @Override
-    public boolean existsById(CommentId commentId) {
-        return commentJpaRepository.existsById(commentId.id());
+    public boolean existsById(Long commentId) {
+        return commentJpaRepository.existsById(commentId);
     }
 }
