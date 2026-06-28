@@ -5,7 +5,9 @@ import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,13 +21,13 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Optional<TagJpaEntity> findById(Long tagId) {
-        return tagJpaRepository.findById(tagId);
+    public List<TagJpaEntity> saveAll(Set<TagJpaEntity> tags) {
+        return tagJpaRepository.saveAll(tags);
     }
 
     @Override
-    public Optional<TagJpaEntity> findByName(String name) {
-        return tagJpaRepository.findByName(name);
+    public Optional<TagJpaEntity> findById(Long tagId) {
+        return tagJpaRepository.findById(tagId);
     }
 
     @Override
