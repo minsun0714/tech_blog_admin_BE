@@ -21,4 +21,13 @@ public class PostTagJpaEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Long tagId;
+
+    private PostTagJpaEntity(Long postId, Long tagId){
+        this.postId = postId;
+        this.tagId = tagId;
+    }
+
+    public static PostTagJpaEntity create(Long postId, Long tagId) {
+        return new PostTagJpaEntity(postId, tagId);
+    }
 }
