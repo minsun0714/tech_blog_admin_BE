@@ -1,0 +1,35 @@
+package com.blog.be.post.infrastructure.repository;
+
+import com.blog.be.post.domain.PostTagRepository;
+import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Set;
+
+@Repository
+@RequiredArgsConstructor
+public class PostTagRepositoryImpl implements PostTagRepository {
+
+    private final PostTagJpaRepository postTagJpaRepository;
+
+    @Override
+    public void saveAll(Long postId, Set<Long> tagIds) {
+        List<PostTagJpaEntity> postTagJpaEntities = tagIds.stream()
+                .map(tagId -> PostTagJpaEntity.create(postId, tagId))
+                        .toList();
+
+        postTagJpaRepository.saveAll(postTagJpaEntities);
+    }
+
+    @Override
+    public Set<PostTagJpaEntity> findAllByPostId(Long postId) {
+        return postTagJpaRepository.findAllByPostId(postId);
+    }
+
+    @Override
+    public Set<Long> deleteAllByPostId(Long postId) {
+        return postTagJpaRepository.deleteAllByPostIdInBatch(postId);
+    }
+}
