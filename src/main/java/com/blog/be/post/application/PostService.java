@@ -1,8 +1,6 @@
 package com.blog.be.post.application;
 
-import com.blog.be.post.domain.Post;
-import com.blog.be.post.domain.PostRepository;
-import com.blog.be.post.domain.PostTagRepository;
+import com.blog.be.post.domain.*;
 import com.blog.be.post.domain.image.PostImage;
 import com.blog.be.tag.application.TagCommandService;
 import jakarta.transaction.Transactional;
@@ -69,5 +67,50 @@ public class PostService {
         Long postId = postRepository.save(post).getPostId();
 
         postTagRepository.saveAll(postId, tagIds);
+    }
+
+    public void updatePost(
+            Long postId,
+            String newTitle,
+            String newContent,
+            List<PostImage> newPostImages,
+            Set<String> newTagNames,
+            Long newCategoryId,
+            Long newSeriesId
+    ) {
+
+        Post post = getPost(postId);
+
+        postTagRepository.deleteAllByPostId(postId);
+
+        // tag batch upsert (더 이상 게시물을 참조하지 않는 태그가 생겨도 삭제하지 않고 두기로 결정)
+        Set<Long> upsertedTagIds = tagCommandService.upsertAllAndGetIds(newTagNames);
+
+        post.change(
+            newTitle,
+            newContent,
+            newPostImages,
+            upsertedTagIds,
+            newCategoryId,
+            newSeriesId
+        );
+
+        postRepository.save(post);
+
+        // tagNames와 postId로 PostTag 다시 생성
+        postTagRepository.saveAll(postId, upsertedTagIds);
+    }
+
+    public void deletePost(Long postId) {
+        Post post = getPost(postId);
+
+        postTagRepository.deleteAllByPostId(postId);
+
+        postRepository.delete(post);
+    }
+
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
     }
 }

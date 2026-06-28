@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +31,13 @@ public class PostRepositoryImpl implements PostRepository {
 
         PostJpaEntity savedPostEntity = postJpaRepository.save(entity);
 
-        List<PostImageJpaEntity> postImageJpaEntities = PostMapper.toPostImageJpaEntities(post);
+        // 수정일 경우 기존 이미지 삭제
+        if (!Objects.isNull(post.getPostId())) {
+            postImageJpaRepository.deleteAllByPostId(savedPostEntity.getId());
+        }
+
+        List<PostImageJpaEntity> postImageJpaEntities =
+                PostMapper.toPostImageJpaEntities(savedPostEntity.getId(), post.getPostImages());
 
         List<PostImageJpaEntity> savedPostImages = postImageJpaRepository.saveAll(postImageJpaEntities);
 
@@ -51,6 +58,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void delete(Post post) {
+        postImageJpaRepository.deleteAllByPostId(post.getPostId());
         postJpaRepository.delete(PostMapper.toJpaEntity(post));
     }
 

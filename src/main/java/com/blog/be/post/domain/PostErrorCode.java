@@ -5,6 +5,11 @@ import org.springframework.http.HttpStatus;
 
 public enum PostErrorCode implements ErrorCode {
 
+    POST_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "해당 게시물이 존재하지 않습니다."
+    ),
+
     DUPLICATE_POST_IMAGE(
             HttpStatus.BAD_REQUEST,
             "이미 추가된 이미지입니다."
