@@ -6,3 +6,5 @@ build/
 .classpath
 .settings/
 .mvn/wrapper/maven-wrapper.jar
+
+.env
