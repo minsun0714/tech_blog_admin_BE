@@ -2,12 +2,37 @@ services:
   app:
     image: ${DOCKERHUB_USERNAME}/tech-blog:latest
     container_name: tech-blog
+    depends_on:
+      mysql:
+        condition: service_healthy
     ports:
       - "8080:8080"
     env_file:
       - .env
     volumes:
       - ./logs:/app/logs
+    restart: always
+
+  mysql:
+    image: mysql:8.4
+    container_name: tech-blog-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     restart: always
 
   nginx:
@@ -40,3 +65,5 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
+volumes:
+  mysql-data:
