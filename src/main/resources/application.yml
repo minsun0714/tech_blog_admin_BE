@@ -3,4 +3,4 @@ spring:
     name: tech-blog-admin-be
 
 app:
-  api-key: ${API_KEY:change-me-in-production}
+  api-key: ${API_KEY}
