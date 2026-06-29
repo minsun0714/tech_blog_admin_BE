@@ -10,7 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 public class ApiKeyFilter extends OncePerRequestFilter {
 
@@ -30,10 +31,10 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String requestKey = request.getHeader(API_KEY_HEADER);
 
-        if (!Objects.equals(apiKey, requestKey)) {
+        if (!isValidApiKey(requestKey)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Invalid or missing API key\"}");
+            response.getWriter().write("{\"error\": \"Unauthorized\"}");
             return;
         }
 
@@ -44,6 +45,15 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isValidApiKey(String requestKey) {
+        byte[] expected = apiKey.getBytes(StandardCharsets.UTF_8);
+        byte[] provided = requestKey == null
+                ? new byte[0]
+                : requestKey.getBytes(StandardCharsets.UTF_8);
+
+        return MessageDigest.isEqual(expected, provided);
     }
 
     @Override
