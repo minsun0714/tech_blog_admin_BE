@@ -9,5 +9,5 @@ public interface PostTagJpaRepository extends JpaRepository<PostTagJpaEntity, Lo
 
     Set<PostTagJpaEntity> findAllByPostId(Long postId);
 
-    Set<Long> deleteAllByPostIdInBatch(Long postId);
+    Set<Long> deleteAllByPostId(Long postId);
 }

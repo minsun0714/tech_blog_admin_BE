@@ -30,6 +30,6 @@ public class PostTagRepositoryImpl implements PostTagRepository {
 
     @Override
     public Set<Long> deleteAllByPostId(Long postId) {
-        return postTagJpaRepository.deleteAllByPostIdInBatch(postId);
+        return postTagJpaRepository.deleteAllByPostId(postId);
     }
 }
