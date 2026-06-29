@@ -2,11 +2,13 @@ package com.blog.be.post.application;
 
 import com.blog.be.post.domain.*;
 import com.blog.be.post.domain.image.PostImage;
+import com.blog.be.post.infrastructure.persistence.mapper.PostMapper;
 import com.blog.be.tag.application.TagCommandService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,7 @@ public class PostService {
     private final TagCommandService tagCommandService;
     private final PostRepository postRepository;
     private final PostTagRepository postTagRepository;
+    private final PostImageRepository postImageRepository;
 
     public void publishPost(
             String title,
