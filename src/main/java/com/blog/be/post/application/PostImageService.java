@@ -3,6 +3,7 @@ package com.blog.be.post.application;
 import java.util.List;
 import java.util.Set;
 
+import com.blog.be.post.infrastructure.persistence.PostImageJpaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,15 +28,15 @@ public class PostImageService {
 
 	private final PostImageRepository postImageRepository;
 
-	public String uploadPostImage(Long postId, MultipartFile multipartFile, boolean isThumbnail) {
-		return postImageRepository.saveFile(postId, multipartFile, isThumbnail);
+	public String uploadPostImage(Long postId, String s3Key, boolean isThumbnail) {
+		return postImageRepository.saveFile(postId, s3Key, isThumbnail);
 	}
 
-	public void deletePostImagesByPostId(Long postId) {
-		postImageRepository.deleteAllByPostId(postId);
+	public List<String> deletePostImagesByPostId(Long postId) {
+		return postImageRepository.deleteAllByPostId(postId);
 	}
 
-	public void deletePostImage(String originalFilename) {
-		postImageRepository.deleteFile(originalFilename);
+	public String deletePostImage(Long imageId) {
+		return postImageRepository.deleteById(imageId);
 	}
 }

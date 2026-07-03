@@ -20,15 +20,15 @@ public class PostImageJpaEntity extends BaseEntity {
     private Long postId;
 
     @Column(nullable = false)
-    private String originalFilename;
+    private String s3Key;
 
     @Column(nullable = false)
     private boolean thumbnail;
 
-    public static PostImageJpaEntity create(Long postId, String originalFilename, boolean thumbnail) {
+    public static PostImageJpaEntity create(Long postId, String s3Key, boolean thumbnail) {
         return PostImageJpaEntity.builder()
                 .postId(postId)
-                .originalFilename(originalFilename)
+                .s3Key(s3Key)
                 .thumbnail(thumbnail)
                 .build();
     }

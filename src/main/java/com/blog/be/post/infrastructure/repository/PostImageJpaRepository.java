@@ -9,5 +9,9 @@ public interface PostImageJpaRepository extends JpaRepository<PostImageJpaEntity
 
     List<PostImageJpaEntity> findAllByPostId(Long postId);
 
-    void deleteAllByPostId(Long postId);
+    List<PostImageJpaEntity> deleteAllByPostId(Long postId);
+
+    boolean existsByS3Key(String S3Key);
+
+    void deleteByS3Key(String S3Key);
 }

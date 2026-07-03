@@ -1,51 +1,48 @@
 package com.blog.be.post.presentation;
 
+import com.blog.be.post.application.PostImageFacade;
+import com.blog.be.post.presentation.dto.PostImageResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.blog.be.post.application.PostImageService;
-import com.blog.be.post.presentation.dto.PostImageUploadRequest;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/posts/{postId}/images")
 @RequiredArgsConstructor
 public class PostImageController {
 
-	private final PostImageService postImageService;
+	private final PostImageFacade postImageFacade;
 
-	@PostMapping
-	public ResponseEntity<Void> uploadPostImage(
-		@PathVariable Long postId,
-		@RequestBody PostImageUploadRequest postImageUploadRequest
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<PostImageResponse> uploadPostImage(
+			@PathVariable Long postId,
+			@RequestPart MultipartFile image,
+			@RequestParam boolean isThumbnail
 	) {
-		postImageService.uploadPostImage(
-			postId,
-			postImageUploadRequest.multipartFile(),
-			postImageUploadRequest.isThumbnail()
+		String imageUrl = postImageFacade.uploadAndGetImageUrl(
+				postId,
+				image,
+				isThumbnail
 		);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(PostImageResponse.of(imageUrl));
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Void> deletePostImage(
+	public ResponseEntity<Void> deletePostImagesByPostId(
 		@PathVariable Long postId
 	) {
-		postImageService.deletePostImagesByPostId(postId);
+		postImageFacade.deletePostImagesByPostId(postId);
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/{originalFilename}")
+	@DeleteMapping("/{imageId}")
 	public ResponseEntity<Void> deletePostImage(
-		@PathVariable String originalFilename
+		@PathVariable Long imageId
 	) {
-		postImageService.deletePostImage(originalFilename);
+		postImageFacade.deletePostImage(imageId);
 		return ResponseEntity.ok().build();
 	}
 
