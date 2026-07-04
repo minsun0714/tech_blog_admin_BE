@@ -5,6 +5,7 @@ import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Optional<CommentJpaEntity> findById(Long commentId) {
         return commentJpaRepository.findById(commentId);
+    }
+
+    @Override
+    public List<CommentJpaEntity> findAll() {
+        return commentJpaRepository.findAll();
     }
 
     @Override
