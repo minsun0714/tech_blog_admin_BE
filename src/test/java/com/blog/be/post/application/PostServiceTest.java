@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,7 +48,6 @@ class PostServiceTest {
         postService.publishPost(
                 "제목",
                 "내용",
-                List.of(),
                 tagNames,
                 1L,
                 1L
@@ -78,7 +76,6 @@ class PostServiceTest {
         postService.draftPost(
                 "제목",
                 "내용",
-                List.of(),
                 tagNames,
                 1L,
                 1L
@@ -115,7 +112,6 @@ class PostServiceTest {
                 postId,
                 "새 제목",
                 "새 내용",
-                List.of(),
                 tagNames,
                 2L,
                 3L
@@ -168,7 +164,6 @@ class PostServiceTest {
                         1L,
                         "제목",
                         "내용",
-                        List.of(),
                         Set.of(),
                         1L,
                         1L
@@ -205,11 +200,9 @@ class PostServiceTest {
                 "제목",
                 "내용",
                 openStatus,
-                List.of(),
                 tagIds,
                 1L,
-                1L,
-                0L
+                1L
         );
     }
 }

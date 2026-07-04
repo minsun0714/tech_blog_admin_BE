@@ -21,45 +21,35 @@ public final class PostMapper {
                 .openStatus(post.getOpenStatus())
                 .categoryId(post.getCategoryId())
                 .seriesId(post.getSeriesId())
-                .likeCount(post.getLikeCount())
                 .build();
     }
 
-    public static List<PostImageJpaEntity> toPostImageJpaEntities(
+    public static PostImageJpaEntity toPostImageJpaEntity(
             Long postId,
-            List<PostImage> postImages
+            PostImage postImage,
+            String s3Key
     ) {
-        return postImages.stream()
-                .map(image -> PostImageJpaEntity.builder()
-                        .id(image.getId())
-                        .postId(postId)
-                        .thumbnail(image.isThumbnail())
-                        .build())
-                .toList();
+        return PostImageJpaEntity.builder()
+                .id(postImage.getId())
+                .postId(postId)
+                .thumbnail(postImage.isThumbnail())
+                .s3Key(s3Key)
+                .build();
     }
 
     public static Post toDomain(
             PostJpaEntity postEntity,
-            List<PostImageJpaEntity> imageEntities,
             Set<Long> tagIds
     ) {
-        List<PostImage> images = imageEntities.stream()
-                .map(image -> PostImage.create(
-                        image.getId(),
-                        image.isThumbnail()
-                ))
-                .toList();
 
         return Post.restore(
                 postEntity.getId(),
                 postEntity.getTitle(),
                 postEntity.getContent(),
                 postEntity.getOpenStatus(),
-                images,
                 tagIds,
                 postEntity.getCategoryId(),
-                postEntity.getSeriesId(),
-                postEntity.getLikeCount()
+                postEntity.getSeriesId()
         );
     }
 }

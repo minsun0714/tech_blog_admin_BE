@@ -8,7 +8,6 @@ import java.util.Set;
 public record PostUpdateRequest(
         String title,
         String content,
-        List<PostImage> postImages,
         Set<String> tagNames,
         Long categoryId,
         Long seriesId

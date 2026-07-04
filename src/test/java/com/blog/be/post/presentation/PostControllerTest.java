@@ -1,7 +1,6 @@
 package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostService;
-import com.blog.be.post.domain.image.PostImage;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
@@ -12,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @WebMvcTest(PostController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class PostControllerTest {
@@ -45,7 +45,6 @@ class PostControllerTest {
         PostPublishRequest request = new PostPublishRequest(
                 "제목",
                 "내용",
-                List.of(PostImage.create(1L, true)),
                 Set.of("Spring", "JPA"),
                 1L,
                 1L
@@ -60,7 +59,6 @@ class PostControllerTest {
         verify(postService).publishPost(
                 eq("제목"),
                 eq("내용"),
-                anyList(),
                 eq(Set.of("Spring", "JPA")),
                 eq(1L),
                 eq(1L)
@@ -74,7 +72,6 @@ class PostControllerTest {
         PostDraftRequest request = new PostDraftRequest(
                 "제목",
                 "내용",
-                List.of(PostImage.create(1L, true)),
                 Set.of("Spring"),
                 1L,
                 1L
@@ -89,7 +86,6 @@ class PostControllerTest {
         verify(postService).draftPost(
                 eq("제목"),
                 eq("내용"),
-                anyList(),
                 eq(Set.of("Spring")),
                 eq(1L),
                 eq(1L)
@@ -103,7 +99,6 @@ class PostControllerTest {
         PostUpdateRequest request = new PostUpdateRequest(
                 "수정 제목",
                 "수정 내용",
-                List.of(PostImage.create(1L, true)),
                 Set.of("DDD"),
                 2L,
                 3L
@@ -119,7 +114,6 @@ class PostControllerTest {
                 eq(1L),
                 eq("수정 제목"),
                 eq("수정 내용"),
-                anyList(),
                 eq(Set.of("DDD")),
                 eq(2L),
                 eq(3L)

@@ -1,5 +1,8 @@
 services:
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: ${DOCKERHUB_USERNAME}/tech-blog:latest
     container_name: tech-blog
     depends_on:

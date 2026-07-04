@@ -36,24 +36,18 @@ public class PostRepositoryImpl implements PostRepository {
             postImageJpaRepository.deleteAllByPostId(savedPostEntity.getId());
         }
 
-        List<PostImageJpaEntity> postImageJpaEntities =
-                PostMapper.toPostImageJpaEntities(savedPostEntity.getId(), post.getPostImages());
-
-        List<PostImageJpaEntity> savedPostImages = postImageJpaRepository.saveAll(postImageJpaEntities);
-
-        return PostMapper.toDomain(savedPostEntity, savedPostImages, post.getTagIds());
+        return PostMapper.toDomain(savedPostEntity, post.getTagIds());
     }
 
     @Override
     public Optional<Post> findById(Long postId) {
-        List<PostImageJpaEntity> postImageJpaEntities = postImageJpaRepository.findAllByPostId(postId);
         Set<Long> tagIds = postTagRepository.findAllByPostId(postId)
                 .stream()
                 .map(PostTagJpaEntity::getTagId)
                 .collect(Collectors.toSet());
 
         return postJpaRepository.findById(postId)
-                .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, postImageJpaEntities, tagIds));
+                .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, tagIds));
     }
 
     @Override
