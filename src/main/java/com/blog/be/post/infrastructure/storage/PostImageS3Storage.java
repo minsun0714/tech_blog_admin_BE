@@ -28,13 +28,6 @@ public class PostImageS3Storage implements ImageStorage {
     private String bucket;
 
     @Override
-    public List<String> uploadAll(Long postId, List<MultipartFile> multipartFiles) {
-        return multipartFiles.stream()
-                .map(multipartFile -> upload(postId, multipartFile))
-                .toList();
-    }
-
-    @Override
     public String upload(Long postId, MultipartFile multipartFile) {
         String originalFilename = multipartFile.getOriginalFilename();
 
