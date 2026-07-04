@@ -42,6 +42,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
@@ -83,7 +84,22 @@ tasks.register("generateIndexAdoc") {
                             .each { operation ->
 
                                 builder << "=== ${operation.name}\n\n"
-                                builder << "operation::${apiGroup.name}/${operation.name}[]\n\n"
+                                def snippetPath = "{snippets}/${apiGroup.name}/${operation.name}"
+
+                                builder << ".Curl\n"
+                                builder << "include::${snippetPath}/curl-request.adoc[]\n\n"
+
+                                builder << ".HTTP Request\n"
+                                builder << "include::${snippetPath}/http-request.adoc[]\n\n"
+
+                                builder << ".Request Body\n"
+                                builder << "include::${snippetPath}/request-body.adoc[]\n\n"
+
+                                builder << ".HTTP Response\n"
+                                builder << "include::${snippetPath}/http-response.adoc[]\n\n"
+
+                                builder << ".Response Body\n"
+                                builder << "include::${snippetPath}/response-body.adoc[]\n\n"
                             }
                 }
 
@@ -95,19 +111,17 @@ tasks.named("asciidoctor") {
     dependsOn(generateIndexAdoc)
 
     sourceDir = layout.buildDirectory.dir("generated-docs").get().asFile
+
     sources {
         include "index.adoc"
     }
 
     inputs.dir snippetsDir
-}
 
-tasks.register("copyDocument", Copy) {
-    dependsOn asciidoctor
-    from(layout.buildDirectory.dir("docs/asciidoc"))
-    into(layout.projectDirectory.dir("docs"))
+    attributes(
+            snippets: snippetsDir
+    )
 }
 
 tasks.named("build") {
-    dependsOn("copyDocument")
 }
