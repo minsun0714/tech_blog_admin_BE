@@ -14,5 +14,5 @@ public interface CategoryRepository {
 
     boolean existsById(Long categoryId);
 
-    boolean existsByParentId(Long parentId);
+    boolean existsByNameAndParentId(String name, Long parentId);
 }
