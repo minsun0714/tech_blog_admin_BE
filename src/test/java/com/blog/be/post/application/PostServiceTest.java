@@ -202,8 +202,7 @@ class PostServiceTest {
                 openStatus,
                 tagIds,
                 1L,
-                1L,
-                0L
+                1L
         );
     }
 }

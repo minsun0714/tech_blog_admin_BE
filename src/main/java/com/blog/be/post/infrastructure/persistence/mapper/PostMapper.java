@@ -21,7 +21,6 @@ public final class PostMapper {
                 .openStatus(post.getOpenStatus())
                 .categoryId(post.getCategoryId())
                 .seriesId(post.getSeriesId())
-                .likeCount(post.getLikeCount())
                 .build();
     }
 
@@ -50,8 +49,7 @@ public final class PostMapper {
                 postEntity.getOpenStatus(),
                 tagIds,
                 postEntity.getCategoryId(),
-                postEntity.getSeriesId(),
-                postEntity.getLikeCount()
+                postEntity.getSeriesId()
         );
     }
 }

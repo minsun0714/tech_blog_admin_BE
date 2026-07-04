@@ -26,8 +26,6 @@ public class Post {
 
     private Long seriesId;
 
-    private Long likeCount;
-
     private Post(String title, String content, OpenStatus openStatus, Set<Long> tagIds, Long categoryId, Long seriesId) {
         Objects.requireNonNull(title);
         Objects.requireNonNull(content);
@@ -49,8 +47,7 @@ public class Post {
             OpenStatus openStatus,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId,
-            Long likeCount
+            Long seriesId
     ) {
         Objects.requireNonNull(postId);
         Objects.requireNonNull(title);
@@ -58,7 +55,6 @@ public class Post {
         Objects.requireNonNull(openStatus);
         Objects.requireNonNull(tagIds);
         Objects.requireNonNull(categoryId);
-        Objects.requireNonNull(likeCount);
 
         this.postId = postId;
         this.title = title;
@@ -67,7 +63,6 @@ public class Post {
         this.tagIds = new HashSet<>(tagIds);
         this.categoryId = categoryId;
         this.seriesId = seriesId;
-        this.likeCount = likeCount;
     }
 
     public static Post restore(
@@ -77,8 +72,7 @@ public class Post {
             OpenStatus openStatus,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId,
-            Long likeCount
+            Long seriesId
     ) {
         return new Post(
                 postId,
@@ -87,8 +81,7 @@ public class Post {
                 openStatus,
                 tagIds,
                 categoryId,
-                seriesId,
-                likeCount
+                seriesId
         );
     }
 
