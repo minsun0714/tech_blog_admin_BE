@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,12 +28,15 @@ public class TagCommandService {
         tagRepository.save(tag);
     }
 
-    public Set<Long> upsertAllAndGetIds(Collection<String> tagNames) {
+    public Set<Long> upsertAllAndGetIds(Set<String> tagNames) {
         Set<TagJpaEntity> tagJpaEntities = tagNames.stream()
+                .filter(tagName -> !tagRepository.existsByName(tagName))
                 .map(TagJpaEntity::create)
                 .collect(Collectors.toSet());
 
-        return tagRepository.saveAll(tagJpaEntities)
+        tagRepository.saveAll(tagJpaEntities);
+
+        return tagRepository.findAllByNameIn(tagNames)
                 .stream()
                 .map(TagJpaEntity::getId)
                 .collect(Collectors.toSet());
