@@ -1,6 +1,7 @@
 package com.blog.be.category.presentation;
 
 import com.blog.be.category.application.CategoryCommandService;
+import com.blog.be.category.application.CategoryQueryService;
 import com.blog.be.category.presentation.dto.CategoryChangeParentRequest;
 import com.blog.be.category.presentation.dto.CategoryCreateRequest;
 import com.blog.be.category.presentation.dto.CategoryUpdateNameRequest;
@@ -14,6 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +34,22 @@ class CategoryControllerTest {
     ObjectMapper objectMapper;
 
     @MockitoBean
+    CategoryQueryService categoryQueryService;
+
+    @MockitoBean
     CategoryCommandService categoryCommandService;
+
+    @Test
+    void getAllCategories() throws Exception {
+        // given
+        given(categoryQueryService.getAllCategories())
+                .willReturn(List.of());
+
+        // when & then
+        mockMvc.perform(get("/api/categories"))
+                .andExpect(status().isOk());
+    }
+
 
     @Test
     void createCategory() throws Exception {

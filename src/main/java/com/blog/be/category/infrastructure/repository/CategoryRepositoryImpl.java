@@ -5,6 +5,7 @@ import com.blog.be.category.infrastructure.persistence.CategoryJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public CategoryJpaEntity save(CategoryJpaEntity category) {
         return categoryJpaRepository.save(category);
+    }
+
+    @Override
+    public List<CategoryJpaEntity> findAll() {
+        return categoryJpaRepository.findAll();
     }
 
     @Override

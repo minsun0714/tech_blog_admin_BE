@@ -2,11 +2,14 @@ package com.blog.be.category.domain;
 
 import com.blog.be.category.infrastructure.persistence.CategoryJpaEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository {
 
     CategoryJpaEntity save(CategoryJpaEntity category);
+
+    List<CategoryJpaEntity> findAll();
 
     Optional<CategoryJpaEntity> findById(Long categoryId);
 
