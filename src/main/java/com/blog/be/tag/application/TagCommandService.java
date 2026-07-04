@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class TagCommandService {
 
         tagRepository.saveAll(tagJpaEntities);
 
-        return tagRepository.findAllByTagNamesIn(tagNames)
+        return tagRepository.findAllByNameIn(tagNames)
                 .stream()
                 .map(TagJpaEntity::getId)
                 .collect(Collectors.toSet());
