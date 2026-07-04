@@ -5,6 +5,7 @@ import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,10 +14,14 @@ public class SeriesRepositoryImpl implements SeriesRepository {
 
     private final SeriesJpaRepository seriesJpaRepository;
 
-
     @Override
     public SeriesJpaEntity save(SeriesJpaEntity series) {
         return seriesJpaRepository.save(series);
+    }
+
+    @Override
+    public List<SeriesJpaEntity> findAll() {
+        return seriesJpaRepository.findAll();
     }
 
     @Override
