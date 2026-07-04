@@ -2,6 +2,7 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
+import com.blog.be.post.domain.Post;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
@@ -49,6 +50,25 @@ class PostControllerTest {
 
     @MockitoBean
     private PostCommandService postCommandService;
+
+    @Test
+    @DisplayName("개별 게시물을 조회한다.")
+    void getOnPost() throws Exception {
+        // given
+        given(postQueryService.findById(1L))
+                .willReturn(Post.publish(
+                        "제목",
+                        "내용",
+                        Set.of(1L, 2L),
+                        1L,
+                        1L
+                ));
+
+        // when & then
+        mockMvc.perform(get("/api/posts/1"))
+                .andExpect(status().isOk())
+                .andDo(document("post/get-detail"));
+    }
 
     @Test
     @DisplayName("카테고리별 게시글을 조회한다.")
