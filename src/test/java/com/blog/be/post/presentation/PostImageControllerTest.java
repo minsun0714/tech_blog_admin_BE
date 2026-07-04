@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,6 +58,7 @@ class PostImageControllerTest {
                         multipart("/api/posts/{postId}/images", 1L)
                                 .file(image)
                                 .param("isThumbnail", "true")
+                                .with(apiKey())
                 )
                 .andExpect(status().isOk())
                 .andDo(document("post-image/upload"));
@@ -70,7 +72,8 @@ class PostImageControllerTest {
                 .deletePostImagesByPostId(1L);
 
         // when & then
-        mockMvc.perform(delete("/api/posts/{postId}/images", 1L))
+        mockMvc.perform(delete("/api/posts/{postId}/images", 1L)
+                        .with(apiKey()))
                 .andExpect(status().isOk())
                 .andDo(document("post-image/delete-all"));
     }
@@ -83,7 +86,8 @@ class PostImageControllerTest {
                 .deletePostImage(1L);
 
         // when & then
-        mockMvc.perform(delete("/api/posts/{postId}/images/{imageId}", 1L, 1L))
+        mockMvc.perform(delete("/api/posts/{postId}/images/{imageId}", 1L, 1L)
+                        .with(apiKey()))
                 .andExpect(status().isOk())
                 .andDo(document("post-image/delete"));
     }

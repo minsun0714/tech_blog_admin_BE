@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -95,6 +96,7 @@ class CommentControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/posts/1/comments")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -112,6 +114,7 @@ class CommentControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/comments/10/replies")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -129,6 +132,7 @@ class CommentControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/comments/1")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -142,7 +146,8 @@ class CommentControllerTest {
     @DisplayName("댓글을 삭제한다.")
     void deleteComment() throws Exception {
         // when & then
-        mockMvc.perform(delete("/api/comments/1"))
+        mockMvc.perform(delete("/api/comments/1")
+                        .with(apiKey()))
                 .andExpect(status().isNoContent())
                 .andDo(document("comment/delete"));
 

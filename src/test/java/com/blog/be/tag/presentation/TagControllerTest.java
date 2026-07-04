@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -46,6 +47,7 @@ class TagControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/tags")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -63,6 +65,7 @@ class TagControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/tags/1")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -76,7 +79,8 @@ class TagControllerTest {
     @DisplayName("태그를 삭제한다.")
     void deleteTag() throws Exception {
         // when & then
-        mockMvc.perform(delete("/api/tags/1"))
+        mockMvc.perform(delete("/api/tags/1")
+                        .with(apiKey()))
                 .andExpect(status().isNoContent())
                 .andDo(document("tag/delete"));
 

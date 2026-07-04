@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -94,6 +95,7 @@ class CategoryControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/categories")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -112,6 +114,7 @@ class CategoryControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/categories/1/name")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -130,6 +133,7 @@ class CategoryControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/categories/1/parent")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -143,7 +147,8 @@ class CategoryControllerTest {
     @DisplayName("카테고리를 삭제한다")
     void deleteCategory() throws Exception {
         // when & then
-        mockMvc.perform(delete("/api/categories/1"))
+        mockMvc.perform(delete("/api/categories/1")
+                        .with(apiKey()))
                 .andExpect(status().isNoContent())
                 .andDo(document("category/delete"));
 

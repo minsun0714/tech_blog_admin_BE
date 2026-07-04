@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Set;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -97,6 +98,7 @@ class PostControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/posts/publish")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -125,6 +127,7 @@ class PostControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/posts/draft")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -153,6 +156,7 @@ class PostControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/posts/1")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -172,7 +176,8 @@ class PostControllerTest {
     @DisplayName("게시글을 삭제한다.")
     void deletePost() throws Exception {
         // when & then
-        mockMvc.perform(delete("/api/posts/1"))
+        mockMvc.perform(delete("/api/posts/1")
+                        .with(apiKey()))
                 .andExpect(status().isNoContent())
                 .andDo(document("post/delete"));
 
