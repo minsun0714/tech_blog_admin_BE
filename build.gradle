@@ -47,7 +47,7 @@ dependencies {
 }
 
 ext {
-    snippetsDir = file("build/generated-snippets")
+    snippetsDir = layout.buildDirectory.dir("generated-snippets").get().asFile
 }
 
 tasks.named('test') {
@@ -59,9 +59,8 @@ tasks.register("generateIndexAdoc") {
     dependsOn(test)
 
     doLast {
-        def snippetsDir = file("$buildDir/generated-snippets")
-        def outputDir = file("src/docs/asciidoc")
-        def indexFile = file("${outputDir}/index.adoc")
+        def outputDir = layout.buildDirectory.dir("generated-docs").get().asFile
+        def indexFile = new File(outputDir, "index.adoc")
 
         outputDir.mkdirs()
 
@@ -95,8 +94,12 @@ tasks.register("generateIndexAdoc") {
 tasks.named("asciidoctor") {
     dependsOn(generateIndexAdoc)
 
+    sourceDir = layout.buildDirectory.dir("generated-docs").get().asFile
+    sources {
+        include "index.adoc"
+    }
+
     inputs.dir snippetsDir
-    dependsOn test
 }
 
 tasks.register("copyDocument", Copy) {
