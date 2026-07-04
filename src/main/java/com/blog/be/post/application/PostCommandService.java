@@ -13,7 +13,7 @@ import java.util.Set;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PostService {
+public class PostCommandService {
 
     private final TagCommandService tagCommandService;
     private final PostRepository postRepository;

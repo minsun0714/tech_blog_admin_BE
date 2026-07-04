@@ -1,7 +1,10 @@
 package com.blog.be.post.presentation;
 
-import com.blog.be.post.application.PostService;
+import com.blog.be.post.application.PostCommandService;
+import com.blog.be.post.application.PostQueryService;
+import com.blog.be.post.domain.Post;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
+import com.blog.be.post.presentation.dto.PostListResponse;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -9,18 +12,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class PostController {
 
-    private final PostService postService;
+    private final PostQueryService postQueryService;
+    private final PostCommandService postCommandService;
+
+    @GetMapping
+    public ResponseEntity<PostListResponse> getAllPostsByCategoryId(
+            @RequestParam Long categoryId
+    ) {
+        List<Post> posts = postQueryService.findByCategoryId(categoryId);
+        return ResponseEntity.ok(PostListResponse.from(posts));
+    }
+
+    @GetMapping
+    public ResponseEntity<PostListResponse> getAllPostsBySeriesId(
+            @RequestParam Long seriesId
+    ) {
+        List<Post> posts = postQueryService.findBySeriesId(seriesId);
+        return ResponseEntity.ok(PostListResponse.from(posts));
+    }
 
     @PostMapping("/publish")
     public ResponseEntity<Void> publishPost(
             @RequestBody PostPublishRequest request
     ) {
-        postService.publishPost(
+        postCommandService.publishPost(
                 request.title(),
                 request.content(),
                 request.tagNames(),
@@ -35,7 +57,7 @@ public class PostController {
     public ResponseEntity<Void> draftPost(
             @RequestBody PostDraftRequest request
     ) {
-        postService.draftPost(
+        postCommandService.draftPost(
                 request.title(),
                 request.content(),
                 request.tagNames(),
@@ -51,7 +73,7 @@ public class PostController {
             @PathVariable Long postId,
             @RequestBody PostUpdateRequest request
     ) {
-        postService.updatePost(
+        postCommandService.updatePost(
                 postId,
                 request.title(),
                 request.content(),
@@ -67,7 +89,7 @@ public class PostController {
     public ResponseEntity<Void> deletePost(
             @PathVariable Long postId
     ) {
-        postService.deletePost(postId);
+        postCommandService.deletePost(postId);
 
         return ResponseEntity.noContent().build();
     }

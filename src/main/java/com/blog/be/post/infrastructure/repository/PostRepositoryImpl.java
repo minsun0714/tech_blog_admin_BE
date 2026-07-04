@@ -51,6 +51,16 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> findAllByCategoryId(Long categoryId) {
+        return postJpaRepository.findAllByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<Post> findAllBySeriesId(Long seriesId) {
+        return postJpaRepository.findAllBySeriesId(seriesId);
+    }
+
+    @Override
     public void delete(Post post) {
         postImageJpaRepository.deleteAllByPostId(post.getPostId());
         postJpaRepository.delete(PostMapper.toJpaEntity(post));

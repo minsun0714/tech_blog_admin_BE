@@ -1,6 +1,7 @@
 package com.blog.be.series.presentation;
 
 import com.blog.be.series.application.SeriesCommandService;
+import com.blog.be.series.application.SeriesQueryService;
 import com.blog.be.series.presentation.dto.SeriesCreateRequest;
 import com.blog.be.series.presentation.dto.SeriesUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,10 +15,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -32,7 +35,20 @@ class SeriesControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
+    private SeriesQueryService seriesQueryService;
+
+    @MockitoBean
     private SeriesCommandService seriesCommandService;
+
+    @Test
+    @DisplayName("시리즈를 모두 조회한다.")
+    void findAllSeries() throws Exception {
+        given(seriesQueryService.findAll())
+                .willReturn(List.of());
+
+        mockMvc.perform(get("/api/series"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     @DisplayName("시리즈를 생성한다.")

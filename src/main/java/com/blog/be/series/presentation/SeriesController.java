@@ -1,19 +1,32 @@
 package com.blog.be.series.presentation;
 
 import com.blog.be.series.application.SeriesCommandService;
+import com.blog.be.series.application.SeriesQueryService;
+import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
 import com.blog.be.series.presentation.dto.SeriesCreateRequest;
+import com.blog.be.series.presentation.dto.SeriesListResponse;
 import com.blog.be.series.presentation.dto.SeriesUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/series")
 @RequiredArgsConstructor
 public class SeriesController {
 
+    private final SeriesQueryService seriesQueryService;
+
     private final SeriesCommandService seriesCommandService;
+
+    @GetMapping
+    public ResponseEntity<SeriesListResponse> getAllSeries() {
+        List<SeriesJpaEntity> seriesList = seriesQueryService.findAll();
+        return ResponseEntity.ok(SeriesListResponse.from(seriesList));
+    }
 
     @PostMapping
     public ResponseEntity<Void> createSeries(
