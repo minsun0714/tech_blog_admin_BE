@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PostServiceTest {
+class PostCommandServiceTest {
 
     @Mock
     private TagCommandService tagCommandService;
@@ -29,7 +29,7 @@ class PostServiceTest {
     private PostTagRepository postTagRepository;
 
     @InjectMocks
-    private PostService postService;
+    private PostCommandService postCommandService;
 
     @Test
     @DisplayName("게시글을 발행한다.")
@@ -45,7 +45,7 @@ class PostServiceTest {
                 .thenReturn(savedPost(OpenStatus.PUBLIC, tagIds));
 
         // when
-        postService.publishPost(
+        postCommandService.publishPost(
                 "제목",
                 "내용",
                 tagNames,
@@ -73,7 +73,7 @@ class PostServiceTest {
                 .thenReturn(savedPost(OpenStatus.PRIVATE, tagIds));
 
         // when
-        postService.draftPost(
+        postCommandService.draftPost(
                 "제목",
                 "내용",
                 tagNames,
@@ -108,7 +108,7 @@ class PostServiceTest {
                 .thenReturn(post);
 
         // when
-        postService.updatePost(
+        postCommandService.updatePost(
                 postId,
                 "새 제목",
                 "새 내용",
@@ -143,7 +143,7 @@ class PostServiceTest {
                 .thenReturn(Optional.of(post));
 
         // when
-        postService.deletePost(postId);
+        postCommandService.deletePost(postId);
 
         // then
         verify(postRepository).findById(postId);
@@ -160,7 +160,7 @@ class PostServiceTest {
 
         // when & then
         assertThatThrownBy(() ->
-                postService.updatePost(
+                postCommandService.updatePost(
                         1L,
                         "제목",
                         "내용",
@@ -185,7 +185,7 @@ class PostServiceTest {
 
         // when & then
         assertThatThrownBy(() ->
-                postService.deletePost(1L)
+                postCommandService.deletePost(1L)
         )
                 .isInstanceOf(PostException.class)
                 .extracting("errorCode")

@@ -1,6 +1,6 @@
 package com.blog.be.post.presentation;
 
-import com.blog.be.post.application.PostService;
+import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
@@ -36,7 +36,7 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private PostService postService;
+    private PostCommandService postCommandService;
 
     @Test
     @DisplayName("게시글을 발행한다.")
@@ -56,7 +56,7 @@ class PostControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
 
-        verify(postService).publishPost(
+        verify(postCommandService).publishPost(
                 eq("제목"),
                 eq("내용"),
                 eq(Set.of("Spring", "JPA")),
@@ -83,7 +83,7 @@ class PostControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
 
-        verify(postService).draftPost(
+        verify(postCommandService).draftPost(
                 eq("제목"),
                 eq("내용"),
                 eq(Set.of("Spring")),
@@ -110,7 +110,7 @@ class PostControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
 
-        verify(postService).updatePost(
+        verify(postCommandService).updatePost(
                 eq(1L),
                 eq("수정 제목"),
                 eq("수정 내용"),
@@ -127,6 +127,6 @@ class PostControllerTest {
         mockMvc.perform(delete("/api/posts/1"))
                 .andExpect(status().isNoContent());
 
-        verify(postService).deletePost(1L);
+        verify(postCommandService).deletePost(1L);
     }
 }
