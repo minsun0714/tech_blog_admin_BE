@@ -29,12 +29,15 @@ public class TagCommandService {
         tagRepository.save(tag);
     }
 
-    public Set<Long> upsertAllAndGetIds(Collection<String> tagNames) {
+    public Set<Long> upsertAllAndGetIds(Set<String> tagNames) {
         Set<TagJpaEntity> tagJpaEntities = tagNames.stream()
+                .filter(tagName -> !tagRepository.existsByName(tagName))
                 .map(TagJpaEntity::create)
                 .collect(Collectors.toSet());
 
-        return tagRepository.saveAll(tagJpaEntities)
+        tagRepository.saveAll(tagJpaEntities);
+
+        return tagRepository.findAllByTagNamesIn(tagNames)
                 .stream()
                 .map(TagJpaEntity::getId)
                 .collect(Collectors.toSet());

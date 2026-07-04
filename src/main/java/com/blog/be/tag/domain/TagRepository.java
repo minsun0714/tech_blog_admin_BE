@@ -14,6 +14,8 @@ public interface TagRepository {
 
     Optional<TagJpaEntity> findById(Long tagId);
 
+    Set<TagJpaEntity> findAllByTagNamesIn(Set<String> tagNames);
+
     boolean existsByName(String name);
 
     void delete(TagJpaEntity tag);
