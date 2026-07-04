@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -79,6 +80,7 @@ class SeriesControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/series")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -96,6 +98,7 @@ class SeriesControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/series/1")
+                        .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
@@ -109,7 +112,8 @@ class SeriesControllerTest {
     @DisplayName("시리즈를 삭제한다.")
     void deleteSeries() throws Exception {
         // when & then
-        mockMvc.perform(delete("/api/series/1"))
+        mockMvc.perform(delete("/api/series/1")
+                        .with(apiKey()))
                 .andExpect(status().isNoContent())
                 .andDo(document("series/delete"));
 
