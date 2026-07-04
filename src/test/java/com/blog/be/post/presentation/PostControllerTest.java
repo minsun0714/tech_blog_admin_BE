@@ -1,6 +1,7 @@
 package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
+import com.blog.be.post.application.PostQueryService;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
@@ -8,18 +9,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(PostController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs
 class PostControllerTest {
 
     @Autowired
@@ -36,7 +44,44 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
+    private PostQueryService postQueryService;
+
+    @MockitoBean
     private PostCommandService postCommandService;
+
+    @Test
+    @DisplayName("카테고리별 게시글을 조회한다.")
+    void getAllPostsByCategoryId() throws Exception {
+        // given
+        given(postQueryService.findByCategoryId(1L))
+                .willReturn(List.of());
+
+        // when & then
+        mockMvc.perform(get("/api/posts")
+                        .param("categoryId", "1"))
+                .andExpect(status().isOk())
+                .andDo(document("post/get-by-category"));
+
+        verify(postQueryService)
+                .findByCategoryId(1L);
+    }
+
+    @Test
+    @DisplayName("시리즈별 게시글을 조회한다.")
+    void getAllPostsBySeriesId() throws Exception {
+        // given
+        given(postQueryService.findBySeriesId(2L))
+                .willReturn(List.of());
+
+        // when & then
+        mockMvc.perform(get("/api/posts")
+                        .param("seriesId", "2"))
+                .andExpect(status().isOk())
+                .andDo(document("post/get-by-series"));
+
+        verify(postQueryService)
+                .findBySeriesId(2L);
+    }
 
     @Test
     @DisplayName("게시글을 발행한다.")
@@ -54,7 +99,8 @@ class PostControllerTest {
         mockMvc.perform(post("/api/posts/publish")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("post/publish"));
 
         verify(postCommandService).publishPost(
                 eq("제목"),
@@ -81,7 +127,8 @@ class PostControllerTest {
         mockMvc.perform(post("/api/posts/draft")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("post/draft"));
 
         verify(postCommandService).draftPost(
                 eq("제목"),
@@ -108,7 +155,8 @@ class PostControllerTest {
         mockMvc.perform(patch("/api/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("post/update"));
 
         verify(postCommandService).updatePost(
                 eq(1L),
@@ -125,8 +173,10 @@ class PostControllerTest {
     void deletePost() throws Exception {
         // when & then
         mockMvc.perform(delete("/api/posts/1"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("post/delete"));
 
-        verify(postCommandService).deletePost(1L);
+        verify(postCommandService)
+                .deletePost(1L);
     }
 }
