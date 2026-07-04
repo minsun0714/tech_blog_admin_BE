@@ -4,8 +4,8 @@ import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
 import com.blog.be.post.domain.Post;
 import com.blog.be.post.presentation.dto.PostDraftRequest;
-import com.blog.be.post.presentation.dto.PostListResponse;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
+import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,20 +22,33 @@ public class PostController {
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponse> getOnePost(
+            @PathVariable Long postId
+    ) {
+        Post post = postQueryService.findById(postId);
+        return ResponseEntity.ok(PostResponse.from(post));
+    }
+
     @GetMapping(params = "categoryId")
-    public ResponseEntity<PostListResponse> getAllPostsByCategoryId(
+    public ResponseEntity<List<PostResponse>> getAllPostsByCategoryId(
             @RequestParam Long categoryId
     ) {
-        List<Post> posts = postQueryService.findByCategoryId(categoryId);
-        return ResponseEntity.ok(PostListResponse.from(posts));
+        List<PostResponse> postResponseList = postQueryService.findByCategoryId(categoryId)
+                .stream().map(PostResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(postResponseList);
     }
 
     @GetMapping(params = "seriesId")
-    public ResponseEntity<PostListResponse> getAllPostsBySeriesId(
+    public ResponseEntity<List<PostResponse>> getAllPostsBySeriesId(
             @RequestParam Long seriesId
     ) {
-        List<Post> posts = postQueryService.findBySeriesId(seriesId);
-        return ResponseEntity.ok(PostListResponse.from(posts));
+        List<PostResponse> postResponseList = postQueryService.findBySeriesId(seriesId)
+                .stream().map(PostResponse::from)
+                .toList();
+        return ResponseEntity.ok(postResponseList);
     }
 
     @PostMapping("/publish")
