@@ -18,15 +18,29 @@ public class PostImageRepositoryImpl implements PostImageRepository {
 	private final PostImageJpaRepository postImageJpaRepository;
 
 	@Override
+	public void restore(PostImageJpaEntity postImageJpaEntity) {
+		postImageJpaRepository.save(postImageJpaEntity);
+	}
+
+	@Override
+	public void restoreAll(List<PostImageJpaEntity> postImageJpaEntities) {
+		postImageJpaRepository.saveAll(postImageJpaEntities);
+	}
+
+	@Override
+	public PostImageJpaEntity findById(Long imageId) {
+		return postImageJpaRepository.findById(imageId)
+				.orElseThrow(() -> new PostException(PostErrorCode.POST_IMAGE_NOT_FOUND));
+	}
+
+	@Override
 	public List<PostImageJpaEntity> findAllByPostId(Long postId) {
 		return postImageJpaRepository.findAllByPostId(postId);
 	}
 
 	@Override
-	public List<String> deleteAllByPostId(Long postId) {
-		return postImageJpaRepository.deleteAllByPostId(postId)
-				.stream().map(PostImageJpaEntity::getS3Key)
-				.toList();
+	public List<PostImageJpaEntity> deleteAllByPostId(Long postId) {
+		return postImageJpaRepository.deleteAllByPostId(postId);
 	}
 
 	@Override
@@ -38,12 +52,18 @@ public class PostImageRepositoryImpl implements PostImageRepository {
 	}
 
 	@Override
-	public String deleteById(Long imageId) {
-		String s3Key = postImageJpaRepository.findById(imageId)
-						.map(PostImageJpaEntity::getS3Key)
-						.orElseThrow(() -> new PostException(PostErrorCode.POST_IMAGE_NOT_FOUND));
-		postImageJpaRepository.deleteByS3Key(s3Key);
+	public PostImageJpaEntity deleteById(Long postImageId) {
+		PostImageJpaEntity postImageJpaEntity = postImageJpaRepository.findById(postImageId)
+				.orElseThrow(() -> new PostException(PostErrorCode.POST_IMAGE_NOT_FOUND));
+		postImageJpaRepository.deleteById(postImageId);
+		return postImageJpaEntity;
+	}
 
-		return s3Key;
+	@Override
+	public PostImageJpaEntity delete(Long postImageId) {
+		PostImageJpaEntity postImageJpaEntity = postImageJpaRepository.findById(postImageId)
+				.orElseThrow(() -> new PostException(PostErrorCode.POST_IMAGE_NOT_FOUND));
+		postImageJpaRepository.delete(postImageJpaEntity);
+		return postImageJpaEntity;
 	}
 }

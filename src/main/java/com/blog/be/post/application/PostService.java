@@ -22,7 +22,6 @@ public class PostService {
     private final TagCommandService tagCommandService;
     private final PostRepository postRepository;
     private final PostTagRepository postTagRepository;
-    private final PostImageRepository postImageRepository;
 
     public void publishPost(
             String title,

@@ -25,17 +25,17 @@ public final class PostMapper {
                 .build();
     }
 
-    public static List<PostImageJpaEntity> toPostImageJpaEntities(
+    public static PostImageJpaEntity toPostImageJpaEntity(
             Long postId,
-            List<PostImage> postImages
+            PostImage postImage,
+            String s3Key
     ) {
-        return postImages.stream()
-                .map(image -> PostImageJpaEntity.builder()
-                        .id(image.getId())
-                        .postId(postId)
-                        .thumbnail(image.isThumbnail())
-                        .build())
-                .toList();
+        return PostImageJpaEntity.builder()
+                .id(postImage.getId())
+                .postId(postId)
+                .thumbnail(postImage.isThumbnail())
+                .s3Key(s3Key)
+                .build();
     }
 
     public static Post toDomain(

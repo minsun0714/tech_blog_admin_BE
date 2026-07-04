@@ -13,5 +13,5 @@ public interface PostImageJpaRepository extends JpaRepository<PostImageJpaEntity
 
     boolean existsByS3Key(String S3Key);
 
-    void deleteByS3Key(String S3Key);
+    PostImageJpaEntity deleteByS3Key(String S3Key);
 }

@@ -1,6 +1,6 @@
 package com.blog.be.post.application;
 
-import lombok.RequiredArgsConstructor;
+import com.blog.be.post.application.dto.DeletedPostImage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,13 +41,27 @@ public class PostImageFacade {
     }
 
     public void deletePostImagesByPostId(Long postId) {
-        List<String> s3KeyList = postImageService.deletePostImagesByPostId(postId);
-        imageStorage.deleteMany(s3KeyList);
+        List<DeletedPostImage> deletedPostImageList = postImageService.deletePostImagesByPostId(postId);
+        List<String> s3KeyList = deletedPostImageList
+                .stream()
+                .map(DeletedPostImage::s3Key)
+                .toList();
+
+        try {
+            imageStorage.deleteMany(s3KeyList);
+        } catch (Exception e) {
+            postImageService.restoreAll(deletedPostImageList);
+            throw e;
+        }
     }
 
     public void deletePostImage(Long imageId) {
-        String S3Key = postImageService.deletePostImage(imageId);
-
-        imageStorage.deleteOne(S3Key);
+        DeletedPostImage deletedPostImage = postImageService.deletePostImage(imageId);
+        try {
+            imageStorage.deleteOne(deletedPostImage.s3Key());
+        } catch (Exception e) {
+            postImageService.restore(deletedPostImage.postId(), deletedPostImage.isThumbnail(), deletedPostImage.s3Key());
+            throw e;
+        }
     }
 }

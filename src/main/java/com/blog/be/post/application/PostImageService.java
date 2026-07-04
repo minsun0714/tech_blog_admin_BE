@@ -1,20 +1,12 @@
 package com.blog.be.post.application;
 
 import java.util.List;
-import java.util.Set;
 
+import com.blog.be.post.application.dto.DeletedPostImage;
 import com.blog.be.post.infrastructure.persistence.PostImageJpaEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.blog.be.post.domain.Post;
-import com.blog.be.post.domain.PostErrorCode;
-import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.PostImageRepository;
-import com.blog.be.post.domain.PostRepository;
-import com.blog.be.post.domain.PostTagRepository;
-import com.blog.be.post.domain.image.PostImage;
-import com.blog.be.tag.application.TagCommandService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +20,35 @@ public class PostImageService {
 
 	private final PostImageRepository postImageRepository;
 
+	public void restore(Long postId, boolean isThumbnail, String s3Key) {
+		PostImageJpaEntity postImageJpaEntity = PostImageJpaEntity.create(postId, s3Key, isThumbnail);
+		postImageRepository.restore(postImageJpaEntity);
+	}
+
+	public void restoreAll(List<DeletedPostImage> deletedPostImageList) {
+		List<PostImageJpaEntity> postImageJpaEntities = deletedPostImageList.stream()
+						.map(deletedPostImage -> PostImageJpaEntity.create(deletedPostImage.postId(), deletedPostImage.s3Key(), deletedPostImage.isThumbnail()))
+						.toList();
+
+		postImageRepository.restoreAll(postImageJpaEntities);
+	}
+
 	public String uploadPostImage(Long postId, String s3Key, boolean isThumbnail) {
 		return postImageRepository.saveFile(postId, s3Key, isThumbnail);
 	}
 
-	public List<String> deletePostImagesByPostId(Long postId) {
-		return postImageRepository.deleteAllByPostId(postId);
+	public List<DeletedPostImage> deletePostImagesByPostId(Long postId) {
+		List<PostImageJpaEntity> postImageJpaEntities = postImageRepository.findAllByPostId(postId);
+		postImageRepository.deleteAllByPostId(postId);
+		return postImageJpaEntities.stream()
+				.map(postImageJpaEntity ->
+						DeletedPostImage.of(postImageJpaEntity.getPostId(), postImageJpaEntity.isThumbnail(), postImageJpaEntity.getS3Key()))
+				.toList();
 	}
 
-	public String deletePostImage(Long imageId) {
-		return postImageRepository.deleteById(imageId);
+	public DeletedPostImage deletePostImage(Long imageId) {
+		PostImageJpaEntity postImageJpaEntity = postImageRepository.findById(imageId);
+		postImageRepository.deleteById(imageId);
+		return DeletedPostImage.of(postImageJpaEntity.getPostId(), postImageJpaEntity.isThumbnail(), postImageJpaEntity.getS3Key());
 	}
 }
