@@ -34,7 +34,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public boolean existsByParentId(Long parentId) {
-        return existsById(parentId);
+    public boolean existsByNameAndParentId(String name, Long parentId) {
+        if (parentId == null) return categoryJpaRepository.existsByNameAndParentIdIsNull(name);
+        return categoryJpaRepository.existsByNameAndParentId(name, parentId);
     }
 }

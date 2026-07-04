@@ -18,6 +18,9 @@ public class CategoryCommandService {
     private final CategoryRepository categoryRepository;
 
     public void createCategory(String name, Long parentId) {
+        if (categoryRepository.existsByNameAndParentId(name, parentId)) {
+            throw new CategoryException(CategoryErrorCode.DUPLICATE_CATEGORY_NAME);
+        }
         CategoryJpaEntity category = CategoryJpaEntity.create(name, parentId);
         categoryRepository.save(category);
     }

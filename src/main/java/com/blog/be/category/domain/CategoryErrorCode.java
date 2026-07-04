@@ -23,6 +23,11 @@ public enum CategoryErrorCode implements ErrorCode {
     CATEGORY_HAS_POSTS(
             HttpStatus.BAD_REQUEST,
             "게시글이 존재하는 카테고리는 삭제할 수 없습니다."
+    ),
+
+    DUPLICATE_CATEGORY_NAME(
+            HttpStatus.CONFLICT,
+            "같은 이름의 카테고리가 같은 부모 카테고리의 자식으로 존재합니다."
     );
 
     private final HttpStatus status;
