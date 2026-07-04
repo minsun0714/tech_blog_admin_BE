@@ -22,7 +22,7 @@ public class PostController {
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
 
-    @GetMapping
+    @GetMapping(params = "categoryId")
     public ResponseEntity<PostListResponse> getAllPostsByCategoryId(
             @RequestParam Long categoryId
     ) {
@@ -30,7 +30,7 @@ public class PostController {
         return ResponseEntity.ok(PostListResponse.from(posts));
     }
 
-    @GetMapping
+    @GetMapping(params = "seriesId")
     public ResponseEntity<PostListResponse> getAllPostsBySeriesId(
             @RequestParam Long seriesId
     ) {

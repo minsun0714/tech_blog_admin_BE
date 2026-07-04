@@ -7,14 +7,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.verify;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(TagController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs
 class TagControllerTest {
 
     @Autowired
@@ -44,7 +48,8 @@ class TagControllerTest {
         mockMvc.perform(post("/api/tags")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("tag/create"));
 
         verify(tagCommandService)
                 .upsertTag("Spring");
@@ -60,7 +65,8 @@ class TagControllerTest {
         mockMvc.perform(patch("/api/tags/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("tag/update"));
 
         verify(tagCommandService)
                 .updateTagName(1L, "JPA");
@@ -71,7 +77,8 @@ class TagControllerTest {
     void deleteTag() throws Exception {
         // when & then
         mockMvc.perform(delete("/api/tags/1"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("tag/delete"));
 
         verify(tagCommandService)
                 .deleteTag(1L);
