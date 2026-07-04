@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static java.util.UUID.randomUUID;
@@ -25,6 +26,13 @@ public class PostImageS3Storage implements ImageStorage {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    @Override
+    public List<String> uploadAll(Long postId, List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream()
+                .map(multipartFile -> upload(postId, multipartFile))
+                .toList();
+    }
 
     @Override
     public String upload(Long postId, MultipartFile multipartFile) {

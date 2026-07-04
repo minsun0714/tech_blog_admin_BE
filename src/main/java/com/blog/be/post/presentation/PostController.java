@@ -23,7 +23,6 @@ public class PostController {
         postService.publishPost(
                 request.title(),
                 request.content(),
-                request.postImages(),
                 request.tagNames(),
                 request.categoryId(),
                 request.seriesId()
@@ -39,7 +38,6 @@ public class PostController {
         postService.draftPost(
                 request.title(),
                 request.content(),
-                request.postImages(),
                 request.tagNames(),
                 request.categoryId(),
                 request.seriesId()
@@ -57,7 +55,6 @@ public class PostController {
                 postId,
                 request.title(),
                 request.content(),
-                request.postImages(),
                 request.tagNames(),
                 request.categoryId(),
                 request.seriesId()

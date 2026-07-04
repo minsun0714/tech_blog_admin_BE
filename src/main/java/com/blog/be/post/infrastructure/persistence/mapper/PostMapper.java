@@ -40,22 +40,14 @@ public final class PostMapper {
 
     public static Post toDomain(
             PostJpaEntity postEntity,
-            List<PostImageJpaEntity> imageEntities,
             Set<Long> tagIds
     ) {
-        List<PostImage> images = imageEntities.stream()
-                .map(image -> PostImage.create(
-                        image.getId(),
-                        image.isThumbnail()
-                ))
-                .toList();
 
         return Post.restore(
                 postEntity.getId(),
                 postEntity.getTitle(),
                 postEntity.getContent(),
                 postEntity.getOpenStatus(),
-                images,
                 tagIds,
                 postEntity.getCategoryId(),
                 postEntity.getSeriesId(),

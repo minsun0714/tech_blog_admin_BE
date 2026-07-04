@@ -1,16 +1,12 @@
 package com.blog.be.post.application;
 
 import com.blog.be.post.domain.*;
-import com.blog.be.post.domain.image.PostImage;
-import com.blog.be.post.infrastructure.persistence.mapper.PostMapper;
 import com.blog.be.tag.application.TagCommandService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -26,7 +22,6 @@ public class PostService {
     public void publishPost(
             String title,
             String content,
-            List<PostImage> postImages,
             Set<String> tagNames,
             Long categoryId,
             Long seriesId
@@ -36,7 +31,6 @@ public class PostService {
         Post post = Post.publish(
                 title,
                 content,
-                postImages,
                 tagIds,
                 categoryId,
                 seriesId
@@ -50,7 +44,6 @@ public class PostService {
     public void draftPost(
             String title,
             String content,
-            List<PostImage> postImages,
             Set<String> tagNames,
             Long categoryId,
             Long seriesId
@@ -60,7 +53,6 @@ public class PostService {
         Post post = Post.draft(
                 title,
                 content,
-                postImages,
                 tagIds,
                 categoryId,
                 seriesId
@@ -75,7 +67,6 @@ public class PostService {
             Long postId,
             String newTitle,
             String newContent,
-            List<PostImage> newPostImages,
             Set<String> newTagNames,
             Long newCategoryId,
             Long newSeriesId
@@ -91,7 +82,6 @@ public class PostService {
         post.change(
             newTitle,
             newContent,
-            newPostImages,
             upsertedTagIds,
             newCategoryId,
             newSeriesId
