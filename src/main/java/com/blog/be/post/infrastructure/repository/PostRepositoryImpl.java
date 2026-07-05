@@ -3,14 +3,16 @@ package com.blog.be.post.infrastructure.repository;
 import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PostRepository;
 import com.blog.be.post.domain.PostTagRepository;
-import com.blog.be.post.infrastructure.persistence.PostImageJpaEntity;
 import com.blog.be.post.infrastructure.persistence.PostJpaEntity;
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
 import com.blog.be.post.infrastructure.persistence.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -41,23 +43,23 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Optional<Post> findById(Long postId) {
-        Set<Long> tagIds = postTagRepository.findAllByPostId(postId)
-                .stream()
-                .map(PostTagJpaEntity::getTagId)
-                .collect(Collectors.toSet());
-
         return postJpaRepository.findById(postId)
-                .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, tagIds));
+                .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, getTagIds(postId)));
     }
 
     @Override
-    public List<Post> findAllByCategoryId(Long categoryId) {
-        return postJpaRepository.findAllByCategoryId(categoryId);
+    public Page<Post> findAll(Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAll(pageable));
     }
 
     @Override
-    public List<Post> findAllBySeriesId(Long seriesId) {
-        return postJpaRepository.findAllBySeriesId(seriesId);
+    public Page<Post> findAllByCategoryId(Long categoryId, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllByCategoryId(categoryId, pageable));
+    }
+
+    @Override
+    public Page<Post> findAllBySeriesId(Long seriesId, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllBySeriesId(seriesId, pageable));
     }
 
     @Override
@@ -69,5 +71,33 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public boolean existsById(Long postId) {
         return postJpaRepository.existsById(postId);
+    }
+
+    private Set<Long> getTagIds(Long postId) {
+        return postTagRepository.findAllByPostId(postId)
+                .stream()
+                .map(PostTagJpaEntity::getTagId)
+                .collect(Collectors.toSet());
+    }
+
+    private Page<Post> toDomainPage(Page<PostJpaEntity> postPage) {
+        Set<Long> postIds = postPage.getContent()
+                .stream()
+                .map(PostJpaEntity::getId)
+                .collect(Collectors.toSet());
+
+        Map<Long, Set<Long>> tagIdsByPostId = postIds.isEmpty()
+                ? Collections.emptyMap()
+                : postTagRepository.findAllByPostIds(postIds)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        PostTagJpaEntity::getPostId,
+                        Collectors.mapping(PostTagJpaEntity::getTagId, Collectors.toSet())
+                ));
+
+        return postPage.map(postJpaEntity -> PostMapper.toDomain(
+                postJpaEntity,
+                tagIdsByPostId.getOrDefault(postJpaEntity.getId(), Set.of())
+        ));
     }
 }

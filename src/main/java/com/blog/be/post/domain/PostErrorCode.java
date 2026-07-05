@@ -28,6 +28,11 @@ public enum PostErrorCode implements ErrorCode {
     INVALID_POST_CONTENT(
             HttpStatus.BAD_REQUEST,
             "게시물 내용은 비어 있을 수 없습니다."
+    ),
+
+    INVALID_POST_FILTER(
+            HttpStatus.BAD_REQUEST,
+            "categoryId와 seriesId는 동시에 요청할 수 없습니다."
     );
 
     private final HttpStatus status;
