@@ -11,11 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -64,7 +60,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Page<Post> findAllByTagId(Long tagId, Pageable pageable) {
-        return toDomainPage(postJpaRepository.findAllByTagId(tagId, pageable));
+        List<Long> postIds = postTagRepository.findAllByTagId(tagId)
+                .stream()
+                .map(PostTagJpaEntity::getPostId)
+                .toList();
+
+        return toDomainPage(postJpaRepository.findAllByIdIn(postIds, pageable));
     }
 
     @Override

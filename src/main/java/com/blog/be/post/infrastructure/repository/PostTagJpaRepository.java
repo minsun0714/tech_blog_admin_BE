@@ -27,5 +27,7 @@ public interface PostTagJpaRepository extends JpaRepository<PostTagJpaEntity, Lo
         """)
     List<PostTagName> findNamesByPostIds(@Param("postIds") Set<Long> postIds);
 
+    Set<PostTagJpaEntity> findAllByTagId(Long tagId);
+
     void deleteAllByPostId(Long postId);
 }
