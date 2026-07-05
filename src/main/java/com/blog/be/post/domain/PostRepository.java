@@ -17,6 +17,8 @@ public interface PostRepository {
 
     Page<Post> findAllBySeriesId(Long seriesId, Pageable pageable);
 
+    Page<Post> findAllByTagId(Long tagId, Pageable pageable);
+
     void delete(Post post);
 
     boolean existsById(Long postId);
