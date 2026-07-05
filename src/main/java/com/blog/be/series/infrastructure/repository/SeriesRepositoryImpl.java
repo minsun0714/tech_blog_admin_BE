@@ -21,7 +21,7 @@ public class SeriesRepositoryImpl implements SeriesRepository {
 
     @Override
     public List<SeriesJpaEntity> findAll() {
-        return seriesJpaRepository.findAll();
+        return seriesJpaRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override
