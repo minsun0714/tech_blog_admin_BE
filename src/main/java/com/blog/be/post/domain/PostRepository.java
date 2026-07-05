@@ -1,6 +1,8 @@
 package com.blog.be.post.domain;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.Optional;
 
 public interface PostRepository {
@@ -9,9 +11,11 @@ public interface PostRepository {
 
     Optional<Post> findById(Long postId);
 
-    List<Post> findAllByCategoryId(Long categoryId);
+    Page<Post> findAll(Pageable pageable);
 
-    List<Post> findAllBySeriesId(Long seriesId);
+    Page<Post> findAllByCategoryId(Long categoryId, Pageable pageable);
+
+    Page<Post> findAllBySeriesId(Long seriesId, Pageable pageable);
 
     void delete(Post post);
 

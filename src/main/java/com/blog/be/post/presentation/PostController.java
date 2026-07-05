@@ -8,11 +8,14 @@ import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -30,25 +33,15 @@ public class PostController {
         return ResponseEntity.ok(PostResponse.from(post));
     }
 
-    @GetMapping(params = "categoryId")
-    public ResponseEntity<List<PostResponse>> getAllPostsByCategoryId(
-            @RequestParam Long categoryId
+    @GetMapping
+    public ResponseEntity<Page<PostResponse>> getAllPosts(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long seriesId,
+            @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
     ) {
-        List<PostResponse> postResponseList = postQueryService.findByCategoryId(categoryId)
-                .stream().map(PostResponse::from)
-                .toList();
-
-        return ResponseEntity.ok(postResponseList);
-    }
-
-    @GetMapping(params = "seriesId")
-    public ResponseEntity<List<PostResponse>> getAllPostsBySeriesId(
-            @RequestParam Long seriesId
-    ) {
-        List<PostResponse> postResponseList = postQueryService.findBySeriesId(seriesId)
-                .stream().map(PostResponse::from)
-                .toList();
-        return ResponseEntity.ok(postResponseList);
+        Page<PostResponse> postResponsePage = postQueryService.findAll(categoryId, seriesId, pageable)
+                .map(PostResponse::from);
+        return ResponseEntity.ok(postResponsePage);
     }
 
     @PostMapping("/publish")

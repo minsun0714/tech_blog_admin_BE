@@ -6,10 +6,10 @@ import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -24,11 +24,19 @@ public class PostQueryService {
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
     }
 
-    public List<Post> findByCategoryId(Long categoryId) {
-        return postRepository.findAllByCategoryId(categoryId);
-    }
+    public Page<Post> findAll(Long categoryId, Long seriesId, Pageable pageable) {
+        if (categoryId != null && seriesId != null) {
+            throw new PostException(PostErrorCode.INVALID_POST_FILTER);
+        }
 
-    public List<Post> findBySeriesId(Long seriesId) {
-        return postRepository.findAllBySeriesId(seriesId);
+        if (categoryId != null) {
+            return postRepository.findAllByCategoryId(categoryId, pageable);
+        }
+
+        if (seriesId != null) {
+            return postRepository.findAllBySeriesId(seriesId, pageable);
+        }
+
+        return postRepository.findAll(pageable);
     }
 }
