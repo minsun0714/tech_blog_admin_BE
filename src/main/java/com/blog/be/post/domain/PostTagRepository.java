@@ -12,5 +12,5 @@ public interface PostTagRepository {
 
     Set<PostTagJpaEntity> findAllByPostIds(Set<Long> postIds);
 
-    Set<Long> deleteAllByPostId(Long postId);
+    void deleteAllByPostId(Long postId);
 }
