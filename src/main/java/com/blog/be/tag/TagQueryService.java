@@ -1,7 +1,7 @@
 package com.blog.be.tag;
 
 import com.blog.be.post.domain.PostTagRepository;
-import com.blog.be.post.infrastructure.repository.dto.PostTagName;
+import com.blog.be.post.application.dto.PostTagName;
 import com.blog.be.tag.domain.TagRepository;
 import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.blog.be.post.infrastructure.repository.dto;
+package com.blog.be.post.application.dto;
 
 public record PostTagName(
         Long postId,
