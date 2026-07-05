@@ -1,6 +1,9 @@
 package com.blog.be.tag.presentation;
 
+import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
+import com.blog.be.tag.TagQueryService;
 import com.blog.be.tag.application.TagCommandService;
+import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
 import com.blog.be.tag.presentation.dto.TagCreateRequest;
 import com.blog.be.tag.presentation.dto.TagUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,12 +19,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static com.blog.be.support.MockMvcUtils.apiKey;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -37,7 +42,33 @@ class TagControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
+    private TagQueryService tagQueryService;
+
+    @MockitoBean
     private TagCommandService tagCommandService;
+
+    @Test
+    @DisplayName("모든 태그를 조회한다.")
+    void getAllTags() throws Exception {
+        // given
+        TagJpaEntity tag = TagJpaEntity.builder()
+                .id(1L)
+                .name("Spring")
+                .build();
+
+        given(tagQueryService.getAllTags())
+                .willReturn(List.of(tag));
+
+        // when & then
+        mockMvc.perform(get("/api/tags"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Spring"))
+                .andDo(document("tags/get-all"));
+
+        verify(tagQueryService)
+                .getAllTags();
+    }
 
     @Test
     @DisplayName("태그를 생성한다.")

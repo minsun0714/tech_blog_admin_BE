@@ -23,6 +23,10 @@ public class TagQueryService {
     private final PostTagRepository postTagRepository;
     private final TagRepository tagRepository;
 
+    public List<TagJpaEntity> getAllTags() {
+        return tagRepository.findAll();
+    }
+
     public List<String> findNamesByIdIn(Set<Long> tagIds) {
         return tagRepository.findAllByIdIn(tagIds)
                 .stream()
