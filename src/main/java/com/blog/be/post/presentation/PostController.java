@@ -29,8 +29,8 @@ public class PostController {
     public ResponseEntity<PostResponse> getOnePost(
             @PathVariable Long postId
     ) {
-        Post post = postQueryService.findById(postId);
-        return ResponseEntity.ok(PostResponse.from(post));
+        PostResponse postResponse = postQueryService.getOnePost(postId);
+        return ResponseEntity.ok(postResponse);
     }
 
     @GetMapping
@@ -39,8 +39,7 @@ public class PostController {
             @RequestParam(required = false) Long seriesId,
             @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
     ) {
-        Page<PostResponse> postResponsePage = postQueryService.findAll(categoryId, seriesId, pageable)
-                .map(PostResponse::from);
+        Page<PostResponse> postResponsePage = postQueryService.getPagedPosts(categoryId, seriesId, pageable);
         return ResponseEntity.ok(postResponsePage);
     }
 

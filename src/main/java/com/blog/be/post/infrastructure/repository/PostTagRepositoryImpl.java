@@ -2,6 +2,7 @@ package com.blog.be.post.infrastructure.repository;
 
 import com.blog.be.post.domain.PostTagRepository;
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
+import com.blog.be.post.infrastructure.repository.dto.PostTagName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +32,11 @@ public class PostTagRepositoryImpl implements PostTagRepository {
     @Override
     public Set<PostTagJpaEntity> findAllByPostIds(Set<Long> postIds) {
         return postTagJpaRepository.findAllByPostIdIn(postIds);
+    }
+
+    @Override
+    public List<PostTagName> findNamesByPostIds(Set<Long> postIds) {
+        return postTagJpaRepository.findNamesByPostIds(postIds);
     }
 
     @Override

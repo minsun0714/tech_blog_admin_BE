@@ -3,6 +3,7 @@ package com.blog.be.post.presentation.dto;
 import com.blog.be.post.domain.OpenStatus;
 import com.blog.be.post.domain.Post;
 
+import java.util.List;
 import java.util.Set;
 
 public record PostResponse(
@@ -10,20 +11,19 @@ public record PostResponse(
         String title,
         String content,
         OpenStatus openStatus,
-        Set<Long> tagIds,
+        List<String> tagNames,
         Long categoryId,
         Long seriesId
 ){
-    public static PostResponse from(Post post) {
+    public static PostResponse of(Post post, List<String> tagNames) {
         return new PostResponse(
                 post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getOpenStatus(),
-                post.getTagIds(),
+                tagNames,
                 post.getCategoryId(),
                 post.getSeriesId()
         );
     }
-
 }
