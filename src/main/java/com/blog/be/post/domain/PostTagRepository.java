@@ -1,7 +1,7 @@
 package com.blog.be.post.domain;
 
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
-import com.blog.be.post.application.dto.PostTagName;
+import com.blog.be.post.infrastructure.repository.projection.PostTagName;
 
 import java.util.List;
 import java.util.Set;

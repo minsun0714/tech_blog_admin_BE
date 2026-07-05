@@ -1,7 +1,7 @@
 package com.blog.be.post.infrastructure.repository;
 
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
-import com.blog.be.post.application.dto.PostTagName;
+import com.blog.be.post.infrastructure.repository.projection.PostTagName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +16,7 @@ public interface PostTagJpaRepository extends JpaRepository<PostTagJpaEntity, Lo
     Set<PostTagJpaEntity> findAllByPostIdIn(Set<Long> postIds);
 
     @Query("""
-        SELECT new com.blog.be.post.application.dto.PostTagName(
+        SELECT new com.blog.be.post.infrastructure.repository.projection.PostTagName(
             pt.postId,
             t.name
         )
