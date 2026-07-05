@@ -2,7 +2,7 @@ package com.blog.be.post.infrastructure.repository;
 
 import com.blog.be.post.domain.PostTagRepository;
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
-import com.blog.be.post.application.dto.PostTagName;
+import com.blog.be.post.infrastructure.repository.projection.PostTagName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
