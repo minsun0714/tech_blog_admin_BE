@@ -35,6 +35,11 @@ public class PostTagRepositoryImpl implements PostTagRepository {
     }
 
     @Override
+    public Set<PostTagJpaEntity> findAllByTagId(Long tagId) {
+        return postTagJpaRepository.findAllByTagId(tagId);
+    }
+
+    @Override
     public List<PostTagName> findNamesByPostIds(Set<Long> postIds) {
         return postTagJpaRepository.findNamesByPostIds(postIds);
     }
