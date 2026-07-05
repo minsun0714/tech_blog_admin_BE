@@ -38,7 +38,7 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
 
         // when & then
-        assertThatThrownBy(() -> postQueryService.findAll(1L, 2L, pageable))
+        assertThatThrownBy(() -> postQueryService.findAll(1L, 2L, null, pageable))
                 .isInstanceOf(PostException.class)
                 .extracting("errorCode")
                 .isEqualTo(PostErrorCode.INVALID_POST_FILTER);
@@ -55,7 +55,7 @@ class PostQueryServiceTest {
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(1L, null, pageable);
+        postQueryService.findAll(1L, null, null, pageable);
 
         // then
         verify(postRepository).findAllByCategoryId(1L, pageable);
@@ -72,7 +72,7 @@ class PostQueryServiceTest {
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(null, 2L, pageable);
+        postQueryService.findAll(null, 2L, null, pageable);
 
         // then
         verify(postRepository).findAllBySeriesId(2L, pageable);
@@ -89,7 +89,7 @@ class PostQueryServiceTest {
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(null, null, pageable);
+        postQueryService.findAll(null, null, null, pageable);
 
         // then
         verify(postRepository).findAll(pageable);

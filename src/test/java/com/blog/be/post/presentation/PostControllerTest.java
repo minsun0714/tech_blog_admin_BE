@@ -81,7 +81,7 @@ class PostControllerTest {
     @DisplayName("카테고리 필터로 게시글을 조회한다.")
     void getAllPostsByCategoryId() throws Exception {
         // given
-        given(postQueryService.getPagedPosts(eq(1L), eq(null), any()))
+        given(postQueryService.getPagedPosts(eq(1L), eq(null), eq(null), any()))
                 .willReturn(new PageImpl<>(List.of()));
 
         // when & then
@@ -90,14 +90,14 @@ class PostControllerTest {
                 .andExpect(status().isOk());
 
         verify(postQueryService)
-                .getPagedPosts(eq(1L), eq(null), any());
+                .getPagedPosts(eq(1L), eq(null), eq(null), any());
     }
 
     @Test
     @DisplayName("시리즈 필터로 게시글을 조회한다.")
     void getAllPostsBySeriesId() throws Exception {
         // given
-        given(postQueryService.getPagedPosts(eq(null), eq(2L), any()))
+        given(postQueryService.getPagedPosts(eq(null), eq(2L), eq(null),any()))
                 .willReturn(new PageImpl<>(List.of()));
 
         // when & then
@@ -106,7 +106,23 @@ class PostControllerTest {
                 .andExpect(status().isOk());
 
         verify(postQueryService)
-                .getPagedPosts(eq(null), eq(2L), any());
+                .getPagedPosts(eq(null), eq(2L), eq(null), any());
+    }
+
+    @Test
+    @DisplayName("태그 필터로 게시글을 조회한다.")
+    void getAllPostsByTagId() throws Exception {
+        // given
+        given(postQueryService.getPagedPosts(eq(null), eq(null), eq(2L), any()))
+                .willReturn(new PageImpl<>(List.of()));
+
+        // when & then
+        mockMvc.perform(get("/api/posts")
+                        .param("tagId", "2"))
+                .andExpect(status().isOk());
+
+        verify(postQueryService)
+                .getPagedPosts(eq(null), eq(null), eq(2L), any());
     }
 
     @Test
@@ -124,7 +140,7 @@ class PostControllerTest {
         List<String> tagNames = List.of("java", "spring");
 
         PostResponse postResponse = PostResponse.of(post, tagNames);
-        given(postQueryService.getPagedPosts(eq(null), eq(null), any()))
+        given(postQueryService.getPagedPosts(eq(null), eq(null), eq(null), any()))
                 .willReturn(new PageImpl<>(List.of(postResponse)));
 
         // when & then
@@ -134,14 +150,14 @@ class PostControllerTest {
                 .andDo(document("post/get-all"));
 
         verify(postQueryService)
-                .getPagedPosts(eq(null), eq(null), any());
+                .getPagedPosts(eq(null), eq(null), eq(null), any());
     }
 
     @Test
     @DisplayName("categoryId와 seriesId가 모두 있으면 400을 반환한다.")
     void getAllPostsWithCategoryIdAndSeriesId() throws Exception {
         // given
-        given(postQueryService.getPagedPosts(eq(1L), eq(2L), any()))
+        given(postQueryService.getPagedPosts(eq(1L), eq(2L), eq(null), any()))
                 .willThrow(new PostException(PostErrorCode.INVALID_POST_FILTER));
 
         // when & then
@@ -152,7 +168,7 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.message").value("categoryId와 seriesId는 동시에 요청할 수 없습니다."));
 
         verify(postQueryService)
-                .getPagedPosts(eq(1L), eq(2L), any());
+                .getPagedPosts(eq(1L), eq(2L), eq(null), any());
     }
 
     @Test

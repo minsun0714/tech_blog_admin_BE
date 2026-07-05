@@ -63,6 +63,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Page<Post> findAllByTagId(Long tagId, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllByTagId(tagId, pageable));
+    }
+
+    @Override
     public void delete(Post post) {
         postImageJpaRepository.deleteAllByPostId(post.getPostId());
         postJpaRepository.delete(PostMapper.toJpaEntity(post));

@@ -10,4 +10,6 @@ public interface PostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
     Page<PostJpaEntity> findAllByCategoryId(Long categoryId, Pageable pageable);
 
     Page<PostJpaEntity> findAllBySeriesId(Long seriesId, Pageable pageable);
+
+    Page<PostJpaEntity> findAllByTagId(Long tagId, Pageable pageable);
 }

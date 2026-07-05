@@ -37,9 +37,10 @@ public class PostController {
     public ResponseEntity<Page<PostResponse>> getAllPosts(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long seriesId,
+            @RequestParam(required = false) Long tagId,
             @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
     ) {
-        Page<PostResponse> postResponsePage = postQueryService.getPagedPosts(categoryId, seriesId, pageable);
+        Page<PostResponse> postResponsePage = postQueryService.getPagedPosts(categoryId, seriesId, tagId, pageable);
         return ResponseEntity.ok(postResponsePage);
     }
 

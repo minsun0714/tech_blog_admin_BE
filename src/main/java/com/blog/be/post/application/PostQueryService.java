@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -48,9 +50,10 @@ public class PostQueryService {
     public Page<PostResponse> getPagedPosts(
             Long categoryId,
             Long seriesId,
+            Long tagId,
             Pageable pageable
     ) {
-        Page<Post> posts = findAll(categoryId, seriesId, pageable);
+        Page<Post> posts = findAll(categoryId, seriesId, tagId, pageable);
 
         Set<Long> postIds = posts.stream()
                 .map(Post::getPostId)
@@ -67,8 +70,12 @@ public class PostQueryService {
         );
     }
 
-    public Page<Post> findAll(Long categoryId, Long seriesId, Pageable pageable) {
-        if (categoryId != null && seriesId != null) {
+    public Page<Post> findAll(Long categoryId, Long seriesId, Long tagId, Pageable pageable) {
+        long count = Stream.of(categoryId, seriesId, tagId)
+                .filter(Objects::nonNull)
+                .count();
+
+        if (count > 1) {
             throw new PostException(PostErrorCode.INVALID_POST_FILTER);
         }
 
@@ -78,6 +85,10 @@ public class PostQueryService {
 
         if (seriesId != null) {
             return postRepository.findAllBySeriesId(seriesId, pageable);
+        }
+
+        if (tagId != null) {
+            return postRepository.findAllByTagId(tagId, pageable);
         }
 
         return postRepository.findAll(pageable);
