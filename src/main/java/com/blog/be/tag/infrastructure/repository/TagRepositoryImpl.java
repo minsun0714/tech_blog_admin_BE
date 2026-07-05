@@ -36,6 +36,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public List<TagJpaEntity> findAllByIdIn(Set<Long> tagIds) {
+        return tagJpaRepository.findAllByIdIn(tagIds);
+    }
+
+    @Override
     public boolean existsByName(String name) {
         return tagJpaRepository.existsByName(name);
     }

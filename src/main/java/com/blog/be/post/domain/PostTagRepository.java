@@ -1,7 +1,9 @@
 package com.blog.be.post.domain;
 
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
+import com.blog.be.post.infrastructure.repository.dto.PostTagName;
 
+import java.util.List;
 import java.util.Set;
 
 public interface PostTagRepository {
@@ -11,6 +13,8 @@ public interface PostTagRepository {
     Set<PostTagJpaEntity> findAllByPostId(Long postId);
 
     Set<PostTagJpaEntity> findAllByPostIds(Set<Long> postIds);
+
+    List<PostTagName> findNamesByPostIds(Set<Long> postIds);
 
     void deleteAllByPostId(Long postId);
 }
