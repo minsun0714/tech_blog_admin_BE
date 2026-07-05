@@ -12,6 +12,8 @@ public interface TagRepository {
 
     List<TagJpaEntity> saveAll(Set<TagJpaEntity> tags);
 
+    List<TagJpaEntity> findAll();
+
     Optional<TagJpaEntity> findById(Long tagId);
 
     Set<TagJpaEntity> findAllByNameIn(Set<String> tagNames);
