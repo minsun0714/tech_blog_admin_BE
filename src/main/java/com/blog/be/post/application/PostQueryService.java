@@ -4,7 +4,6 @@ import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PostErrorCode;
 import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.PostRepository;
-import com.blog.be.post.infrastructure.repository.dto.PostTagName;
 import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.tag.TagQueryService;
 import com.blog.be.tag.domain.TagRepository;

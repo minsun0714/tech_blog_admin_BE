@@ -1,7 +1,7 @@
 package com.blog.be.post.infrastructure.repository;
 
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
-import com.blog.be.post.infrastructure.repository.dto.PostTagName;
+import com.blog.be.post.application.dto.PostTagName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
