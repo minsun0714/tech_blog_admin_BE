@@ -28,14 +28,14 @@ public class PostImageS3Storage implements ImageStorage {
     private String bucket;
 
     @Override
-    public String upload(Long postId, MultipartFile multipartFile) {
+    public String upload(MultipartFile multipartFile) {
         String originalFilename = multipartFile.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        String s3Key = postId + "/" + originalFilename + "." + randomUUID();
+        String s3Key = originalFilename + "." + randomUUID();
 
         try {
             amazonS3.putObject(bucket, s3Key, multipartFile.getInputStream(), metadata);

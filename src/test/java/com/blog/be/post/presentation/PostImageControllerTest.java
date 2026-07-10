@@ -1,6 +1,6 @@
 package com.blog.be.post.presentation;
 
-import com.blog.be.post.application.PostImageFacade;
+import com.blog.be.post.application.PostImageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.blog.be.support.MockMvcUtils.apiKey;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -34,7 +31,7 @@ class PostImageControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private PostImageFacade postImageFacade;
+    private PostImageService postImageService;
 
     @Test
     @DisplayName("게시글 이미지를 업로드한다.")
@@ -47,48 +44,17 @@ class PostImageControllerTest {
                 "image".getBytes()
         );
 
-        given(postImageFacade.uploadAndGetImageUrl(
-                anyLong(),
-                any(),
-                anyBoolean()
+        given(postImageService.uploadAndGetImageUrl(
+                any()
         )).willReturn("https://test.com/image.png");
 
         // when & then
         mockMvc.perform(
-                        multipart("/api/posts/{postId}/images", 1L)
+                        multipart("/api/images")
                                 .file(image)
-                                .param("isThumbnail", "true")
                                 .with(apiKey())
                 )
                 .andExpect(status().isOk())
                 .andDo(document("post-image/upload"));
-    }
-
-    @Test
-    @DisplayName("게시글의 모든 이미지를 삭제한다.")
-    void deletePostImagesByPostId() throws Exception {
-        // given
-        doNothing().when(postImageFacade)
-                .deletePostImagesByPostId(1L);
-
-        // when & then
-        mockMvc.perform(delete("/api/posts/{postId}/images", 1L)
-                        .with(apiKey()))
-                .andExpect(status().isOk())
-                .andDo(document("post-image/delete-all"));
-    }
-
-    @Test
-    @DisplayName("게시글 이미지를 삭제한다.")
-    void deletePostImage() throws Exception {
-        // given
-        doNothing().when(postImageFacade)
-                .deletePostImage(1L);
-
-        // when & then
-        mockMvc.perform(delete("/api/posts/{postId}/images/{imageId}", 1L, 1L)
-                        .with(apiKey()))
-                .andExpect(status().isOk())
-                .andDo(document("post-image/delete"));
     }
 }

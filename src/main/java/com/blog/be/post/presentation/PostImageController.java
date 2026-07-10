@@ -1,6 +1,6 @@
 package com.blog.be.post.presentation;
 
-import com.blog.be.post.application.PostImageFacade;
+import com.blog.be.post.application.PostImageService;
 import com.blog.be.post.presentation.dto.PostImageResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,40 +10,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/posts/{postId}/images")
+@RequestMapping("/api/images")
 @RequiredArgsConstructor
 public class PostImageController {
 
-	private final PostImageFacade postImageFacade;
+	private final PostImageService postImageService;
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<PostImageResponse> uploadPostImage(
-			@PathVariable Long postId,
-			@RequestPart MultipartFile image,
-			@RequestParam boolean isThumbnail
+			@RequestPart MultipartFile image
 	) {
-		String imageUrl = postImageFacade.uploadAndGetImageUrl(
-				postId,
-				image,
-				isThumbnail
-		);
+		String imageUrl = postImageService.uploadAndGetImageUrl(image);
 		return ResponseEntity.ok().body(PostImageResponse.of(imageUrl));
-	}
-
-	@DeleteMapping
-	public ResponseEntity<Void> deletePostImagesByPostId(
-		@PathVariable Long postId
-	) {
-		postImageFacade.deletePostImagesByPostId(postId);
-		return ResponseEntity.ok().build();
-	}
-
-	@DeleteMapping("/{imageId}")
-	public ResponseEntity<Void> deletePostImage(
-		@PathVariable Long imageId
-	) {
-		postImageFacade.deletePostImage(imageId);
-		return ResponseEntity.ok().build();
 	}
 
 }
