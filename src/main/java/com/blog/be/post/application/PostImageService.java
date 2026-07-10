@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class PostImageService {
 
-	@Value("{cloud.aws.s3.base-url")
+	@Value("${cloud.aws.s3.base-url")
 	private String s3BaseUrl;
 
 	private final ImageStorage imageStorage;
