@@ -53,7 +53,8 @@ public class PostController {
                 request.content(),
                 request.tagNames(),
                 request.categoryId(),
-                request.seriesId()
+                request.seriesId(),
+                request.postUuid()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -68,7 +69,8 @@ public class PostController {
                 request.content(),
                 request.tagNames(),
                 request.categoryId(),
-                request.seriesId()
+                request.seriesId(),
+                request.postUuid()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

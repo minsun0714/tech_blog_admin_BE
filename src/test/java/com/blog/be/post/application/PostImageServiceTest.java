@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -29,12 +30,13 @@ class PostImageServiceTest {
     void uploadPostImage() {
 
         MultipartFile file = mock(MultipartFile.class);
+        String postUuid = UUID.randomUUID().toString();
 
-        when(imageStorage.upload(file))
+        when(imageStorage.upload(file, postUuid))
                 .thenReturn("https://image");
 
         String result =
-                imageStorage.upload(file);
+                imageStorage.upload(file, postUuid);
 
         assertEquals("https://image", result);
     }

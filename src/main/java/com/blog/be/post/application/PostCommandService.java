@@ -24,7 +24,8 @@ public class PostCommandService {
             String content,
             Set<String> tagNames,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            String postUuid
     ) {
         Set<Long> tagIds = tagCommandService.upsertAllAndGetIds(tagNames);
 
@@ -36,7 +37,7 @@ public class PostCommandService {
                 seriesId
         );
 
-        Long postId = postRepository.save(post).getPostId();
+        Long postId = postRepository.save(post, postUuid).getPostId();
 
         postTagRepository.saveAll(postId, tagIds);
     }
@@ -46,7 +47,8 @@ public class PostCommandService {
             String content,
             Set<String> tagNames,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            String postUuid
     ) {
         Set<Long> tagIds = tagCommandService.upsertAllAndGetIds(tagNames);
 
@@ -58,7 +60,7 @@ public class PostCommandService {
                 seriesId
         );
 
-        Long postId = postRepository.save(post).getPostId();
+        Long postId = postRepository.save(post, postUuid).getPostId();
 
         postTagRepository.saveAll(postId, tagIds);
     }

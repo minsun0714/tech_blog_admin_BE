@@ -9,6 +9,8 @@ public interface PostRepository {
 
     Post save(Post post);
 
+    Post save(Post post, String postUuid);
+
     Optional<Post> findById(Long postId);
 
     Page<Post> findAll(Pageable pageable);

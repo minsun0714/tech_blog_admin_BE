@@ -13,7 +13,7 @@ public final class PostMapper {
     private PostMapper() {
     }
 
-    public static PostJpaEntity toJpaEntity(Post post) {
+    public static PostJpaEntity toJpaEntity(Post post, String postUuid) {
         return PostJpaEntity.builder()
                 .id(post.getPostId())
                 .title(post.getTitle())
@@ -21,6 +21,7 @@ public final class PostMapper {
                 .openStatus(post.getOpenStatus())
                 .categoryId(post.getCategoryId())
                 .seriesId(post.getSeriesId())
+                .postUuid(postUuid)
                 .build();
     }
 

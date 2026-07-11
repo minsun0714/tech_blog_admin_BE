@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.hamcrest.Matchers.hasSize;
@@ -175,12 +176,14 @@ class PostControllerTest {
     @DisplayName("게시글을 발행한다.")
     void publishPost() throws Exception {
         // given
+        String uuid = UUID.randomUUID().toString();
         PostPublishRequest request = new PostPublishRequest(
                 "제목",
                 "내용",
                 Set.of("Spring", "JPA"),
                 1L,
-                1L
+                1L,
+                uuid
         );
 
         // when & then
@@ -196,7 +199,8 @@ class PostControllerTest {
                 eq("내용"),
                 eq(Set.of("Spring", "JPA")),
                 eq(1L),
-                eq(1L)
+                eq(1L),
+                eq(uuid)
         );
     }
 
@@ -204,12 +208,14 @@ class PostControllerTest {
     @DisplayName("게시글을 임시 저장한다.")
     void draftPost() throws Exception {
         // given
+        String uuid = UUID.randomUUID().toString();
         PostDraftRequest request = new PostDraftRequest(
                 "제목",
                 "내용",
                 Set.of("Spring"),
                 1L,
-                1L
+                1L,
+                uuid
         );
 
         // when & then
@@ -225,7 +231,8 @@ class PostControllerTest {
                 eq("내용"),
                 eq(Set.of("Spring")),
                 eq(1L),
-                eq(1L)
+                eq(1L),
+                eq(uuid)
         );
     }
 

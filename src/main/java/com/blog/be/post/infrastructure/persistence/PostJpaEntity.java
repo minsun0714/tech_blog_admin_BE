@@ -21,7 +21,7 @@ public class PostJpaEntity extends BaseEntity {
     private String title;
 
     @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -33,6 +33,9 @@ public class PostJpaEntity extends BaseEntity {
 
     @Column
     private Long seriesId;
+
+    @Column
+    private String postUuid;
 
     @Column(nullable = false)
     @Builder.Default

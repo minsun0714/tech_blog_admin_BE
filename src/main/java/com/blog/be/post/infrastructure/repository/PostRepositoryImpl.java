@@ -1,8 +1,6 @@
 package com.blog.be.post.infrastructure.repository;
 
-import com.blog.be.post.domain.Post;
-import com.blog.be.post.domain.PostRepository;
-import com.blog.be.post.domain.PostTagRepository;
+import com.blog.be.post.domain.*;
 import com.blog.be.post.infrastructure.persistence.PostJpaEntity;
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
 import com.blog.be.post.infrastructure.persistence.mapper.PostMapper;
@@ -24,8 +22,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post save(Post post) {
+        PostJpaEntity oldJpaEntity = postJpaRepository.findById(post.getPostId())
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
 
-        PostJpaEntity entity = PostMapper.toJpaEntity(post);
+        return save(post, oldJpaEntity.getPostUuid());
+    }
+
+    @Override
+    public Post save(Post post, String postUuid) {
+
+        PostJpaEntity entity = PostMapper.toJpaEntity(post, postUuid);
 
         PostJpaEntity savedPostEntity = postJpaRepository.save(entity);
 
@@ -70,8 +76,8 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void delete(Post post) {
-        postImageJpaRepository.deleteAllByPostId(post.getPostId());
-        postJpaRepository.delete(PostMapper.toJpaEntity(post));
+//        postImageJpaRepository.deleteAllByPostId(post.getPostId());
+//        postJpaRepository.delete(PostMapper.toJpaEntity(post));
     }
 
     @Override
