@@ -7,8 +7,6 @@ import java.util.List;
 public interface ImageStorage {
     String upload(MultipartFile multipartFile, String uuid);
 
-    void deleteMany(List<String> deleteList);
-
-    void deleteOne(String key);
+    void deleteMany(String postUuid);
 }
 

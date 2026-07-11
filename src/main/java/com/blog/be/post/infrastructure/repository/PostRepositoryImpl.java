@@ -75,9 +75,13 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public void delete(Post post) {
-//        postImageJpaRepository.deleteAllByPostId(post.getPostId());
-//        postJpaRepository.delete(PostMapper.toJpaEntity(post));
+    public String deleteById(Long postId) {
+        PostJpaEntity postJpaEntity = postJpaRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
+
+        postJpaRepository.delete(postJpaEntity);
+
+        return postJpaEntity.getPostUuid();
     }
 
     @Override

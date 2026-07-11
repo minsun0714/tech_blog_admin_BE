@@ -21,7 +21,7 @@ public interface PostRepository {
 
     Page<Post> findAllByTagId(Long tagId, Pageable pageable);
 
-    void delete(Post post);
+    String deleteById(Long postId);
 
     boolean existsById(Long postId);
 }
