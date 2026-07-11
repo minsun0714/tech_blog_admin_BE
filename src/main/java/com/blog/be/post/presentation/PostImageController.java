@@ -1,6 +1,7 @@
 package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostImageService;
+import com.blog.be.post.application.PostQueryService;
 import com.blog.be.post.presentation.dto.PostUuidResponse;
 import com.blog.be.post.presentation.dto.PostImageResponse;
 import jakarta.validation.Valid;
@@ -19,11 +20,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostImageController {
 
+	private final PostQueryService postQueryService;
 	private final PostImageService postImageService;
 
 	@GetMapping("/uuid")
 	public ResponseEntity<PostUuidResponse> getPostUuid() {
 		return ResponseEntity.ok().body(PostUuidResponse.of(UUID.randomUUID().toString()));
+	}
+
+	@GetMapping("/uuid/{postId}")
+	public ResponseEntity<PostUuidResponse> getPostUuid(
+			@PathVariable Long postId
+	) {
+		String postUuid = postQueryService.getUuidByPostId(postId);
+		return ResponseEntity.ok().body(PostUuidResponse.of(postUuid));
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
