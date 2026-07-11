@@ -1,10 +1,13 @@
 package com.blog.be.post.application;
 
+import com.blog.be.post.application.event.PostDeletedEvent;
 import com.blog.be.post.domain.*;
 import com.blog.be.tag.application.TagCommandService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.event.spi.PostDeleteEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -18,6 +21,7 @@ public class PostCommandService {
     private final TagCommandService tagCommandService;
     private final PostRepository postRepository;
     private final PostTagRepository postTagRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public void publishPost(
             String title,
@@ -96,11 +100,15 @@ public class PostCommandService {
     }
 
     public void deletePost(Long postId) {
-        Post post = getPost(postId);
-
         postTagRepository.deleteAllByPostId(postId);
 
-        postRepository.delete(post);
+        if (!postRepository.existsById(postId)) {
+            throw new PostException(PostErrorCode.POST_NOT_FOUND);
+        }
+
+        String postUuid = postRepository.deleteById(postId);
+
+        applicationEventPublisher.publishEvent(new PostDeletedEvent(postUuid));
     }
 
     private Post getPost(Long postId) {

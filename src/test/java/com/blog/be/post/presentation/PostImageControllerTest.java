@@ -1,6 +1,7 @@
 package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostImageService;
+import com.blog.be.post.application.PostQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ class PostImageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private PostQueryService postQueryService;
 
     @MockitoBean
     private PostImageService postImageService;

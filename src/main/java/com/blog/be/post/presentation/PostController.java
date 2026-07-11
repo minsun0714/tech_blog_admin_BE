@@ -2,11 +2,7 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
-import com.blog.be.post.domain.Post;
-import com.blog.be.post.presentation.dto.PostDraftRequest;
-import com.blog.be.post.presentation.dto.PostPublishRequest;
-import com.blog.be.post.presentation.dto.PostResponse;
-import com.blog.be.post.presentation.dto.PostUpdateRequest;
+import com.blog.be.post.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +22,10 @@ public class PostController {
     private final PostCommandService postCommandService;
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponse> getOnePost(
+    public ResponseEntity<PostResponseWithUuid> getOnePost(
             @PathVariable Long postId
     ) {
-        PostResponse postResponse = postQueryService.getOnePost(postId);
+        PostResponseWithUuid postResponse = postQueryService.getOnePost(postId);
         return ResponseEntity.ok(postResponse);
     }
 

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +29,9 @@ class PostCommandServiceTest {
 
     @Mock
     private PostTagRepository postTagRepository;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InjectMocks
     private PostCommandService postCommandService;
@@ -144,16 +148,15 @@ class PostCommandServiceTest {
 
         Post post = savedPost(OpenStatus.PUBLIC, Set.of());
 
-        when(postRepository.findById(postId))
-                .thenReturn(Optional.of(post));
+        when(postRepository.existsById(1L)).thenReturn(true);
 
         // when
         postCommandService.deletePost(postId);
 
         // then
-        verify(postRepository).findById(postId);
+        verify(postRepository).existsById(postId);
         verify(postTagRepository).deleteAllByPostId(postId);
-        verify(postRepository).delete(post);
+        verify(postRepository).deleteById(postId);
     }
 
     @Test
@@ -162,8 +165,6 @@ class PostCommandServiceTest {
         // given
         when(postRepository.findById(1L))
                 .thenReturn(Optional.empty());
-
-        String uuid = UUID.randomUUID().toString();
 
         // when & then
         assertThatThrownBy(() ->
@@ -187,8 +188,7 @@ class PostCommandServiceTest {
     @DisplayName("존재하지 않는 게시글은 삭제할 수 없다.")
     void deletePostNotFound() {
         // given
-        when(postRepository.findById(1L))
-                .thenReturn(Optional.empty());
+        when(postRepository.existsById(1L)).thenReturn(false);
 
         // when & then
         assertThatThrownBy(() ->
@@ -198,7 +198,7 @@ class PostCommandServiceTest {
                 .extracting("errorCode")
                 .isEqualTo(PostErrorCode.POST_NOT_FOUND);
 
-        verify(postRepository, never()).delete(any());
+        verify(postRepository, never()).deleteById(anyLong());
     }
 
     private Post savedPost(OpenStatus openStatus, Set<Long> tagIds) {

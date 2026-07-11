@@ -13,6 +13,8 @@ public interface PostRepository {
 
     Optional<Post> findById(Long postId);
 
+    String findUuidById(Long postId);
+
     Page<Post> findAll(Pageable pageable);
 
     Page<Post> findAllByCategoryId(Long categoryId, Pageable pageable);
@@ -21,7 +23,7 @@ public interface PostRepository {
 
     Page<Post> findAllByTagId(Long tagId, Pageable pageable);
 
-    void delete(Post post);
+    String deleteById(Long postId);
 
     boolean existsById(Long postId);
 }

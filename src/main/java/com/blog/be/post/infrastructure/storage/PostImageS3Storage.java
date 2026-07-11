@@ -2,10 +2,7 @@ package com.blog.be.post.infrastructure.storage;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest;
-import com.amazonaws.services.s3.model.DeleteObjectsResult;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.*;
 import com.blog.be.post.application.ImageStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,22 +43,26 @@ public class PostImageS3Storage implements ImageStorage {
     }
 
     @Override
-    public void deleteMany(List<String> s3KeyListToDelete) {
-        amazonS3.deleteObjects(new DeleteObjectsRequest(bucket)
-                .withKeys(
-                        s3KeyListToDelete.stream()
-                            .map(DeleteObjectsRequest.KeyVersion::new)
-                                .toList()
-                )
-        );
-    }
+    public void deleteMany(String postUuid) {
+        String prefix = postUuid + ".";
 
-    @Override
-    public void deleteOne(String S3Key) {
-        try {
-            amazonS3.deleteObject(new DeleteObjectRequest(bucket, S3Key));
-        } catch (SdkClientException e) {
-            throw new RuntimeException(e);
+        List<String> keys = amazonS3.listObjects(bucket, prefix)
+                .getObjectSummaries()
+                .stream()
+                .map(S3ObjectSummary::getKey)
+                .toList();
+
+        if (keys.isEmpty()) {
+            return;
         }
+
+        DeleteObjectsRequest request = new DeleteObjectsRequest(bucket)
+                .withKeys(
+                        keys.stream()
+                                .map(DeleteObjectsRequest.KeyVersion::new)
+                                .toList()
+                );
+
+        amazonS3.deleteObjects(request);
     }
 }
