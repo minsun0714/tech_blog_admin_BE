@@ -50,6 +50,13 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public String findUuidById(Long postId) {
+        return postJpaRepository.findById(postId)
+                .map(PostJpaEntity::getPostUuid)
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
+    }
+
+    @Override
     public Page<Post> findAll(Pageable pageable) {
         return toDomainPage(postJpaRepository.findAll(pageable));
     }

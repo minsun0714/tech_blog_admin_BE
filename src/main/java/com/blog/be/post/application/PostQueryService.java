@@ -5,6 +5,7 @@ import com.blog.be.post.domain.PostErrorCode;
 import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.PostRepository;
 import com.blog.be.post.presentation.dto.PostResponse;
+import com.blog.be.post.presentation.dto.PostResponseWithUuid;
 import com.blog.be.tag.TagQueryService;
 import com.blog.be.tag.domain.TagRepository;
 import com.blog.be.tag.infrastructure.persistence.TagJpaEntity;
@@ -37,14 +38,16 @@ public class PostQueryService {
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
     }
 
-    public PostResponse getOnePost(Long postId) {
+    public PostResponseWithUuid getOnePost(Long postId) {
         Post post = findById(postId);
 
         List<String> tagNames = tagRepository.findAllByIdIn(post.getTagIds())
                 .stream().map(TagJpaEntity::getName)
                 .toList();
 
-        return PostResponse.of(post, tagNames);
+        String postUuid = postRepository.findUuidById(postId);
+
+        return PostResponseWithUuid.of(post, tagNames, postUuid);
     }
 
     public Page<PostResponse> getPagedPosts(
@@ -68,6 +71,10 @@ public class PostQueryService {
                         tagNamesByPostId.getOrDefault(post.getPostId(), List.of())
                 )
         );
+    }
+
+    public String getUuidByPostId(Long postId) {
+        return postRepository.findUuidById(postId);
     }
 
     public Page<Post> findAll(Long categoryId, Long seriesId, Long tagId, Pageable pageable) {

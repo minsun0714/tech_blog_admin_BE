@@ -13,6 +13,8 @@ public interface PostRepository {
 
     Optional<Post> findById(Long postId);
 
+    String findUuidById(Long postId);
+
     Page<Post> findAll(Pageable pageable);
 
     Page<Post> findAllByCategoryId(Long categoryId, Pageable pageable);
