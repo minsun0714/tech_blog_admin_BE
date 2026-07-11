@@ -45,6 +45,15 @@ logging:
     root: INFO
     org.springframework.security: TRACE
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics
+  endpoint:
+    health:
+      show-details: always
+
 server:
   port: 8080
   forward-headers-strategy: framework
