@@ -25,8 +25,8 @@ public class PostImageService {
 
 	private final ImageStorage imageStorage;
 
-	public String uploadAndGetImageUrl(MultipartFile file) {
-		String s3Key = imageStorage.upload(file);
+	public String uploadAndGetImageUrl(MultipartFile file, String uuid) {
+		String s3Key = imageStorage.upload(file, uuid);
 		return String.join("/", s3BaseUrl, s3Key);
 	}
 }

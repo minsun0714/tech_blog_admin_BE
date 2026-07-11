@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ImageStorage {
-    String upload(MultipartFile multipartFile);
+    String upload(MultipartFile multipartFile, String uuid);
 
     void deleteMany(List<String> deleteList);
 

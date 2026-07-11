@@ -13,8 +13,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static com.blog.be.support.MockMvcUtils.apiKey;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -44,14 +47,18 @@ class PostImageControllerTest {
                 "image".getBytes()
         );
 
+        String uuidString = UUID.randomUUID().toString();
+
         given(postImageService.uploadAndGetImageUrl(
-                any()
+                any(),
+                anyString()
         )).willReturn("https://test.com/image.png");
 
         // when & then
         mockMvc.perform(
                         multipart("/api/images")
                                 .file(image)
+                                .param("postUuid", uuidString)
                                 .with(apiKey())
                 )
                 .andExpect(status().isOk())
