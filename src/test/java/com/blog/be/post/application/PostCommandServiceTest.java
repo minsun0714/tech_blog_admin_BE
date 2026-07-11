@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,13 +36,14 @@ class PostCommandServiceTest {
     @DisplayName("게시글을 발행한다.")
     void publishPost() {
         // given
+        String uuid = UUID.randomUUID().toString();
         Set<String> tagNames = Set.of("Spring", "DDD");
         Set<Long> tagIds = Set.of(1L, 2L);
 
         when(tagCommandService.upsertAllAndGetIds(tagNames))
                 .thenReturn(tagIds);
 
-        when(postRepository.save(any(Post.class)))
+        when(postRepository.save(any(Post.class), eq(uuid)))
                 .thenReturn(savedPost(OpenStatus.PUBLIC, tagIds));
 
         // when
@@ -50,12 +52,13 @@ class PostCommandServiceTest {
                 "내용",
                 tagNames,
                 1L,
-                1L
+                1L,
+                uuid
         );
 
         // then
         verify(tagCommandService).upsertAllAndGetIds(tagNames);
-        verify(postRepository).save(any(Post.class));
+        verify(postRepository).save(any(Post.class), eq(uuid));
         verify(postTagRepository).saveAll(1L, tagIds);
     }
 
@@ -63,13 +66,14 @@ class PostCommandServiceTest {
     @DisplayName("게시글를 임시 저장한다.")
     void draftPost() {
         // given
+        String uuid = UUID.randomUUID().toString();
         Set<String> tagNames = Set.of("Spring");
         Set<Long> tagIds = Set.of(1L);
 
         when(tagCommandService.upsertAllAndGetIds(tagNames))
                 .thenReturn(tagIds);
 
-        when(postRepository.save(any(Post.class)))
+        when(postRepository.save(any(Post.class), eq(uuid)))
                 .thenReturn(savedPost(OpenStatus.PRIVATE, tagIds));
 
         // when
@@ -78,12 +82,13 @@ class PostCommandServiceTest {
                 "내용",
                 tagNames,
                 1L,
-                1L
+                1L,
+                uuid
         );
 
         // then
         verify(tagCommandService).upsertAllAndGetIds(tagNames);
-        verify(postRepository).save(any(Post.class));
+        verify(postRepository).save(any(Post.class), eq(uuid));
         verify(postTagRepository).saveAll(1L, tagIds);
     }
 
@@ -157,6 +162,8 @@ class PostCommandServiceTest {
         // given
         when(postRepository.findById(1L))
                 .thenReturn(Optional.empty());
+
+        String uuid = UUID.randomUUID().toString();
 
         // when & then
         assertThatThrownBy(() ->

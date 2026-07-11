@@ -10,6 +10,7 @@ public record PostPublishRequest(
         String content,
         Set<String> tagNames,
         Long categoryId,
-        Long seriesId
+        Long seriesId,
+        String postUuid
 ) {
 }

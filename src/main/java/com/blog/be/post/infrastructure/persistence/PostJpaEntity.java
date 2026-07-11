@@ -34,6 +34,9 @@ public class PostJpaEntity extends BaseEntity {
     @Column
     private Long seriesId;
 
+    @Column
+    private String postUuid;
+
     @Column(nullable = false)
     @Builder.Default
     private Long likeCount = 0L;
