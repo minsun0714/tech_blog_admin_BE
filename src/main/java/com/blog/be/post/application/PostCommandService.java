@@ -10,7 +10,9 @@ import org.hibernate.event.spi.PostDeleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -40,6 +42,10 @@ public class PostCommandService {
                 categoryId,
                 seriesId
         );
+
+        if (Objects.isNull(postUuid)) {
+            postUuid = UUID.randomUUID().toString();
+        }
 
         Long postId = postRepository.save(post, postUuid).getPostId();
 
