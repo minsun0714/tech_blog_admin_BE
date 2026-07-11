@@ -102,7 +102,11 @@ public class PostCommandService {
     public void deletePost(Long postId) {
         postTagRepository.deleteAllByPostId(postId);
 
-        String postUuid= postRepository.deleteById(postId);
+        if (!postRepository.existsById(postId)) {
+            throw new PostException(PostErrorCode.POST_NOT_FOUND);
+        }
+
+        String postUuid = postRepository.deleteById(postId);
 
         applicationEventPublisher.publishEvent(new PostDeletedEvent(postUuid));
     }
