@@ -11,6 +11,8 @@ public interface PostRepository {
 
     Post save(Post post, String postUuid);
 
+    Long countByPublishStatus(PublishStatus publishStatus);
+
     Optional<Post> findById(Long postId);
 
     String findUuidById(Long postId);

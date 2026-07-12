@@ -2,6 +2,7 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
+import com.blog.be.post.application.dto.PostCountResponse;
 import com.blog.be.post.domain.PublishStatus;
 import com.blog.be.post.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class PostController {
 
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
+
+    @GetMapping("/count")
+    public ResponseEntity<PostCountResponse> getPostsCount() {
+        PostCountResponse postCountResponse = postQueryService.getPostsCountByPublishStatus();
+        return ResponseEntity.ok(postCountResponse);
+    }
 
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseWithUuid> getOnePost(

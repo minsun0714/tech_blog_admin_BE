@@ -2,6 +2,7 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
+import com.blog.be.post.application.dto.PostCountResponse;
 import com.blog.be.post.domain.PostErrorCode;
 import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.Post;
@@ -58,6 +59,21 @@ class PostControllerTest {
 
     @MockitoBean
     private PostCommandService postCommandService;
+
+    @Test
+    @DisplayName("저장된 게시물의 개수와 임시저장된 게시물의 개수를 조회한다.")
+    void getPostsCount() throws Exception {
+        // given
+        long publishedPostCount = 3;
+        long draftedPostCount = 5;
+        given(postQueryService.getPostsCountByPublishStatus())
+                .willReturn(PostCountResponse.of(publishedPostCount, draftedPostCount));
+
+        // when & then
+        mockMvc.perform(get("/api/posts/count"))
+                .andExpect(status().isOk())
+                .andDo(document("post/get-count"));
+    }
 
     @Test
     @DisplayName("개별 게시물을 조회한다.")

@@ -1,5 +1,6 @@
 package com.blog.be.post.application;
 
+import com.blog.be.post.application.dto.PostCountResponse;
 import com.blog.be.post.domain.*;
 import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.post.presentation.dto.PostResponseWithUuid;
@@ -29,6 +30,13 @@ public class PostQueryService {
     private final PostRepository postRepository;
     private final TagQueryService tagQueryService;
     private final TagRepository tagRepository;
+
+    public PostCountResponse getPostsCountByPublishStatus() {
+        long publishedPostsCount = postRepository.countByPublishStatus(PublishStatus.PUBLISHED);
+        long draftedPostsCount = postRepository.countByPublishStatus(PublishStatus.DRAFTED);
+
+        return PostCountResponse.of(publishedPostsCount, draftedPostsCount);
+    }
 
     public Post findById(Long postId) {
         return postRepository.findById(postId)
