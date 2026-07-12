@@ -53,7 +53,7 @@ public class PostQueryService {
             Long tagId,
             Pageable pageable
     ) {
-        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PUBLIC, pageable);
+        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, PublishStatus.PUBLIC, pageable);
 
         Set<Long> postIds = posts.stream()
                 .map(Post::getPostId)
@@ -76,7 +76,7 @@ public class PostQueryService {
             Long tagId,
             Pageable pageable
     ) {
-        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PRIVATE, pageable);
+        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, PublishStatus.PRIVATE, pageable);
 
         Set<Long> postIds = posts.stream()
                 .map(Post::getPostId)
@@ -97,7 +97,7 @@ public class PostQueryService {
         return postRepository.findUuidById(postId);
     }
 
-    public Page<Post> findAllByOpenStatus(Long categoryId, Long seriesId, Long tagId, OpenStatus openStatus, Pageable pageable) {
+    public Page<Post> findAllByOpenStatus(Long categoryId, Long seriesId, Long tagId, PublishStatus publishStatus, Pageable pageable) {
         long count = Stream.of(categoryId, seriesId, tagId)
                 .filter(Objects::nonNull)
                 .count();
@@ -107,17 +107,17 @@ public class PostQueryService {
         }
 
         if (categoryId != null) {
-            return postRepository.findAllByCategoryIdAndOpenStatus(categoryId, openStatus, pageable);
+            return postRepository.findAllByCategoryIdAndOpenStatus(categoryId, publishStatus, pageable);
         }
 
         if (seriesId != null) {
-            return postRepository.findAllBySeriesIdAndOpenStatus(seriesId, openStatus, pageable);
+            return postRepository.findAllBySeriesIdAndOpenStatus(seriesId, publishStatus, pageable);
         }
 
         if (tagId != null) {
-            return postRepository.findAllByTagIdAndOpenStatus(tagId, openStatus, pageable);
+            return postRepository.findAllByTagIdAndOpenStatus(tagId, publishStatus, pageable);
         }
 
-        return postRepository.findAllByOpenStatus(openStatus, pageable);
+        return postRepository.findAllByOpenStatus(publishStatus, pageable);
     }
 }

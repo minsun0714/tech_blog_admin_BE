@@ -1,5 +1,5 @@
 package com.blog.be.post.domain;
 
-public enum OpenStatus {
+public enum PublishStatus {
     PUBLIC, PRIVATE
 }

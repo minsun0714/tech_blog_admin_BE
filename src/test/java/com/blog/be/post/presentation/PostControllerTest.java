@@ -2,7 +2,6 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
-import com.blog.be.post.domain.OpenStatus;
 import com.blog.be.post.domain.PostErrorCode;
 import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.Post;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;

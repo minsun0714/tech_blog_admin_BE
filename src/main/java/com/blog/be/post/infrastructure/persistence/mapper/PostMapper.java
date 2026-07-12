@@ -5,7 +5,6 @@ import com.blog.be.post.domain.image.PostImage;
 import com.blog.be.post.infrastructure.persistence.PostJpaEntity;
 import com.blog.be.post.infrastructure.persistence.PostImageJpaEntity;
 
-import java.util.List;
 import java.util.Set;
 
 public final class PostMapper {
@@ -18,7 +17,7 @@ public final class PostMapper {
                 .id(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .openStatus(post.getOpenStatus())
+                .publishStatus(post.getPublishStatus())
                 .categoryId(post.getCategoryId())
                 .seriesId(post.getSeriesId())
                 .postUuid(postUuid)
@@ -47,7 +46,7 @@ public final class PostMapper {
                 postEntity.getId(),
                 postEntity.getTitle(),
                 postEntity.getContent(),
-                postEntity.getOpenStatus(),
+                postEntity.getPublishStatus(),
                 tagIds,
                 postEntity.getCategoryId(),
                 postEntity.getSeriesId()

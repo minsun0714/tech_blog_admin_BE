@@ -1,10 +1,8 @@
 package com.blog.be.post.domain;
 
-import com.blog.be.post.domain.image.PostImage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +23,7 @@ class PostTest {
         );
 
         // then
-        assertThat(post.getOpenStatus()).isEqualTo(OpenStatus.PUBLIC);
+        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.PUBLIC);
     }
 
     @Test
@@ -41,7 +39,7 @@ class PostTest {
         );
 
         // then
-        assertThat(post.getOpenStatus()).isEqualTo(OpenStatus.PRIVATE);
+        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.PRIVATE);
     }
 
     @Test
