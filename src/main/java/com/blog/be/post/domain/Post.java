@@ -89,32 +89,16 @@ public class Post {
             String content,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            PublishStatus publishStatus
     ) {
         return new Post(
           title,
           content,
-          PublishStatus.PUBLISHED,
+          publishStatus,
           tagIds,
           categoryId,
           seriesId
-        );
-    }
-
-    public static Post draft(
-            String title,
-            String content,
-            Set<Long> tagIds,
-            Long categoryId,
-            Long seriesId
-    ) {
-        return new Post(
-                title,
-                content,
-                PublishStatus.DRAFTED,
-                tagIds,
-                categoryId,
-                seriesId
         );
     }
 
@@ -123,13 +107,15 @@ public class Post {
             String content,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            PublishStatus publishStatus
     ){
         changeTitle(title);
         changeContent(content);
         changeCategory(categoryId);
         changeSeries(seriesId);
         changeTags(tagIds);
+        changePublishStatus(publishStatus);
     }
 
     public void changeTitle(String title) {
@@ -171,6 +157,8 @@ public class Post {
         this.seriesId = seriesId;
     }
 
-
+    public void changePublishStatus(PublishStatus publishStatus){
+        this.publishStatus = publishStatus;
+    }
 
 }

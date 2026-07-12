@@ -49,7 +49,7 @@ public class PostController {
         return ResponseEntity.ok(postResponsePage);
     }
 
-    @PostMapping("/publish")
+    @PostMapping
     public ResponseEntity<Void> publishPost(
             @RequestBody PostPublishRequest request
     ) {
@@ -59,29 +59,14 @@ public class PostController {
                 request.tagNames(),
                 request.categoryId(),
                 request.seriesId(),
-                request.postUuid()
+                request.postUuid(),
+                request.publishStatus()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/draft")
-    public ResponseEntity<Void> draftPost(
-            @RequestBody PostDraftRequest request
-    ) {
-        postCommandService.draftPost(
-                request.title(),
-                request.content(),
-                request.tagNames(),
-                request.categoryId(),
-                request.seriesId(),
-                request.postUuid()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PatchMapping("/{postId}")
+    @PutMapping("/{postId}")
     public ResponseEntity<Void> updatePost(
             @PathVariable Long postId,
             @RequestBody PostUpdateRequest request
@@ -92,7 +77,8 @@ public class PostController {
                 request.content(),
                 request.tagNames(),
                 request.categoryId(),
-                request.seriesId()
+                request.seriesId(),
+                request.publishStatus()
         );
 
         return ResponseEntity.noContent().build();

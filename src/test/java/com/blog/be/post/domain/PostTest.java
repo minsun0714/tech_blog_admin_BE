@@ -19,7 +19,8 @@ class PostTest {
                 "내용",
                 Set.of(),
                 1L,
-                1L
+                1L,
+                PublishStatus.PUBLISHED
         );
 
         // then
@@ -30,12 +31,13 @@ class PostTest {
     @DisplayName("비공개 게시글을 생성한다.")
     void draft() {
         // when
-        Post post = Post.draft(
+        Post post = Post.publish(
                 "제목",
                 "내용",
                 Set.of(),
                 1L,
-                1L
+                1L,
+                PublishStatus.DRAFTED
         );
 
         // then
@@ -92,7 +94,8 @@ class PostTest {
                 "내용",
                 Set.of(tagId),
                 1L,
-                1L
+                1L,
+                PublishStatus.PUBLISHED
         );
 
         // when
@@ -146,7 +149,8 @@ class PostTest {
                 "새 내용",
                 tagIds,
                 10L,
-                20L
+                20L,
+                PublishStatus.DRAFTED
         );
 
         // then
@@ -155,6 +159,7 @@ class PostTest {
         assertThat(post.getTagIds()).containsExactlyInAnyOrder(1L, 2L);
         assertThat(post.getCategoryId()).isEqualTo(10L);
         assertThat(post.getSeriesId()).isEqualTo(20L);
+        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.DRAFTED);
     }
 
     @Test
@@ -205,7 +210,8 @@ class PostTest {
                 "내용",
                 Set.of(),
                 1L,
-                1L
+                1L,
+                PublishStatus.PUBLISHED
         );
     }
 }
