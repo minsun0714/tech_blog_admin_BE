@@ -1,5 +1,6 @@
 package com.blog.be.post.application;
 
+import com.blog.be.post.application.dto.PostCountResponse;
 import com.blog.be.post.domain.PublishStatus;
 import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PostErrorCode;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +32,26 @@ class PostQueryServiceTest {
 
     @InjectMocks
     private PostQueryService postQueryService;
+
+    @Test
+    @DisplayName("published 게시물과 drafted 게시물의 개수를 각각 반환한다.")
+    void getPublishedPostsCountAndDraftedPostsCount() {
+        // given
+        long publishedPostCount = 3;
+        long draftedPostCount = 5;
+        
+        when(postRepository.countByPublishStatus(PublishStatus.PUBLISHED)).thenReturn(publishedPostCount);
+        when(postRepository.countByPublishStatus(PublishStatus.DRAFTED)).thenReturn(draftedPostCount);
+        
+        PostCountResponse response = postQueryService.getPostsCountByPublishStatus();
+        
+        assertThat(response.publishedPostCount()).isEqualTo(publishedPostCount);
+        assertThat(response.draftedPostCount()).isEqualTo(draftedPostCount);
+
+        // then
+        verify(postRepository).countByPublishStatus(PublishStatus.PUBLISHED);
+        verify(postRepository).countByPublishStatus(PublishStatus.DRAFTED);
+    }
 
     @Test
     @DisplayName("categoryId와 seriesId가 모두 있으면 예외가 발생한다.")

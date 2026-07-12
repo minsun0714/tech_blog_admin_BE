@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface PostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
 
+    Long countByPublishStatus(PublishStatus publishStatus);
+
     Page<PostJpaEntity> findAllByPublishStatus(PublishStatus publishStatus, Pageable pageable);
 
     Page<PostJpaEntity> findAllByCategoryIdAndPublishStatus(Long categoryId, PublishStatus publishStatus, Pageable pageable);

@@ -44,6 +44,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Long countByPublishStatus(PublishStatus publishStatus) {
+        return postJpaRepository.countByPublishStatus(publishStatus);
+    }
+
+    @Override
     public Optional<Post> findById(Long postId) {
         return postJpaRepository.findById(postId)
                 .map(postJpaEntity -> PostMapper.toDomain(postJpaEntity, getTagIds(postId)));
