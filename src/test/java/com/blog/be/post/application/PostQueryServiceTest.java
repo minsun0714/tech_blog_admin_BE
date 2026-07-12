@@ -38,7 +38,7 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
 
         // when & then
-        assertThatThrownBy(() -> postQueryService.findAll(1L, 2L, null, pageable))
+        assertThatThrownBy(() -> postQueryService.findAllByOpenStatus(1L, 2L, null, OpenStatus.PUBLIC, pageable))
                 .isInstanceOf(PostException.class)
                 .extracting("errorCode")
                 .isEqualTo(PostErrorCode.INVALID_POST_FILTER);
@@ -51,14 +51,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAllByCategoryId(1L, pageable))
+        when(postRepository.findAllByCategoryIdAndOpenStatus(1L, OpenStatus.PUBLIC, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(1L, null, null, pageable);
+        postQueryService.findAllByOpenStatus(1L, null, null, OpenStatus.PUBLIC, pageable);
 
         // then
-        verify(postRepository).findAllByCategoryId(1L, pageable);
+        verify(postRepository).findAllByCategoryIdAndOpenStatus(1L, OpenStatus.PUBLIC, pageable);
     }
 
     @Test
@@ -68,14 +68,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAllBySeriesId(2L, pageable))
+        when(postRepository.findAllBySeriesIdAndOpenStatus(2L, OpenStatus.PUBLIC, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(null, 2L, null, pageable);
+        postQueryService.findAllByOpenStatus(null, 2L, null, OpenStatus.PUBLIC, pageable);
 
         // then
-        verify(postRepository).findAllBySeriesId(2L, pageable);
+        verify(postRepository).findAllBySeriesIdAndOpenStatus(2L, OpenStatus.PUBLIC, pageable);
     }
 
     @Test
@@ -85,14 +85,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAll(pageable))
+        when(postRepository.findAllByOpenStatus(OpenStatus.PUBLIC, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAll(null, null, null, pageable);
+        postQueryService.findAllByOpenStatus(null, null, null, OpenStatus.PUBLIC, pageable);
 
         // then
-        verify(postRepository).findAll(pageable);
+        verify(postRepository).findAllByOpenStatus(OpenStatus.PUBLIC, pageable);
     }
 
     private Post post() {

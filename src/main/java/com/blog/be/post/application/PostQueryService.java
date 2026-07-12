@@ -1,9 +1,6 @@
 package com.blog.be.post.application;
 
-import com.blog.be.post.domain.Post;
-import com.blog.be.post.domain.PostErrorCode;
-import com.blog.be.post.domain.PostException;
-import com.blog.be.post.domain.PostRepository;
+import com.blog.be.post.domain.*;
 import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.post.presentation.dto.PostResponseWithUuid;
 import com.blog.be.tag.TagQueryService;
@@ -50,13 +47,36 @@ public class PostQueryService {
         return PostResponseWithUuid.of(post, tagNames, postUuid);
     }
 
-    public Page<PostResponse> getPagedPosts(
+    public Page<PostResponse> getPagedPublishedPosts(
             Long categoryId,
             Long seriesId,
             Long tagId,
             Pageable pageable
     ) {
-        Page<Post> posts = findAll(categoryId, seriesId, tagId, pageable);
+        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PUBLIC, pageable);
+
+        Set<Long> postIds = posts.stream()
+                .map(Post::getPostId)
+                .collect(Collectors.toSet());
+
+        Map<Long, List<String>> tagNamesByPostId =
+                tagQueryService.findTagNamesByPostIds(postIds);
+
+        return posts.map(post ->
+                PostResponse.of(
+                        post,
+                        tagNamesByPostId.getOrDefault(post.getPostId(), List.of())
+                )
+        );
+    }
+
+    public Page<PostResponse> getPagedDraftedPosts(
+            Long categoryId,
+            Long seriesId,
+            Long tagId,
+            Pageable pageable
+    ) {
+        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PRIVATE, pageable);
 
         Set<Long> postIds = posts.stream()
                 .map(Post::getPostId)
@@ -77,7 +97,7 @@ public class PostQueryService {
         return postRepository.findUuidById(postId);
     }
 
-    public Page<Post> findAll(Long categoryId, Long seriesId, Long tagId, Pageable pageable) {
+    public Page<Post> findAllByOpenStatus(Long categoryId, Long seriesId, Long tagId, OpenStatus openStatus, Pageable pageable) {
         long count = Stream.of(categoryId, seriesId, tagId)
                 .filter(Objects::nonNull)
                 .count();
@@ -87,17 +107,17 @@ public class PostQueryService {
         }
 
         if (categoryId != null) {
-            return postRepository.findAllByCategoryId(categoryId, pageable);
+            return postRepository.findAllByCategoryIdAndOpenStatus(categoryId, openStatus, pageable);
         }
 
         if (seriesId != null) {
-            return postRepository.findAllBySeriesId(seriesId, pageable);
+            return postRepository.findAllBySeriesIdAndOpenStatus(seriesId, openStatus, pageable);
         }
 
         if (tagId != null) {
-            return postRepository.findAllByTagId(tagId, pageable);
+            return postRepository.findAllByTagIdAndOpenStatus(tagId, openStatus, pageable);
         }
 
-        return postRepository.findAll(pageable);
+        return postRepository.findAllByOpenStatus(openStatus, pageable);
     }
 }

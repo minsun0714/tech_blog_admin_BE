@@ -29,14 +29,25 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<PostResponse>> getAllPosts(
+    @GetMapping("/published")
+    public ResponseEntity<Page<PostResponse>> getAllPublishedPosts(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long seriesId,
             @RequestParam(required = false) Long tagId,
             @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
     ) {
-        Page<PostResponse> postResponsePage = postQueryService.getPagedPosts(categoryId, seriesId, tagId, pageable);
+        Page<PostResponse> postResponsePage = postQueryService.getPagedPublishedPosts(categoryId, seriesId, tagId, pageable);
+        return ResponseEntity.ok(postResponsePage);
+    }
+
+    @GetMapping("/drafts")
+    public ResponseEntity<Page<PostResponse>> getAllDraftedPosts(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long seriesId,
+            @RequestParam(required = false) Long tagId,
+            @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
+    ) {
+        Page<PostResponse> postResponsePage = postQueryService.getPagedDraftedPosts(categoryId, seriesId, tagId, pageable);
         return ResponseEntity.ok(postResponsePage);
     }
 

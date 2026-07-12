@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(("/api/monitoring"))
+@RequestMapping("/api/monitoring")
 @RequiredArgsConstructor
 public class MonitoringController {
 

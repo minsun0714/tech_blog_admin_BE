@@ -14,7 +14,7 @@ public interface PostTagRepository {
 
     Set<PostTagJpaEntity> findAllByPostIds(Set<Long> postIds);
 
-    Set<PostTagJpaEntity> findAllByTagId(Long tagId);
+    Set<PostTagJpaEntity> findAllByTagIdAndOpenStatus(Long tagId, OpenStatus openStatus);
 
     List<PostTagName> findNamesByPostIds(Set<Long> postIds);
 

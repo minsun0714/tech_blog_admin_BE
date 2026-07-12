@@ -1,5 +1,6 @@
 package com.blog.be.post.infrastructure.repository;
 
+import com.blog.be.post.domain.OpenStatus;
 import com.blog.be.post.domain.PostTagRepository;
 import com.blog.be.post.infrastructure.persistence.PostTagJpaEntity;
 import com.blog.be.post.infrastructure.repository.projection.PostTagName;
@@ -35,7 +36,7 @@ public class PostTagRepositoryImpl implements PostTagRepository {
     }
 
     @Override
-    public Set<PostTagJpaEntity> findAllByTagId(Long tagId) {
+    public Set<PostTagJpaEntity> findAllByTagIdAndOpenStatus(Long tagId, OpenStatus postStatus) {
         return postTagJpaRepository.findAllByTagId(tagId);
     }
 
