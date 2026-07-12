@@ -17,9 +17,10 @@ public class SeriesCommandService {
 
     private final SeriesRepository seriesRepository;
 
-    public void createSeries(String name) {
+    public Long createSeries(String name) {
         SeriesJpaEntity series = SeriesJpaEntity.create(name);
-        seriesRepository.save(series);
+        SeriesJpaEntity savedSeries = seriesRepository.save(series);
+        return savedSeries.getId();
     }
 
     public void updateSeriesName(Long id, String newName) {
