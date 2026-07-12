@@ -70,6 +70,10 @@ public class PostCommandService {
                 seriesId
         );
 
+        if (Objects.isNull(postUuid)) {
+            postUuid = UUID.randomUUID().toString();
+        }
+
         Long postId = postRepository.save(post, postUuid).getPostId();
 
         postTagRepository.saveAll(postId, tagIds);
