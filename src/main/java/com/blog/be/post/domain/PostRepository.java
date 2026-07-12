@@ -15,13 +15,13 @@ public interface PostRepository {
 
     String findUuidById(Long postId);
 
-    Page<Post> findAllByOpenStatus(PublishStatus publishStatus, Pageable pageable);
+    Page<Post> findAllByPublishStatus(PublishStatus publishStatus, Pageable pageable);
 
-    Page<Post> findAllByCategoryIdAndOpenStatus(Long categoryId, PublishStatus publishStatus, Pageable pageable);
+    Page<Post> findAllByCategoryIdAndPublishStatus(Long categoryId, PublishStatus publishStatus, Pageable pageable);
 
-    Page<Post> findAllBySeriesIdAndOpenStatus(Long seriesId, PublishStatus publishStatus, Pageable pageable);
+    Page<Post> findAllBySeriesIdAndPublishStatus(Long seriesId, PublishStatus publishStatus, Pageable pageable);
 
-    Page<Post> findAllByTagIdAndOpenStatus(Long tagId, PublishStatus publishStatus, Pageable pageable);
+    Page<Post> findAllByTagIdAndPublishStatus(Long tagId, PublishStatus publishStatus, Pageable pageable);
 
     String deleteById(Long postId);
 

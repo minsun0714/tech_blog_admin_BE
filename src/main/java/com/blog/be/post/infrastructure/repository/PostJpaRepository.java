@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface PostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
 
-    Page<PostJpaEntity> findAllByOpenStatus(PublishStatus publishStatus, Pageable pageable);
+    Page<PostJpaEntity> findAllByPublishStatus(PublishStatus publishStatus, Pageable pageable);
 
-    Page<PostJpaEntity> findAllByCategoryIdAndOpenStatus(Long categoryId, PublishStatus publishStatus, Pageable pageable);
+    Page<PostJpaEntity> findAllByCategoryIdAndPublishStatus(Long categoryId, PublishStatus publishStatus, Pageable pageable);
 
-    Page<PostJpaEntity> findAllBySeriesIdAndOpenStatus(Long seriesId, PublishStatus publishStatus, Pageable pageable);
+    Page<PostJpaEntity> findAllBySeriesIdAndPublishStatus(Long seriesId, PublishStatus publishStatus, Pageable pageable);
 
     Page<PostJpaEntity> findAllByIdIn(List<Long> postIds, Pageable pageable);
 }

@@ -23,7 +23,7 @@ class PostTest {
         );
 
         // then
-        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.PUBLIC);
+        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.PUBLISHED);
     }
 
     @Test
@@ -39,7 +39,7 @@ class PostTest {
         );
 
         // then
-        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.PRIVATE);
+        assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.DRAFTED);
     }
 
     @Test

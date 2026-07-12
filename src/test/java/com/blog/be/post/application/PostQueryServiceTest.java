@@ -38,7 +38,7 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
 
         // when & then
-        assertThatThrownBy(() -> postQueryService.findAllByOpenStatus(1L, 2L, null, PublishStatus.PUBLIC, pageable))
+        assertThatThrownBy(() -> postQueryService.findAllByPublishStatus(1L, 2L, null, PublishStatus.PUBLISHED, pageable))
                 .isInstanceOf(PostException.class)
                 .extracting("errorCode")
                 .isEqualTo(PostErrorCode.INVALID_POST_FILTER);
@@ -51,14 +51,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAllByCategoryIdAndOpenStatus(1L, PublishStatus.PUBLIC, pageable))
+        when(postRepository.findAllByCategoryIdAndPublishStatus(1L, PublishStatus.PUBLISHED, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAllByOpenStatus(1L, null, null, PublishStatus.PUBLIC, pageable);
+        postQueryService.findAllByPublishStatus(1L, null, null, PublishStatus.PUBLISHED, pageable);
 
         // then
-        verify(postRepository).findAllByCategoryIdAndOpenStatus(1L, PublishStatus.PUBLIC, pageable);
+        verify(postRepository).findAllByCategoryIdAndPublishStatus(1L, PublishStatus.PUBLISHED, pageable);
     }
 
     @Test
@@ -68,14 +68,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAllBySeriesIdAndOpenStatus(2L, PublishStatus.PUBLIC, pageable))
+        when(postRepository.findAllBySeriesIdAndPublishStatus(2L, PublishStatus.PUBLISHED, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAllByOpenStatus(null, 2L, null, PublishStatus.PUBLIC, pageable);
+        postQueryService.findAllByPublishStatus(null, 2L, null, PublishStatus.PUBLISHED, pageable);
 
         // then
-        verify(postRepository).findAllBySeriesIdAndOpenStatus(2L, PublishStatus.PUBLIC, pageable);
+        verify(postRepository).findAllBySeriesIdAndPublishStatus(2L, PublishStatus.PUBLISHED, pageable);
     }
 
     @Test
@@ -85,14 +85,14 @@ class PostQueryServiceTest {
         PageRequest pageable = PageRequest.of(0, 20);
         Page<Post> postPage = new PageImpl<>(List.of(post()));
 
-        when(postRepository.findAllByOpenStatus(PublishStatus.PUBLIC, pageable))
+        when(postRepository.findAllByPublishStatus(PublishStatus.PUBLISHED, pageable))
                 .thenReturn(postPage);
 
         // when
-        postQueryService.findAllByOpenStatus(null, null, null, PublishStatus.PUBLIC, pageable);
+        postQueryService.findAllByPublishStatus(null, null, null, PublishStatus.PUBLISHED, pageable);
 
         // then
-        verify(postRepository).findAllByOpenStatus(PublishStatus.PUBLIC, pageable);
+        verify(postRepository).findAllByPublishStatus(PublishStatus.PUBLISHED, pageable);
     }
 
     private Post post() {
@@ -100,7 +100,7 @@ class PostQueryServiceTest {
                 1L,
                 "제목",
                 "내용",
-                PublishStatus.PUBLIC,
+                PublishStatus.PUBLISHED,
                 Set.of(1L),
                 1L,
                 1L

@@ -48,7 +48,7 @@ class PostCommandServiceTest {
                 .thenReturn(tagIds);
 
         when(postRepository.save(any(Post.class), eq(uuid)))
-                .thenReturn(savedPost(PublishStatus.PUBLIC, tagIds));
+                .thenReturn(savedPost(PublishStatus.PUBLISHED, tagIds));
 
         // when
         postCommandService.publishPost(
@@ -78,7 +78,7 @@ class PostCommandServiceTest {
                 .thenReturn(tagIds);
 
         when(postRepository.save(any(Post.class), eq(uuid)))
-                .thenReturn(savedPost(PublishStatus.PRIVATE, tagIds));
+                .thenReturn(savedPost(PublishStatus.DRAFTED, tagIds));
 
         // when
         postCommandService.draftPost(
@@ -105,7 +105,7 @@ class PostCommandServiceTest {
         Set<String> tagNames = Set.of("Java");
         Set<Long> tagIds = Set.of(10L);
 
-        Post post = savedPost(PublishStatus.PUBLIC, Set.of());
+        Post post = savedPost(PublishStatus.PUBLISHED, Set.of());
 
         when(postRepository.findById(postId))
                 .thenReturn(Optional.of(post));
@@ -146,7 +146,7 @@ class PostCommandServiceTest {
         // given
         Long postId = 1L;
 
-        Post post = savedPost(PublishStatus.PUBLIC, Set.of());
+        Post post = savedPost(PublishStatus.PUBLISHED, Set.of());
 
         when(postRepository.existsById(1L)).thenReturn(true);
 

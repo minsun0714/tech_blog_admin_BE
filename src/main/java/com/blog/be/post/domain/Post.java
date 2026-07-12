@@ -94,7 +94,7 @@ public class Post {
         return new Post(
           title,
           content,
-          PublishStatus.PUBLIC,
+          PublishStatus.PUBLISHED,
           tagIds,
           categoryId,
           seriesId
@@ -111,7 +111,7 @@ public class Post {
         return new Post(
                 title,
                 content,
-                PublishStatus.PRIVATE,
+                PublishStatus.DRAFTED,
                 tagIds,
                 categoryId,
                 seriesId

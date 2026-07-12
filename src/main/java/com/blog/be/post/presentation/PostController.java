@@ -2,6 +2,7 @@ package com.blog.be.post.presentation;
 
 import com.blog.be.post.application.PostCommandService;
 import com.blog.be.post.application.PostQueryService;
+import com.blog.be.post.domain.PublishStatus;
 import com.blog.be.post.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,25 +30,15 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
 
-    @GetMapping("/published")
+    @GetMapping
     public ResponseEntity<Page<PostResponse>> getAllPublishedPosts(
+            @RequestParam(required = false, defaultValue = "PUBLISHED") PublishStatus publishStatus,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long seriesId,
             @RequestParam(required = false) Long tagId,
             @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
     ) {
-        Page<PostResponse> postResponsePage = postQueryService.getPagedPublishedPosts(categoryId, seriesId, tagId, pageable);
-        return ResponseEntity.ok(postResponsePage);
-    }
-
-    @GetMapping("/drafts")
-    public ResponseEntity<Page<PostResponse>> getAllDraftedPosts(
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) Long seriesId,
-            @RequestParam(required = false) Long tagId,
-            @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable
-    ) {
-        Page<PostResponse> postResponsePage = postQueryService.getPagedDraftedPosts(categoryId, seriesId, tagId, pageable);
+        Page<PostResponse> postResponsePage = postQueryService.getPagedPosts(publishStatus, categoryId, seriesId, tagId, pageable);
         return ResponseEntity.ok(postResponsePage);
     }
 
