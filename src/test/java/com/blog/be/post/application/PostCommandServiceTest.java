@@ -48,7 +48,7 @@ class PostCommandServiceTest {
                 .thenReturn(tagIds);
 
         when(postRepository.save(any(Post.class), eq(uuid)))
-                .thenReturn(savedPost(OpenStatus.PUBLIC, tagIds));
+                .thenReturn(savedPost(PublishStatus.PUBLISHED, tagIds));
 
         // when
         postCommandService.publishPost(
@@ -78,7 +78,7 @@ class PostCommandServiceTest {
                 .thenReturn(tagIds);
 
         when(postRepository.save(any(Post.class), eq(uuid)))
-                .thenReturn(savedPost(OpenStatus.PRIVATE, tagIds));
+                .thenReturn(savedPost(PublishStatus.DRAFTED, tagIds));
 
         // when
         postCommandService.draftPost(
@@ -105,7 +105,7 @@ class PostCommandServiceTest {
         Set<String> tagNames = Set.of("Java");
         Set<Long> tagIds = Set.of(10L);
 
-        Post post = savedPost(OpenStatus.PUBLIC, Set.of());
+        Post post = savedPost(PublishStatus.PUBLISHED, Set.of());
 
         when(postRepository.findById(postId))
                 .thenReturn(Optional.of(post));
@@ -146,7 +146,7 @@ class PostCommandServiceTest {
         // given
         Long postId = 1L;
 
-        Post post = savedPost(OpenStatus.PUBLIC, Set.of());
+        Post post = savedPost(PublishStatus.PUBLISHED, Set.of());
 
         when(postRepository.existsById(1L)).thenReturn(true);
 
@@ -201,12 +201,12 @@ class PostCommandServiceTest {
         verify(postRepository, never()).deleteById(anyLong());
     }
 
-    private Post savedPost(OpenStatus openStatus, Set<Long> tagIds) {
+    private Post savedPost(PublishStatus publishStatus, Set<Long> tagIds) {
         return Post.restore(
                 1L,
                 "제목",
                 "내용",
-                openStatus,
+                publishStatus,
                 tagIds,
                 1L,
                 1L

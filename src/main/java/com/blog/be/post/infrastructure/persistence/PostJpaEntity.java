@@ -1,7 +1,7 @@
 package com.blog.be.post.infrastructure.persistence;
 
 import com.blog.be.common.infrastructure.persistence.BaseEntity;
-import com.blog.be.post.domain.OpenStatus;
+import com.blog.be.post.domain.PublishStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +26,7 @@ public class PostJpaEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OpenStatus openStatus;
+    private PublishStatus publishStatus;
 
     @Column(nullable = false)
     private Long categoryId;

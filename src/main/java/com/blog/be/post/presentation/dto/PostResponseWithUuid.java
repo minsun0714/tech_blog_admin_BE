@@ -1,6 +1,6 @@
 package com.blog.be.post.presentation.dto;
 
-import com.blog.be.post.domain.OpenStatus;
+import com.blog.be.post.domain.PublishStatus;
 import com.blog.be.post.domain.Post;
 
 import java.util.List;
@@ -9,7 +9,7 @@ public record PostResponseWithUuid(
         Long postId,
         String title,
         String content,
-        OpenStatus openStatus,
+        PublishStatus publishStatus,
         List<String> tagNames,
         Long categoryId,
         Long seriesId,
@@ -20,7 +20,7 @@ public record PostResponseWithUuid(
                 post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getOpenStatus(),
+                post.getPublishStatus(),
                 tagNames,
                 post.getCategoryId(),
                 post.getSeriesId(),

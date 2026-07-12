@@ -47,36 +47,14 @@ public class PostQueryService {
         return PostResponseWithUuid.of(post, tagNames, postUuid);
     }
 
-    public Page<PostResponse> getPagedPublishedPosts(
+    public Page<PostResponse> getPagedPosts(
+            PublishStatus publishStatus,
             Long categoryId,
             Long seriesId,
             Long tagId,
             Pageable pageable
     ) {
-        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PUBLIC, pageable);
-
-        Set<Long> postIds = posts.stream()
-                .map(Post::getPostId)
-                .collect(Collectors.toSet());
-
-        Map<Long, List<String>> tagNamesByPostId =
-                tagQueryService.findTagNamesByPostIds(postIds);
-
-        return posts.map(post ->
-                PostResponse.of(
-                        post,
-                        tagNamesByPostId.getOrDefault(post.getPostId(), List.of())
-                )
-        );
-    }
-
-    public Page<PostResponse> getPagedDraftedPosts(
-            Long categoryId,
-            Long seriesId,
-            Long tagId,
-            Pageable pageable
-    ) {
-        Page<Post> posts = findAllByOpenStatus(categoryId, seriesId, tagId, OpenStatus.PRIVATE, pageable);
+        Page<Post> posts = findAllByPublishStatus(categoryId, seriesId, tagId, publishStatus, pageable);
 
         Set<Long> postIds = posts.stream()
                 .map(Post::getPostId)
@@ -97,7 +75,7 @@ public class PostQueryService {
         return postRepository.findUuidById(postId);
     }
 
-    public Page<Post> findAllByOpenStatus(Long categoryId, Long seriesId, Long tagId, OpenStatus openStatus, Pageable pageable) {
+    public Page<Post> findAllByPublishStatus(Long categoryId, Long seriesId, Long tagId, PublishStatus publishStatus, Pageable pageable) {
         long count = Stream.of(categoryId, seriesId, tagId)
                 .filter(Objects::nonNull)
                 .count();
@@ -107,17 +85,17 @@ public class PostQueryService {
         }
 
         if (categoryId != null) {
-            return postRepository.findAllByCategoryIdAndOpenStatus(categoryId, openStatus, pageable);
+            return postRepository.findAllByCategoryIdAndPublishStatus(categoryId, publishStatus, pageable);
         }
 
         if (seriesId != null) {
-            return postRepository.findAllBySeriesIdAndOpenStatus(seriesId, openStatus, pageable);
+            return postRepository.findAllBySeriesIdAndPublishStatus(seriesId, publishStatus, pageable);
         }
 
         if (tagId != null) {
-            return postRepository.findAllByTagIdAndOpenStatus(tagId, openStatus, pageable);
+            return postRepository.findAllByTagIdAndPublishStatus(tagId, publishStatus, pageable);
         }
 
-        return postRepository.findAllByOpenStatus(openStatus, pageable);
+        return postRepository.findAllByPublishStatus(publishStatus, pageable);
     }
 }

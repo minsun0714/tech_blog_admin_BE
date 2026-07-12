@@ -1,6 +1,5 @@
 package com.blog.be.post.domain;
 
-import com.blog.be.post.domain.image.PostImage;
 import lombok.Getter;
 
 import java.util.*;
@@ -14,7 +13,7 @@ public class Post {
 
     private String content;
 
-    private OpenStatus openStatus;
+    private PublishStatus publishStatus;
 
     private Set<Long> tagIds;
 
@@ -26,15 +25,15 @@ public class Post {
 
     private Long seriesId;
 
-    private Post(String title, String content, OpenStatus openStatus, Set<Long> tagIds, Long categoryId, Long seriesId) {
+    private Post(String title, String content, PublishStatus publishStatus, Set<Long> tagIds, Long categoryId, Long seriesId) {
         Objects.requireNonNull(title);
         Objects.requireNonNull(content);
-        Objects.requireNonNull(openStatus);
+        Objects.requireNonNull(publishStatus);
         Objects.requireNonNull(categoryId);
 
         this.title = title;
         this.content = content;
-        this.openStatus = openStatus;
+        this.publishStatus = publishStatus;
         this.tagIds = new HashSet<>(tagIds);
         this.categoryId = categoryId;
         this.seriesId = seriesId;
@@ -44,7 +43,7 @@ public class Post {
             Long postId,
             String title,
             String content,
-            OpenStatus openStatus,
+            PublishStatus publishStatus,
             Set<Long> tagIds,
             Long categoryId,
             Long seriesId
@@ -52,14 +51,14 @@ public class Post {
         Objects.requireNonNull(postId);
         Objects.requireNonNull(title);
         Objects.requireNonNull(content);
-        Objects.requireNonNull(openStatus);
+        Objects.requireNonNull(publishStatus);
         Objects.requireNonNull(tagIds);
         Objects.requireNonNull(categoryId);
 
         this.postId = postId;
         this.title = title;
         this.content = content;
-        this.openStatus = openStatus;
+        this.publishStatus = publishStatus;
         this.tagIds = new HashSet<>(tagIds);
         this.categoryId = categoryId;
         this.seriesId = seriesId;
@@ -69,7 +68,7 @@ public class Post {
             Long postId,
             String title,
             String content,
-            OpenStatus openStatus,
+            PublishStatus publishStatus,
             Set<Long> tagIds,
             Long categoryId,
             Long seriesId
@@ -78,7 +77,7 @@ public class Post {
                 postId,
                 title,
                 content,
-                openStatus,
+                publishStatus,
                 tagIds,
                 categoryId,
                 seriesId
@@ -95,7 +94,7 @@ public class Post {
         return new Post(
           title,
           content,
-          OpenStatus.PUBLIC,
+          PublishStatus.PUBLISHED,
           tagIds,
           categoryId,
           seriesId
@@ -112,7 +111,7 @@ public class Post {
         return new Post(
                 title,
                 content,
-                OpenStatus.PRIVATE,
+                PublishStatus.DRAFTED,
                 tagIds,
                 categoryId,
                 seriesId
