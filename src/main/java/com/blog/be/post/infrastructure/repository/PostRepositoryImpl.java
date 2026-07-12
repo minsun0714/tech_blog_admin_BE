@@ -57,23 +57,23 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Page<Post> findAll(Pageable pageable) {
-        return toDomainPage(postJpaRepository.findAll(pageable));
+    public Page<Post> findAllByOpenStatus(OpenStatus openStatus, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllByOpenStatus(openStatus, pageable));
     }
 
     @Override
-    public Page<Post> findAllByCategoryId(Long categoryId, Pageable pageable) {
-        return toDomainPage(postJpaRepository.findAllByCategoryId(categoryId, pageable));
+    public Page<Post> findAllByCategoryIdAndOpenStatus(Long categoryId, OpenStatus openStatus, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllByCategoryIdAndOpenStatus(categoryId, openStatus, pageable));
     }
 
     @Override
-    public Page<Post> findAllBySeriesId(Long seriesId, Pageable pageable) {
-        return toDomainPage(postJpaRepository.findAllBySeriesId(seriesId, pageable));
+    public Page<Post> findAllBySeriesIdAndOpenStatus(Long seriesId, OpenStatus openStatus, Pageable pageable) {
+        return toDomainPage(postJpaRepository.findAllBySeriesIdAndOpenStatus(seriesId, openStatus, pageable));
     }
 
     @Override
-    public Page<Post> findAllByTagId(Long tagId, Pageable pageable) {
-        List<Long> postIds = postTagRepository.findAllByTagId(tagId)
+    public Page<Post> findAllByTagIdAndOpenStatus(Long tagId, OpenStatus openStatus, Pageable pageable) {
+        List<Long> postIds = postTagRepository.findAllByTagIdAndOpenStatus(tagId, openStatus)
                 .stream()
                 .map(PostTagJpaEntity::getPostId)
                 .toList();
