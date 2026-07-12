@@ -4,6 +4,7 @@ import com.blog.be.series.application.SeriesCommandService;
 import com.blog.be.series.application.SeriesQueryService;
 import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
 import com.blog.be.series.presentation.dto.SeriesCreateRequest;
+import com.blog.be.series.presentation.dto.SeriesCreateResponse;
 import com.blog.be.series.presentation.dto.SeriesListResponse;
 import com.blog.be.series.presentation.dto.SeriesUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +30,12 @@ public class SeriesController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createSeries(
+    public ResponseEntity<SeriesCreateResponse> createSeries(
             @RequestBody SeriesCreateRequest request
     ) {
-        seriesCommandService.createSeries(request.name());
+        Long newSeriesId = seriesCommandService.createSeries(request.name());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok().body(SeriesCreateResponse.of(newSeriesId));
     }
 
     @PatchMapping("/{id}")
