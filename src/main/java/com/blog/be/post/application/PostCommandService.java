@@ -31,7 +31,8 @@ public class PostCommandService {
             Set<String> tagNames,
             Long categoryId,
             Long seriesId,
-            String postUuid
+            String postUuid,
+            PublishStatus publishStatus
     ) {
         Set<Long> tagIds = tagCommandService.upsertAllAndGetIds(tagNames);
 
@@ -40,34 +41,8 @@ public class PostCommandService {
                 content,
                 tagIds,
                 categoryId,
-                seriesId
-        );
-
-        if (Objects.isNull(postUuid)) {
-            postUuid = UUID.randomUUID().toString();
-        }
-
-        Long postId = postRepository.save(post, postUuid).getPostId();
-
-        postTagRepository.saveAll(postId, tagIds);
-    }
-
-    public void draftPost(
-            String title,
-            String content,
-            Set<String> tagNames,
-            Long categoryId,
-            Long seriesId,
-            String postUuid
-    ) {
-        Set<Long> tagIds = tagCommandService.upsertAllAndGetIds(tagNames);
-
-        Post post = Post.draft(
-                title,
-                content,
-                tagIds,
-                categoryId,
-                seriesId
+                seriesId,
+                publishStatus
         );
 
         if (Objects.isNull(postUuid)) {
@@ -85,7 +60,8 @@ public class PostCommandService {
             String newContent,
             Set<String> newTagNames,
             Long newCategoryId,
-            Long newSeriesId
+            Long newSeriesId,
+            PublishStatus publishStatus
     ) {
 
         Post post = getPost(postId);
@@ -100,7 +76,8 @@ public class PostCommandService {
             newContent,
             upsertedTagIds,
             newCategoryId,
-            newSeriesId
+            newSeriesId,
+                publishStatus
         );
 
         postRepository.save(post);

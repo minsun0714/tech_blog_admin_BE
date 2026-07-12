@@ -57,7 +57,8 @@ class PostCommandServiceTest {
                 tagNames,
                 1L,
                 1L,
-                uuid
+                uuid,
+                PublishStatus.PUBLISHED
         );
 
         // then
@@ -81,13 +82,14 @@ class PostCommandServiceTest {
                 .thenReturn(savedPost(PublishStatus.DRAFTED, tagIds));
 
         // when
-        postCommandService.draftPost(
+        postCommandService.publishPost(
                 "제목",
                 "내용",
                 tagNames,
                 1L,
                 1L,
-                uuid
+                uuid,
+                PublishStatus.DRAFTED
         );
 
         // then
@@ -123,7 +125,8 @@ class PostCommandServiceTest {
                 "새 내용",
                 tagNames,
                 2L,
-                3L
+                3L,
+                PublishStatus.PUBLISHED
         );
 
         // then
@@ -174,7 +177,8 @@ class PostCommandServiceTest {
                         "내용",
                         Set.of(),
                         1L,
-                        1L
+                        1L,
+                        PublishStatus.DRAFTED
                 )
         )
                 .isInstanceOf(PostException.class)

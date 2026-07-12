@@ -7,7 +7,6 @@ import com.blog.be.post.domain.PostErrorCode;
 import com.blog.be.post.domain.PostException;
 import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PublishStatus;
-import com.blog.be.post.presentation.dto.PostDraftRequest;
 import com.blog.be.post.presentation.dto.PostPublishRequest;
 import com.blog.be.post.presentation.dto.PostResponse;
 import com.blog.be.post.presentation.dto.PostUpdateRequest;
@@ -35,10 +34,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,7 +81,8 @@ class PostControllerTest {
                         "내용",
                         Set.of(1L, 2L),
                         1L,
-                        1L
+                        1L,
+                        PublishStatus.PUBLISHED
                 ));
 
         // when & then
@@ -168,7 +165,8 @@ class PostControllerTest {
                 "내용",
                 Set.of(1L, 2L),
                 1L,
-                1L
+                1L,
+                PublishStatus.PUBLISHED
         );
 
         List<String> tagNames = List.of("java", "spring");
@@ -216,11 +214,12 @@ class PostControllerTest {
                 Set.of("Spring", "JPA"),
                 1L,
                 1L,
-                uuid
+                uuid,
+                PublishStatus.PUBLISHED
         );
 
         // when & then
-        mockMvc.perform(post("/api/posts/publish")
+        mockMvc.perform(post("/api/posts")
                         .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -233,7 +232,8 @@ class PostControllerTest {
                 eq(Set.of("Spring", "JPA")),
                 eq(1L),
                 eq(1L),
-                eq(uuid)
+                eq(uuid),
+                eq(PublishStatus.PUBLISHED)
         );
     }
 
@@ -242,30 +242,32 @@ class PostControllerTest {
     void draftPost() throws Exception {
         // given
         String uuid = UUID.randomUUID().toString();
-        PostDraftRequest request = new PostDraftRequest(
+        PostPublishRequest request = new PostPublishRequest(
                 "제목",
                 "내용",
                 Set.of("Spring"),
                 1L,
                 1L,
-                uuid
+                uuid,
+                PublishStatus.DRAFTED
         );
 
         // when & then
-        mockMvc.perform(post("/api/posts/draft")
+        mockMvc.perform(post("/api/posts")
                         .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andDo(document("post/draft"));
 
-        verify(postCommandService).draftPost(
+        verify(postCommandService).publishPost(
                 eq("제목"),
                 eq("내용"),
                 eq(Set.of("Spring")),
                 eq(1L),
                 eq(1L),
-                eq(uuid)
+                eq(uuid),
+                eq(PublishStatus.DRAFTED)
         );
     }
 
@@ -278,11 +280,12 @@ class PostControllerTest {
                 "수정 내용",
                 Set.of("DDD"),
                 2L,
-                3L
+                3L,
+                PublishStatus.PUBLISHED
         );
 
         // when & then
-        mockMvc.perform(patch("/api/posts/1")
+        mockMvc.perform(put("/api/posts/1")
                         .with(apiKey())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -295,7 +298,8 @@ class PostControllerTest {
                 eq("수정 내용"),
                 eq(Set.of("DDD")),
                 eq(2L),
-                eq(3L)
+                eq(3L),
+                eq(PublishStatus.PUBLISHED)
         );
     }
 

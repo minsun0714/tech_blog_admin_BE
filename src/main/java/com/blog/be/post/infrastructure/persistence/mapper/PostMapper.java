@@ -21,6 +21,7 @@ public final class PostMapper {
                 .categoryId(post.getCategoryId())
                 .seriesId(post.getSeriesId())
                 .postUuid(postUuid)
+                .publishStatus(post.getPublishStatus())
                 .build();
     }
 
