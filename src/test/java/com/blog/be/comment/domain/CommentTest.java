@@ -15,7 +15,7 @@ class CommentTest {
         Long postId = 1L;
 
         // when
-        CommentJpaEntity comment = CommentJpaEntity.createRoot(postId, "첫 번째 댓글");
+        CommentJpaEntity comment = CommentJpaEntity.createRoot(postId, "user1", "1234", "첫 번째 댓글");
 
         // then
         assertThat(comment.isRoot()).isTrue();
@@ -23,6 +23,8 @@ class CommentTest {
         assertThat(comment.getPostId()).isEqualTo(postId);
         assertThat(comment.getParentCommentId()).isNull();
         assertThat(comment.getContent()).isEqualTo("첫 번째 댓글");
+        assertThat(comment.getAuthor()).isEqualTo("user1");
+        assertThat(comment.getPassword()).isEqualTo("1234");
     }
 
     @Test
@@ -51,7 +53,9 @@ class CommentTest {
         // given
         CommentJpaEntity comment = CommentJpaEntity.createRoot(
                 1L,
-                "기존 댓글"
+                "기존 댓글 작성자",
+                "1234",
+                "원래 댓글 내용"
         );
 
         // when
@@ -67,6 +71,8 @@ class CommentTest {
         // given
         CommentJpaEntity comment = CommentJpaEntity.createRoot(
                 1L,
+                "삭제할 댓글 작성자",
+                "1234",
                 "삭제할 댓글"
         );
 
@@ -84,6 +90,8 @@ class CommentTest {
         // given
         CommentJpaEntity root = CommentJpaEntity.createRoot(
                 1L,
+                "작성자",
+                "1234",
                 "루트"
         );
 

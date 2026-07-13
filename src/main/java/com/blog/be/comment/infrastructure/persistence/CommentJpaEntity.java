@@ -33,14 +33,24 @@ public class CommentJpaEntity extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
+    private String author;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private boolean deleted;
 
-    public static CommentJpaEntity createRoot(Long postId, String content) {
+    public static CommentJpaEntity createRoot(Long postId, String author, String password, String content) {
         Objects.requireNonNull(postId);
+        Objects.requireNonNull(author);
+        Objects.requireNonNull(password);
         validateContent(content);
 
         return CommentJpaEntity.builder()
                 .postId(postId)
+                .author(author)
+                .password(password)
                 .content(content)
                 .deleted(false)
                 .build();

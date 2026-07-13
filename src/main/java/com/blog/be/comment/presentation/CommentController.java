@@ -37,7 +37,7 @@ public class CommentController {
             @PathVariable Long postId,
             @RequestBody CommentCreateRequest request
     ) {
-        commentCommandService.createRootComment(postId, request.content());
+        commentCommandService.createRootComment(postId, request.author(), request.password(), request.content());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

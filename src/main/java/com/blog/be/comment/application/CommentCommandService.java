@@ -18,8 +18,8 @@ public class CommentCommandService {
     private final CommentRepository commentRepository;
 
     // 댓글 달기
-    public void createRootComment(Long postId, String content) {
-        CommentJpaEntity comment = CommentJpaEntity.createRoot(postId, content);
+    public void createRootComment(Long postId, String author, String password, String content) {
+        CommentJpaEntity comment = CommentJpaEntity.createRoot(postId, author, password, content);
 
         commentRepository.save(comment);
     }
