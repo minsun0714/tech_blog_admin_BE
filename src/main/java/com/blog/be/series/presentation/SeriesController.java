@@ -3,17 +3,20 @@ package com.blog.be.series.presentation;
 import com.blog.be.series.application.SeriesCommandService;
 import com.blog.be.series.application.SeriesQueryService;
 import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
+import com.blog.be.series.infrastructure.repository.projection.SeriesResponseDto;
 import com.blog.be.series.presentation.dto.SeriesCreateRequest;
 import com.blog.be.series.presentation.dto.SeriesCreateResponse;
-import com.blog.be.series.presentation.dto.SeriesListResponse;
 import com.blog.be.series.presentation.dto.SeriesUpdateRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/series")
 @RequiredArgsConstructor
@@ -24,9 +27,11 @@ public class SeriesController {
     private final SeriesCommandService seriesCommandService;
 
     @GetMapping
-    public ResponseEntity<SeriesListResponse> getAllSeries() {
-        List<SeriesJpaEntity> seriesList = seriesQueryService.findAll();
-        return ResponseEntity.ok(SeriesListResponse.from(seriesList));
+    public ResponseEntity<Page<SeriesResponseDto>> getAllSeries(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<SeriesResponseDto> seriesPage = seriesQueryService.findAll(pageable);
+        return ResponseEntity.ok(seriesPage);
     }
 
     @PostMapping

@@ -2,12 +2,17 @@ package com.blog.be.series.infrastructure.repository;
 
 import com.blog.be.series.domain.SeriesRepository;
 import com.blog.be.series.infrastructure.persistence.SeriesJpaEntity;
+import com.blog.be.series.infrastructure.repository.projection.SeriesResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class SeriesRepositoryImpl implements SeriesRepository {
@@ -20,8 +25,8 @@ public class SeriesRepositoryImpl implements SeriesRepository {
     }
 
     @Override
-    public List<SeriesJpaEntity> findAll() {
-        return seriesJpaRepository.findAllByOrderByCreatedAtDesc();
+    public Page<SeriesResponseDto> findAll(Pageable pageable) {
+        return seriesJpaRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     @Override
