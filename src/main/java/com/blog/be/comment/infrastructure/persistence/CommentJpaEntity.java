@@ -59,15 +59,21 @@ public class CommentJpaEntity extends BaseEntity {
     public static CommentJpaEntity createReply(
             Long postId,
             Long parentCommentId,
+            String author,
+            String password,
             String content
     ) {
         Objects.requireNonNull(postId);
         Objects.requireNonNull(parentCommentId);
+        Objects.requireNonNull(author);
+        Objects.requireNonNull(password);
         validateContent(content);
 
         return CommentJpaEntity.builder()
                 .postId(postId)
                 .parentCommentId(parentCommentId)
+                .author(author)
+                .password(password)
                 .content(content)
                 .deleted(false)
                 .build();

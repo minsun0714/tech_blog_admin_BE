@@ -25,12 +25,12 @@ public class CommentCommandService {
     }
 
     // 대댓글 작성
-    public void createReply(Long parentId, Long postId, String content) {
+    public void createReply(Long parentId, Long postId, String author, String password, String content) {
         Long parentCommentId = commentRepository.findById(parentId)
                 .map(CommentJpaEntity::getId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.PARENT_COMMENT_NOT_FOUND));
 
-        CommentJpaEntity newReply = CommentJpaEntity.createReply(postId, parentCommentId, content);
+        CommentJpaEntity newReply = CommentJpaEntity.createReply(postId, parentCommentId, author, password, content);
         commentRepository.save(newReply);
     }
 

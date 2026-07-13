@@ -38,6 +38,8 @@ class CommentTest {
         CommentJpaEntity comment = CommentJpaEntity.createReply(
                 postId,
                 parentCommentId,
+                "user2",
+                "5678",
                 "대댓글입니다."
         );
 
@@ -98,6 +100,8 @@ class CommentTest {
         CommentJpaEntity reply = CommentJpaEntity.createReply(
                 1L,
                 1L,
+                "작성자",
+                "1234",
                 "답글"
         );
 

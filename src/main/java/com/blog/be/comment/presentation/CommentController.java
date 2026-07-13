@@ -50,6 +50,8 @@ public class CommentController {
         commentCommandService.createReply(
                 parentId,
                 request.postId(),
+                request.author(),
+                request.password(),
                 request.content()
         );
 
