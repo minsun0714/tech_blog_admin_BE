@@ -23,6 +23,11 @@ public enum CommentErrorCode implements ErrorCode {
     COMMENT_ALREADY_DELETED(
             HttpStatus.BAD_REQUEST,
             "이미 삭제된 댓글입니다."
+    ),
+
+    INVALID_PASSWORD(
+            HttpStatus.BAD_REQUEST,
+            "비밀번호가 일치하지 않습니다."
     );
 
     private final HttpStatus status;

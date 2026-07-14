@@ -5,6 +5,7 @@ import com.blog.be.comment.application.CommentQueryService;
 import com.blog.be.comment.application.dto.CommentNode;
 import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
 import com.blog.be.comment.presentation.dto.CommentCreateRequest;
+import com.blog.be.comment.presentation.dto.CommentDeleteRequest;
 import com.blog.be.comment.presentation.dto.CommentUpdateRequest;
 import com.blog.be.comment.presentation.dto.ReplyCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,7 +93,7 @@ class CommentControllerTest {
     @DisplayName("루트 댓글을 작성한다.")
     void createRootComment() throws Exception {
         // given
-        CommentCreateRequest request = new CommentCreateRequest("댓글");
+        CommentCreateRequest request = new CommentCreateRequest("user1", "1234", "댓글");
 
         // when & then
         mockMvc.perform(post("/api/posts/1/comments")
@@ -103,14 +104,14 @@ class CommentControllerTest {
                 .andDo(document("comment/create-root"));
 
         verify(commentCommandService)
-                .createRootComment(1L, "댓글");
+                .createRootComment(1L, "user1", "1234", "댓글");
     }
 
     @Test
     @DisplayName("대댓글을 작성한다.")
     void createReply() throws Exception {
         // given
-        ReplyCreateRequest request = new ReplyCreateRequest(1L, "대댓글");
+        ReplyCreateRequest request = new ReplyCreateRequest(1L, "user1", "1234",  "대댓글");
 
         // when & then
         mockMvc.perform(post("/api/comments/10/replies")
@@ -121,14 +122,14 @@ class CommentControllerTest {
                 .andDo(document("comment/create-reply"));
 
         verify(commentCommandService)
-                .createReply(10L, 1L, "대댓글");
+                .createReply(10L, 1L, "user1", "1234", "대댓글");
     }
 
     @Test
     @DisplayName("댓글을 수정한다.")
     void updateComment() throws Exception {
         // given
-        CommentUpdateRequest request = new CommentUpdateRequest("수정된 댓글");
+        CommentUpdateRequest request = new CommentUpdateRequest("user1", "1234", "수정된 댓글");
 
         // when & then
         mockMvc.perform(patch("/api/comments/1")
@@ -139,19 +140,23 @@ class CommentControllerTest {
                 .andDo(document("comment/update"));
 
         verify(commentCommandService)
-                .updateComment(1L, "수정된 댓글");
+                .updateComment(1L, "1234", "수정된 댓글");
     }
 
     @Test
     @DisplayName("댓글을 삭제한다.")
     void deleteComment() throws Exception {
         // when & then
+        CommentDeleteRequest request = new CommentDeleteRequest("1234");
+
         mockMvc.perform(delete("/api/comments/1")
-                        .with(apiKey()))
+                        .with(apiKey())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
                 .andDo(document("comment/delete"));
 
         verify(commentCommandService)
-                .deleteComment(1L);
+                .deleteComment(1L, "1234");
     }
 }
