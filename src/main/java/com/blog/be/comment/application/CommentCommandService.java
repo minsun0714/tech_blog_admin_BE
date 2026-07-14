@@ -35,15 +35,23 @@ public class CommentCommandService {
     }
 
     // 댓글 수정
-    public void updateComment(Long id, String newContent) {
+    public void updateComment(Long id, String password, String newContent) {
         CommentJpaEntity comment = getComment(id);
+
+        if (!comment.isPasswordMatch(password)) {
+            throw new CommentException(CommentErrorCode.INVALID_PASSWORD);
+        }
 
         comment.changeContent(newContent);
     }
 
     // 댓글 삭제
-    public void deleteComment(Long id) {
+    public void deleteComment(Long id, String password) {
         CommentJpaEntity comment = getComment(id);
+
+        if (!comment.isPasswordMatch(password)) {
+            throw new CommentException(CommentErrorCode.INVALID_PASSWORD);
+        }
 
         commentRepository.delete(comment);
     }

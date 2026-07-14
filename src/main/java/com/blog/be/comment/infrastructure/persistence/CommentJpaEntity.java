@@ -93,6 +93,10 @@ public class CommentJpaEntity extends BaseEntity {
         return parentCommentId == null;
     }
 
+    public boolean isPasswordMatch(String password) {
+        return this.password.equals(password);
+    }
+
     private static void validateContent(String content) {
         Objects.requireNonNull(content);
 

@@ -5,6 +5,7 @@ import com.blog.be.comment.application.CommentQueryService;
 import com.blog.be.comment.application.dto.CommentNode;
 import com.blog.be.comment.infrastructure.persistence.CommentJpaEntity;
 import com.blog.be.comment.presentation.dto.CommentCreateRequest;
+import com.blog.be.comment.presentation.dto.CommentDeleteRequest;
 import com.blog.be.comment.presentation.dto.CommentListResponse;
 import com.blog.be.comment.presentation.dto.CommentUpdateRequest;
 import com.blog.be.comment.presentation.dto.ReplyCreateRequest;
@@ -63,16 +64,17 @@ public class CommentController {
             @PathVariable Long id,
             @RequestBody CommentUpdateRequest request
     ) {
-        commentCommandService.updateComment(id, request.content());
+        commentCommandService.updateComment(id, request.password(), request.content());
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<Void> deleteComment(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @RequestBody CommentDeleteRequest request
     ) {
-        commentCommandService.deleteComment(id);
+        commentCommandService.deleteComment(id, request.password());
 
         return ResponseEntity.noContent().build();
     }
