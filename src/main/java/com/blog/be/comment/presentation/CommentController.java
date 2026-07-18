@@ -9,13 +9,16 @@ import com.blog.be.comment.presentation.dto.CommentDeleteRequest;
 import com.blog.be.comment.presentation.dto.CommentListResponse;
 import com.blog.be.comment.presentation.dto.CommentUpdateRequest;
 import com.blog.be.comment.presentation.dto.ReplyCreateRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class CommentController {
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<Void> createRootComment(
             @PathVariable Long postId,
-            @RequestBody CommentCreateRequest request
+            @RequestBody @Valid CommentCreateRequest request
     ) {
         commentCommandService.createRootComment(postId, request.author(), request.password(), request.content());
 
@@ -46,7 +49,7 @@ public class CommentController {
     @PostMapping("/comments/{parentId}/replies")
     public ResponseEntity<Void> createReply(
             @PathVariable Long parentId,
-            @RequestBody ReplyCreateRequest request
+            @RequestBody @Valid ReplyCreateRequest request
     ) {
         commentCommandService.createReply(
                 parentId,
@@ -62,7 +65,7 @@ public class CommentController {
     @PatchMapping("/comments/{id}")
     public ResponseEntity<Void> updateComment(
             @PathVariable Long id,
-            @RequestBody CommentUpdateRequest request
+            @RequestBody @Valid CommentUpdateRequest request
     ) {
         commentCommandService.updateComment(id, request.password(), request.content());
 
@@ -72,7 +75,7 @@ public class CommentController {
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long id,
-            @RequestBody CommentDeleteRequest request
+            @RequestBody @Valid CommentDeleteRequest request
     ) {
         commentCommandService.deleteComment(id, request.password());
 

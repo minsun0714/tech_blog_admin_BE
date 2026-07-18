@@ -1,8 +1,10 @@
 package com.blog.be.comment.presentation.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public record CommentUpdateRequest(
-		String author,
-		String password,
-        String content
+		@NotNull String author,
+		@NotNull String password,
+        @NotNull String content
 ) {
 }

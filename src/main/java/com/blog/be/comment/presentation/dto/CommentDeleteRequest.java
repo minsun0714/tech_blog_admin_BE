@@ -1,6 +1,8 @@
 package com.blog.be.comment.presentation.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public record CommentDeleteRequest (
-		String password
+		@NotNull String password
 ) {
 }
