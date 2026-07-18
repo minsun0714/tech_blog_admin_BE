@@ -13,6 +13,7 @@ public record PostPublishRequest(
         Long categoryId,
         Long seriesId,
         String postUuid,
-        PublishStatus publishStatus
+        PublishStatus publishStatus,
+        String thumbnailImageUrl
 ) {
 }

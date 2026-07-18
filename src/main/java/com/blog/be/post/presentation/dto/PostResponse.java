@@ -12,7 +12,8 @@ public record PostResponse(
         PublishStatus publishStatus,
         List<String> tagNames,
         Long categoryId,
-        Long seriesId
+        Long seriesId,
+        String thumbnailImageUrl
 ){
     public static PostResponse of(Post post, List<String> tagNames) {
         return new PostResponse(
@@ -22,7 +23,8 @@ public record PostResponse(
                 post.getPublishStatus(),
                 tagNames,
                 post.getCategoryId(),
-                post.getSeriesId()
+                post.getSeriesId(),
+                post.getThumbnailImageUrl()
         );
     }
 }

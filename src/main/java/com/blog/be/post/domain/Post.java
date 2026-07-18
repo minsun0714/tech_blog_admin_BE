@@ -25,7 +25,9 @@ public class Post {
 
     private Long seriesId;
 
-    private Post(String title, String content, PublishStatus publishStatus, Set<Long> tagIds, Long categoryId, Long seriesId) {
+    private String thumbnailImageUrl;
+
+    private Post(String title, String content, PublishStatus publishStatus, Set<Long> tagIds, Long categoryId, Long seriesId, String thumbnailImageUrl) {
         Objects.requireNonNull(title);
         Objects.requireNonNull(content);
         Objects.requireNonNull(publishStatus);
@@ -37,6 +39,7 @@ public class Post {
         this.tagIds = new HashSet<>(tagIds);
         this.categoryId = categoryId;
         this.seriesId = seriesId;
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
     private Post(
@@ -46,7 +49,8 @@ public class Post {
             PublishStatus publishStatus,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            String thumbnailImageUrl
     ) {
         Objects.requireNonNull(postId);
         Objects.requireNonNull(title);
@@ -62,6 +66,7 @@ public class Post {
         this.tagIds = new HashSet<>(tagIds);
         this.categoryId = categoryId;
         this.seriesId = seriesId;
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
     public static Post restore(
@@ -71,7 +76,8 @@ public class Post {
             PublishStatus publishStatus,
             Set<Long> tagIds,
             Long categoryId,
-            Long seriesId
+            Long seriesId,
+            String thumbnailImageUrl
     ) {
         return new Post(
                 postId,
@@ -80,7 +86,8 @@ public class Post {
                 publishStatus,
                 tagIds,
                 categoryId,
-                seriesId
+                seriesId,
+                thumbnailImageUrl
         );
     }
 
@@ -90,7 +97,8 @@ public class Post {
             Set<Long> tagIds,
             Long categoryId,
             Long seriesId,
-            PublishStatus publishStatus
+            PublishStatus publishStatus,
+            String thumbnailImageUrl
     ) {
         return new Post(
           title,
@@ -98,7 +106,8 @@ public class Post {
           publishStatus,
           tagIds,
           categoryId,
-          seriesId
+          seriesId,
+                thumbnailImageUrl
         );
     }
 
@@ -108,7 +117,8 @@ public class Post {
             Set<Long> tagIds,
             Long categoryId,
             Long seriesId,
-            PublishStatus publishStatus
+            PublishStatus publishStatus,
+            String thumbnailImageUrl
     ){
         changeTitle(title);
         changeContent(content);
@@ -116,6 +126,7 @@ public class Post {
         changeSeries(seriesId);
         changeTags(tagIds);
         changePublishStatus(publishStatus);
+        changeThumbnailImageUrl(thumbnailImageUrl);
     }
 
     public void changeTitle(String title) {
@@ -128,6 +139,10 @@ public class Post {
         Objects.requireNonNull(content);
 
         this.content = content;
+    }
+
+    private void changeThumbnailImageUrl(String thumbnailImageUrl) {
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
     public void addTag(Long tagId) {

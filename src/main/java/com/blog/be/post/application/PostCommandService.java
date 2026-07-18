@@ -32,7 +32,8 @@ public class PostCommandService {
             Long categoryId,
             Long seriesId,
             String postUuid,
-            PublishStatus publishStatus
+            PublishStatus publishStatus,
+            String thumbnailImageUrl
     ) {
         Set<Long> tagIds = tagCommandService.upsertAllAndGetIds(tagNames);
 
@@ -42,7 +43,8 @@ public class PostCommandService {
                 tagIds,
                 categoryId,
                 seriesId,
-                publishStatus
+                publishStatus,
+                thumbnailImageUrl
         );
 
         if (Objects.isNull(postUuid)) {
@@ -61,7 +63,8 @@ public class PostCommandService {
             Set<String> newTagNames,
             Long newCategoryId,
             Long newSeriesId,
-            PublishStatus publishStatus
+            PublishStatus publishStatus,
+            String thumbnailImageUrl
     ) {
 
         Post post = getPost(postId);
@@ -77,7 +80,8 @@ public class PostCommandService {
             upsertedTagIds,
             newCategoryId,
             newSeriesId,
-                publishStatus
+            publishStatus,
+            thumbnailImageUrl
         );
 
         postRepository.save(post);

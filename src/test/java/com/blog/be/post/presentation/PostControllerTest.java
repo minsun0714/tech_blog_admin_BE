@@ -82,7 +82,8 @@ class PostControllerTest {
                         Set.of(1L, 2L),
                         1L,
                         1L,
-                        PublishStatus.PUBLISHED
+                        PublishStatus.PUBLISHED,
+                        null
                 ));
 
         // when & then
@@ -166,7 +167,8 @@ class PostControllerTest {
                 Set.of(1L, 2L),
                 1L,
                 1L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
 
         List<String> tagNames = List.of("java", "spring");
@@ -215,7 +217,8 @@ class PostControllerTest {
                 1L,
                 1L,
                 uuid,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
 
         // when & then
@@ -233,7 +236,8 @@ class PostControllerTest {
                 eq(1L),
                 eq(1L),
                 eq(uuid),
-                eq(PublishStatus.PUBLISHED)
+                eq(PublishStatus.PUBLISHED),
+                eq("thumbnail.test")
         );
     }
 
@@ -249,7 +253,8 @@ class PostControllerTest {
                 1L,
                 1L,
                 uuid,
-                PublishStatus.DRAFTED
+                PublishStatus.DRAFTED,
+                "thumbnail.test"
         );
 
         // when & then
@@ -267,7 +272,8 @@ class PostControllerTest {
                 eq(1L),
                 eq(1L),
                 eq(uuid),
-                eq(PublishStatus.DRAFTED)
+                eq(PublishStatus.DRAFTED),
+                eq("thumbnail.test")
         );
     }
 
@@ -281,7 +287,8 @@ class PostControllerTest {
                 Set.of("DDD"),
                 2L,
                 3L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
 
         // when & then
@@ -299,7 +306,8 @@ class PostControllerTest {
                 eq(Set.of("DDD")),
                 eq(2L),
                 eq(3L),
-                eq(PublishStatus.PUBLISHED)
+                eq(PublishStatus.PUBLISHED),
+                eq("thumbnail.test")
         );
     }
 
