@@ -1,6 +1,7 @@
 package com.blog.be.post.infrastructure.persistence;
 
 import com.blog.be.common.infrastructure.persistence.BaseEntity;
+import com.blog.be.post.domain.Post;
 import com.blog.be.post.domain.PublishStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,4 +40,13 @@ public class PostJpaEntity extends BaseEntity {
 
     @Column
     private String thumbnailImageUrl;
+
+    public void update(Post post) {
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.categoryId = post.getCategoryId();
+        this.seriesId = post.getSeriesId();
+        this.publishStatus = post.getPublishStatus();
+        this.thumbnailImageUrl = post.getThumbnailImageUrl();
+    }
 }

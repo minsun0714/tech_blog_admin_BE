@@ -25,7 +25,9 @@ public class PostRepositoryImpl implements PostRepository {
         PostJpaEntity oldJpaEntity = postJpaRepository.findById(post.getPostId())
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
 
-        return save(post, oldJpaEntity.getPostUuid());
+        oldJpaEntity.update(post);
+
+        return PostMapper.toDomain(oldJpaEntity, post.getTagIds());
     }
 
     @Override
