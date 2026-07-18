@@ -10,6 +10,7 @@ public record CommentListResponse(
     public record CommentResponse(
         Long commentId,
         Long commentParentId,
+        String author,
         String content,
         List<CommentResponse> childrenCommentList
     ) {
@@ -17,6 +18,7 @@ public record CommentListResponse(
             return new CommentResponse(
                     comment.id(),
                     comment.parentCommentId(),
+                    comment.author(),
                     comment.content(),
                     comment.children().stream()
                             .map(CommentResponse::from)
