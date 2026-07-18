@@ -129,7 +129,7 @@ class CommentControllerTest {
     @DisplayName("댓글을 수정한다.")
     void updateComment() throws Exception {
         // given
-        CommentUpdateRequest request = new CommentUpdateRequest("user1", "1234", "수정된 댓글");
+        CommentUpdateRequest request = new CommentUpdateRequest("1234", "수정된 댓글");
 
         // when & then
         mockMvc.perform(patch("/api/comments/1")
