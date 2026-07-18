@@ -20,7 +20,8 @@ class PostTest {
                 Set.of(),
                 1L,
                 1L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
 
         // then
@@ -37,7 +38,8 @@ class PostTest {
                 Set.of(),
                 1L,
                 1L,
-                PublishStatus.DRAFTED
+                PublishStatus.DRAFTED,
+                "thumbnail.test"
         );
 
         // then
@@ -95,7 +97,8 @@ class PostTest {
                 Set.of(tagId),
                 1L,
                 1L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
 
         // when
@@ -150,7 +153,8 @@ class PostTest {
                 tagIds,
                 10L,
                 20L,
-                PublishStatus.DRAFTED
+                PublishStatus.DRAFTED,
+                "thumbnail.test"
         );
 
         // then
@@ -160,6 +164,7 @@ class PostTest {
         assertThat(post.getCategoryId()).isEqualTo(10L);
         assertThat(post.getSeriesId()).isEqualTo(20L);
         assertThat(post.getPublishStatus()).isEqualTo(PublishStatus.DRAFTED);
+        assertThat(post.getThumbnailImageUrl()).isEqualTo("thumbnail.test");
     }
 
     @Test
@@ -211,7 +216,8 @@ class PostTest {
                 Set.of(),
                 1L,
                 1L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                "thumbnail.test"
         );
     }
 }

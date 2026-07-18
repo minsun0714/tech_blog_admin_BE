@@ -13,7 +13,8 @@ public record PostResponseWithUuid(
         List<String> tagNames,
         Long categoryId,
         Long seriesId,
-        String postUuid
+        String postUuid,
+        String thumbnailImageUrl
 ) {
     public static PostResponseWithUuid of(Post post, List<String> tagNames, String postUuid) {
         return new PostResponseWithUuid(
@@ -24,7 +25,8 @@ public record PostResponseWithUuid(
                 tagNames,
                 post.getCategoryId(),
                 post.getSeriesId(),
-                postUuid
+                postUuid,
+                post.getThumbnailImageUrl()
         );
     }
 }

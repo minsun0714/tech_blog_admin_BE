@@ -125,7 +125,8 @@ class PostQueryServiceTest {
                 PublishStatus.PUBLISHED,
                 Set.of(1L),
                 1L,
-                1L
+                1L,
+                "thumbnail.test"
         );
     }
 }

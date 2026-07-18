@@ -60,7 +60,8 @@ public class PostController {
                 request.categoryId(),
                 request.seriesId(),
                 request.postUuid(),
-                request.publishStatus()
+                request.publishStatus(),
+                request.thumbnailImageUrl()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -78,7 +79,8 @@ public class PostController {
                 request.tagNames(),
                 request.categoryId(),
                 request.seriesId(),
-                request.publishStatus()
+                request.publishStatus(),
+                request.thumbnailImageUrl()
         );
 
         return ResponseEntity.noContent().build();

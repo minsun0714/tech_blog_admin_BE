@@ -22,6 +22,7 @@ public final class PostMapper {
                 .seriesId(post.getSeriesId())
                 .postUuid(postUuid)
                 .publishStatus(post.getPublishStatus())
+                .thumbnailImageUrl(post.getThumbnailImageUrl())
                 .build();
     }
 
@@ -50,7 +51,8 @@ public final class PostMapper {
                 postEntity.getPublishStatus(),
                 tagIds,
                 postEntity.getCategoryId(),
-                postEntity.getSeriesId()
+                postEntity.getSeriesId(),
+                postEntity.getThumbnailImageUrl()
         );
     }
 }

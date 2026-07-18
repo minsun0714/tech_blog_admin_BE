@@ -12,6 +12,7 @@ public record PostUpdateRequest(
         Set<String> tagNames,
         Long categoryId,
         Long seriesId,
-        PublishStatus publishStatus
+        PublishStatus publishStatus,
+        String thumbnailImageUrl
 ) {
 }

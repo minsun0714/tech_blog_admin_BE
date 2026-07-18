@@ -58,7 +58,8 @@ class PostCommandServiceTest {
                 1L,
                 1L,
                 uuid,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                null
         );
 
         // then
@@ -89,7 +90,8 @@ class PostCommandServiceTest {
                 1L,
                 1L,
                 uuid,
-                PublishStatus.DRAFTED
+                PublishStatus.DRAFTED,
+                null
         );
 
         // then
@@ -126,7 +128,8 @@ class PostCommandServiceTest {
                 tagNames,
                 2L,
                 3L,
-                PublishStatus.PUBLISHED
+                PublishStatus.PUBLISHED,
+                null
         );
 
         // then
@@ -141,6 +144,7 @@ class PostCommandServiceTest {
         assertThat(post.getCategoryId()).isEqualTo(2L);
         assertThat(post.getSeriesId()).isEqualTo(3L);
         assertThat(post.getTagIds()).containsExactly(10L);
+        assertThat(post.getThumbnailImageUrl()).isNull();
     }
 
     @Test
@@ -178,7 +182,8 @@ class PostCommandServiceTest {
                         Set.of(),
                         1L,
                         1L,
-                        PublishStatus.DRAFTED
+                        PublishStatus.DRAFTED,
+                        "thumbnail.test"
                 )
         )
                 .isInstanceOf(PostException.class)
@@ -213,7 +218,8 @@ class PostCommandServiceTest {
                 publishStatus,
                 tagIds,
                 1L,
-                1L
+                1L,
+                "thumbnail.test"
         );
     }
 }
