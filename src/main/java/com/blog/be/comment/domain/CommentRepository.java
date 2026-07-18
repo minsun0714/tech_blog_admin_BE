@@ -10,7 +10,7 @@ public interface CommentRepository {
 
     Optional<CommentJpaEntity> findById(Long id);
 
-    List<CommentJpaEntity> findAll();
+    List<CommentJpaEntity> findAllByPostId(Long postId);
 
     void delete(CommentJpaEntity comment);
 

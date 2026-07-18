@@ -26,7 +26,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<CommentJpaEntity> findAll() {
+    public List<CommentJpaEntity> findAllByPostId(Long postId) {
         return commentJpaRepository.findAll();
     }
 

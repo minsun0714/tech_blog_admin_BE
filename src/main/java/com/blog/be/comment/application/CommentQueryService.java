@@ -21,7 +21,7 @@ public class CommentQueryService {
     private final CommentRepository commentRepository;
 
     public List<CommentNode> getAllCommentsByPostId(Long postId) {
-        List<CommentJpaEntity> commentJpaEntities = commentRepository.findAll();
+        List<CommentJpaEntity> commentJpaEntities = commentRepository.findAllByPostId(postId);
 
         Map<Long, CommentNode> commentMap = commentJpaEntities.stream()
                 .collect(Collectors.toMap(
