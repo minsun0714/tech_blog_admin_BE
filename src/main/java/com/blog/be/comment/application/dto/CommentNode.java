@@ -10,6 +10,7 @@ public record CommentNode (
     Long id,
     Long postId,
     Long parentCommentId,
+    String author,
     String content,
     boolean deleted,
     List<CommentNode> children
@@ -19,6 +20,7 @@ public record CommentNode (
                 commentJpaEntity.getId(),
                 commentJpaEntity.getPostId(),
                 commentJpaEntity.getParentCommentId(),
+                commentJpaEntity.getAuthor(),
                 commentJpaEntity.getContent(),
                 commentJpaEntity.isDeleted(),
                 new ArrayList<>()
